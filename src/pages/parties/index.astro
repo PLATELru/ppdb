@@ -58,36 +58,63 @@ const countries = [...new Map(
   <p id="empty-state" class="notice" hidden>No entries match the selected filters.</p>
 
   <script>
-    const search = document.querySelector<HTMLInputElement>("#party-search");
-    const country = document.querySelector<HTMLSelectElement>("#country-filter");
-    const status = document.querySelector<HTMLSelectElement>("#status-filter");
-    const cards = [...document.querySelectorAll<HTMLElement>("[data-party-card]")];
-    const count = document.querySelector<HTMLElement>("#result-count");
-    const empty = document.querySelector<HTMLElement>("#empty-state");
+  const search =
+    document.querySelector<HTMLInputElement>("#party-search")!;
 
-    if (search && country && status && count && empty) {
-      function update() {
-        const query = search.value.trim().toLowerCase();
-        let visible = 0;
+  const country =
+    document.querySelector<HTMLSelectElement>("#country-filter")!;
 
-        for (const card of cards) {
-          const searchableText = card.dataset.search ?? "";
-          const matchesSearch = !query || searchableText.includes(query);
-          const matchesCountry = !country.value || card.dataset.country === country.value;
-          const matchesStatus = !status.value || card.dataset.status === status.value;
-          const show = matchesSearch && matchesCountry && matchesStatus;
+  const status =
+    document.querySelector<HTMLSelectElement>("#status-filter")!;
 
-          card.hidden = !show;
-          if (show) visible += 1;
-        }
+  const cards = [
+    ...document.querySelectorAll<HTMLElement>("[data-party-card]")
+  ];
 
-        count.textContent = `${visible} ${visible === 1 ? "entry" : "entries"}`;
-        empty.hidden = visible !== 0;
+  const count =
+    document.querySelector<HTMLElement>("#result-count")!;
+
+  const empty =
+    document.querySelector<HTMLElement>("#empty-state")!;
+
+  function update() {
+    const query = search.value.trim().toLowerCase();
+    let visible = 0;
+
+    for (const card of cards) {
+      const searchableText = card.dataset.search ?? "";
+
+      const matchesSearch =
+        !query || searchableText.includes(query);
+
+      const matchesCountry =
+        !country.value ||
+        card.dataset.country === country.value;
+
+      const matchesStatus =
+        !status.value ||
+        card.dataset.status === status.value;
+
+      const show =
+        matchesSearch &&
+        matchesCountry &&
+        matchesStatus;
+
+      card.hidden = !show;
+
+      if (show) {
+        visible += 1;
       }
-
-      search.addEventListener("input", update);
-      country.addEventListener("change", update);
-      status.addEventListener("change", update);
     }
-  </script>
+
+    count.textContent =
+      `${visible} ${visible === 1 ? "entry" : "entries"}`;
+
+    empty.hidden = visible !== 0;
+  }
+
+  search.addEventListener("input", update);
+  country.addEventListener("change", update);
+  status.addEventListener("change", update);
+</script>
 </BaseLayout>
