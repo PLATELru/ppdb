@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { withBase } from "../../lib/paths";
+
+const entries = await getCollection("parties");
+const countryMap = new Map<string, { id: string; name: string; count: number }>();
+
+for (const entry of entries) {
+  const country = entry.data.country;
+  const existing = countryMap.get(country.id);
+
+  if (existing) {
+    existing.count += 1;
+  } else {
+    countryMap.set(country.id, { ...country, count: 1 });
+  }
+}
+
+const countries = [...countryMap.values()].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<BaseLayout title="Countries — Political Parties Database">
+  <header class="page-header">
+    <p class="eyebrow">Directory</p>
+    <h1>Countries</h1>
+    <p class="lead">Countries appear here automatically when at least one party record uses their country ID.</p>
+  </header>
+
+  <div class="card-grid">
+    {countries.map((country) => (
+      <article class="party-card">
+        <a class="party-card-link country-card-link" href={withBase(`/countries/${country.id}/`)}>
+          <div>
+            <p class="eyebrow">{country.id.toUpperCase()}</p>
+            <h2>{country.name}</h2>
+            <p class="native-name">{country.count} {country.count === 1 ? "entry" : "entries"}</p>
+          </div>
+        </a>
+      </article>
+    ))}
+  </div>
+</BaseLayout>

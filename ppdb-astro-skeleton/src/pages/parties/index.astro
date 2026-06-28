@@ -1,0 +1,93 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PartyCard from "../../components/PartyCard.astro";
+
+const entries = await getCollection("parties");
+const parties = entries
+  .map((entry) => ({ entryId: entry.id, ...entry.data }))
+  .sort((a, b) => a.name.english.localeCompare(b.name.english));
+
+const countries = [...new Map(
+  parties.map((party) => [party.country.id, party.country])
+).values()].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<BaseLayout title="Parties — Political Parties Database">
+  <header class="page-header">
+    <p class="eyebrow">Directory</p>
+    <h1>Political parties</h1>
+    <p class="lead">Search by party name, country, ideology or political position.</p>
+  </header>
+
+  <section class="filter-panel" aria-label="Party filters">
+    <label>
+      Search
+      <input id="party-search" type="search" placeholder="Name, ideology, country…" autocomplete="off" />
+    </label>
+
+    <label>
+      Country
+      <select id="country-filter">
+        <option value="">All countries</option>
+        {countries.map((country) => <option value={country.id}>{country.name}</option>)}
+      </select>
+    </label>
+
+    <label>
+      Status
+      <select id="status-filter">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="dissolved">Dissolved</option>
+        <option value="historical">Historical</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </label>
+  </section>
+
+  <p id="result-count" class="result-count">{parties.length} entries</p>
+
+  <div class="card-grid" id="party-list">
+    {parties.map((party) => (
+      <PartyCard party={party} entryId={party.entryId} />
+    ))}
+  </div>
+
+  <p id="empty-state" class="notice" hidden>No entries match the selected filters.</p>
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>("#party-search");
+    const country = document.querySelector<HTMLSelectElement>("#country-filter");
+    const status = document.querySelector<HTMLSelectElement>("#status-filter");
+    const cards = [...document.querySelectorAll<HTMLElement>("[data-party-card]")];
+    const count = document.querySelector<HTMLElement>("#result-count");
+    const empty = document.querySelector<HTMLElement>("#empty-state");
+
+    if (search && country && status && count && empty) {
+      function update() {
+        const query = search.value.trim().toLowerCase();
+        let visible = 0;
+
+        for (const card of cards) {
+          const searchableText = card.dataset.search ?? "";
+          const matchesSearch = !query || searchableText.includes(query);
+          const matchesCountry = !country.value || card.dataset.country === country.value;
+          const matchesStatus = !status.value || card.dataset.status === status.value;
+          const show = matchesSearch && matchesCountry && matchesStatus;
+
+          card.hidden = !show;
+          if (show) visible += 1;
+        }
+
+        count.textContent = `${visible} ${visible === 1 ? "entry" : "entries"}`;
+        empty.hidden = visible !== 0;
+      }
+
+      search.addEventListener("input", update);
+      country.addEventListener("change", update);
+      status.addEventListener("change", update);
+    }
+  </script>
+</BaseLayout>

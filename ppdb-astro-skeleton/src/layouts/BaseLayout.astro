@@ -1,0 +1,54 @@
+---
+import "../styles/global.css";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "A structured, source-based database of political parties."
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={withBase("/")}>
+          <span class="brand-mark">PPDB</span>
+          <span>Political Parties Database</span>
+        </a>
+        <nav aria-label="Primary">
+          <a href={withBase("/parties/")}>Parties</a>
+          <a href={withBase("/countries/")}>Countries</a>
+          <a href={withBase("/about/")}>About</a>
+          <a href={withBase("/data/parties.json")}>JSON</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>Political Parties Database. Entries should be based on cited sources and dated editorial review.</p>
+      </div>
+    </footer>
+  </body>
+</html>

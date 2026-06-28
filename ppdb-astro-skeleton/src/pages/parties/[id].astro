@@ -1,0 +1,195 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PartyInfobox from "../../components/PartyInfobox.astro";
+import SourceList from "../../components/SourceList.astro";
+import { withBase } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const parties = await getCollection("parties");
+  return parties.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const party = entry.data;
+const sourceMap = new Map(
+  party.sources.map((source: any, index: number) => [source.id, index + 1])
+);
+
+function sourceLinks(ids: string[] = []) {
+  return ids
+    .filter((id) => sourceMap.has(id))
+    .map((id) => ({ id, label: sourceMap.get(id) }));
+}
+---
+
+<BaseLayout
+  title={`${party.name.english} — Political Parties Database`}
+  description={party.summary}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href={withBase("/")}>Home</a>
+    <span>›</span>
+    <a href={withBase("/parties/")}>Parties</a>
+    <span>›</span>
+    <span>{party.name.english}</span>
+  </nav>
+
+  <header class="party-header">
+    <div>
+      <p class="eyebrow">{party.country.name}</p>
+      <h1>{party.name.english}</h1>
+      {party.name.native.length > 0 && <p class="native-heading">{party.name.native.join(" · ")}</p>}
+      {party.name.abbreviation && <p class="abbreviation">{party.name.abbreviation}</p>}
+    </div>
+  </header>
+
+  <div class="article-layout">
+    <article data-pagefind-body>
+      <section>
+        <h2>Overview</h2>
+        <p>{party.summary}</p>
+      </section>
+
+      {party.history.formation && (
+        <section>
+          <h2>History and formation</h2>
+          <p>
+            {party.history.formation}
+            {sourceLinks(party.history.formationSourceIds).map((source) => (
+              <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+            ))}
+          </p>
+        </section>
+      )}
+
+      {(party.ideology.labels.length > 0 || party.ideology.position) && (
+        <section>
+          <h2>Ideology and political position</h2>
+          {party.ideology.labels.length > 0 && (
+            <ul class="definition-list">
+              {party.ideology.labels.map((item: any) => (
+                <li>
+                  <strong>{item.name}</strong>
+                  {item.note && <> — {item.note}</>}
+                  {sourceLinks(item.sourceIds).map((source) => (
+                    <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          )}
+          {party.ideology.position && (
+            <p>
+              <strong>Position:</strong> {party.ideology.position.label}
+              {party.ideology.position.note && <> — {party.ideology.position.note}</>}
+              {sourceLinks(party.ideology.position.sourceIds).map((source) => (
+                <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+              ))}
+            </p>
+          )}
+        </section>
+      )}
+
+      {party.leadership.length > 0 && (
+        <section>
+          <h2>Leadership</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Office</th>
+                  <th>Person</th>
+                  <th>Term</th>
+                  <th>Birth year</th>
+                </tr>
+              </thead>
+              <tbody>
+                {party.leadership.map((leader: any) => (
+                  <tr>
+                    <td>{leader.title}</td>
+                    <td>
+                      {leader.person}
+                      {sourceLinks(leader.sourceIds).map((source) => (
+                        <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                      ))}
+                    </td>
+                    <td>
+                      {leader.since ?? "Unknown"}{leader.until ? `–${leader.until}` : ""}
+                      {leader.note && <><br /><small>{leader.note}</small></>}
+                    </td>
+                    <td>{leader.birthYear ?? "Unknown"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {party.governmentStatus && (
+        <section>
+          <h2>Political status</h2>
+          <p>
+            <strong>{party.governmentStatus.label.replace("-", " ")}</strong>
+            {party.governmentStatus.since && <> since {party.governmentStatus.since}</>}
+            {party.governmentStatus.description && <>. {party.governmentStatus.description}</>}
+            {sourceLinks(party.governmentStatus.sourceIds).map((source) => (
+              <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+            ))}
+          </p>
+        </section>
+      )}
+
+      {party.internationalAffiliations.length > 0 && (
+        <section>
+          <h2>International affiliations</h2>
+          <ul>
+            {party.internationalAffiliations.map((item: any) => (
+              <li>
+                {item.name}{item.status ? ` — ${item.status}` : ""}
+                {item.since ? ` (since ${item.since})` : ""}
+                {sourceLinks(item.sourceIds).map((source) => (
+                  <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(party.links.website || party.links.facebook || party.links.x || party.links.instagram || party.links.youtube || party.links.other.length > 0) && (
+        <section>
+          <h2>External links</h2>
+          <ul>
+            {party.links.website && <li><a href={party.links.website}>Official website</a></li>}
+            {party.links.facebook && <li><a href={party.links.facebook}>Facebook</a></li>}
+            {party.links.x && <li><a href={party.links.x}>X</a></li>}
+            {party.links.instagram && <li><a href={party.links.instagram}>Instagram</a></li>}
+            {party.links.youtube && <li><a href={party.links.youtube}>YouTube</a></li>}
+            {party.links.other.map((link: any) => <li><a href={link.url}>{link.label}</a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <section>
+        <h2>Sources</h2>
+        <SourceList sources={party.sources} />
+      </section>
+
+      <section class="editorial-note">
+        <h2>Editorial status</h2>
+        <p>
+          Completeness: <strong>{party.editorial.completeness}</strong>.
+          {party.editorial.needsReview ? " This entry is marked for review." : " No review flag is set."}
+        </p>
+        {party.editorial.note && <p>{party.editorial.note}</p>}
+      </section>
+    </article>
+
+    <PartyInfobox party={party} />
+  </div>
+</BaseLayout>
