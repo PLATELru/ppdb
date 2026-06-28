@@ -1,0 +1,92 @@
+{
+  "id": "demo-civic-reform",
+  "name": {
+    "english": "Civic Reform Party",
+    "native": [
+      "Partia Reformy Obywatelskiej"
+    ],
+    "literal": "Party of Civic Reform",
+    "abbreviation": "CRP"
+  },
+  "country": {
+    "id": "demo-republic",
+    "name": "Demo Republic"
+  },
+  "status": "active",
+  "logo": null,
+  "colors": [
+    "#214e8a"
+  ],
+  "dates": {
+    "founded": {
+      "date": "2018-04-12",
+      "precision": "day",
+      "sourceIds": []
+    },
+    "registered": {
+      "date": "2018-06-01",
+      "precision": "day",
+      "sourceIds": []
+    }
+  },
+  "summary": "Demonstration entry included to show the database structure. Replace it with researched party data before publication.",
+  "history": {
+    "formation": "This text is deliberately fictional. It demonstrates where formation history, splits, mergers and predecessor organisations should be described.",
+    "predecessors": [],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": [],
+    "formationSourceIds": []
+  },
+  "ideology": {
+    "labels": [
+      {
+        "name": "Liberalism",
+        "sourceIds": [],
+        "note": "Demonstration label without a factual claim."
+      },
+      {
+        "name": "Civic nationalism",
+        "sourceIds": [],
+        "note": "Demonstration label without a factual claim."
+      }
+    ],
+    "position": {
+      "label": "Centre",
+      "sourceIds": [],
+      "note": "Demonstration placement."
+    }
+  },
+  "leadership": [
+    {
+      "title": "Chairperson",
+      "person": "Example Person",
+      "since": "2022",
+      "birthYear": null,
+      "sourceIds": []
+    }
+  ],
+  "governmentStatus": {
+    "label": "opposition",
+    "since": "2024",
+    "description": "Demonstration political status.",
+    "sourceIds": []
+  },
+  "internationalAffiliations": [],
+  "links": {
+    "website": null,
+    "facebook": null,
+    "x": null,
+    "instagram": null,
+    "youtube": null,
+    "other": []
+  },
+  "sources": [],
+  "lastUpdated": "2026-06-29",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true,
+    "note": "Delete this demonstration entry after importing real data."
+  }
+}
