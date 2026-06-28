@@ -51,14 +51,21 @@ const parties = defineCollection({
     }),
     summary: z.string(),
     history: z.object({
-      formation: z.string().optional(),
-      formationSourceIds: z.array(z.string()).default([]),
-      predecessors: z.array(z.string()).default([]),
-      successors: z.array(z.string()).default([]),
-      splitFrom: z.array(z.string()).default([]),
-      mergers: z.array(z.string()).default([]),
-      memberParties: z.array(z.string()).default([])
-    }).default({}),
+  formation: z.string().optional(),
+  formationSourceIds: z.array(z.string()).default([]),
+  predecessors: z.array(z.string()).default([]),
+  successors: z.array(z.string()).default([]),
+  splitFrom: z.array(z.string()).default([]),
+  mergers: z.array(z.string()).default([]),
+  memberParties: z.array(z.string()).default([])
+}).default({
+  formationSourceIds: [],
+  predecessors: [],
+  successors: [],
+  splitFrom: [],
+  mergers: [],
+  memberParties: []
+}),
     ideology: z.object({
       labels: z.array(z.object({
         name: z.string(),
@@ -107,10 +114,18 @@ const parties = defineCollection({
     sources: z.array(sourceReference).default([]),
     lastUpdated: z.string(),
     editorial: z.object({
-      completeness: z.enum(["stub", "partial", "substantial", "complete"]).default("partial"),
-      needsReview: z.boolean().default(false),
-      note: z.string().optional()
-    }).default({})
+  completeness: z.enum([
+    "stub",
+    "partial",
+    "substantial",
+    "complete"
+  ]).default("partial"),
+  needsReview: z.boolean().default(false),
+  note: z.string().optional()
+}).default({
+  completeness: "partial",
+  needsReview: false
+})
   }).refine((data) => data.id.length > 0, {
     message: "Party ID must not be empty"
   })
