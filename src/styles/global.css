@@ -649,3 +649,56 @@ th {
   }
 }
 
+/* Final infobox, cards, leadership and election-table adjustments */
+
+.infobox dt {
+  text-align: right;
+  padding-inline-start: 1rem;
+  padding-inline-end: 0.25rem;
+}
+
+.party-card {
+  border-color: var(--party-color, var(--border));
+}
+
+.party-card .party-logo {
+  border-color: var(--party-color, var(--border));
+}
+
+.party-summary {
+  padding-top: 0;
+}
+
+.party-summary p {
+  margin-top: 0;
+}
+
+.life-dates {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.references-cell,
+.numeric-cell {
+  white-space: nowrap;
+}
+
+.numeric-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.election-results-table {
+  min-width: 760px;
+}
+
+.election-results-table th,
+.election-results-table td {
+  font-size: 0.92rem;
+}
+
+@media (max-width: 520px) {
+  .infobox dt {
+    padding-inline-start: 0;
+  }
+}
