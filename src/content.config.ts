@@ -31,6 +31,32 @@ const affiliationRecord = z.object({
   sourceIds: z.array(z.string()).default([])
 });
 
+const electionYear = z.union([
+  z.number().int().min(1800).max(2200),
+  z.string()
+]);
+
+const parliamentaryElectionResult = z.object({
+  year: electionYear,
+  listLeader: z.string().nullable().optional(),
+  votes: z.number().int().nonnegative().nullable().optional(),
+  percentage: z.number().min(0).max(100).nullable().optional(),
+  seats: z.number().int().nonnegative().nullable().optional(),
+  outcome: z.string().nullable().optional(),
+  sourceIds: z.array(z.string()).default([])
+});
+
+const presidentialElectionResult = z.object({
+  year: electionYear,
+  candidate: z.string(),
+  firstRoundVotes: z.number().int().nonnegative().nullable().optional(),
+  firstRoundPercentage: z.number().min(0).max(100).nullable().optional(),
+  secondRoundVotes: z.number().int().nonnegative().nullable().optional(),
+  secondRoundPercentage: z.number().min(0).max(100).nullable().optional(),
+  outcome: z.string().nullable().optional(),
+  sourceIds: z.array(z.string()).default([])
+});
+
 const parties = defineCollection({
   loader: glob({
     pattern: "**/[^_]*.json",
@@ -91,7 +117,8 @@ const parties = defineCollection({
       person: z.string(),
       since: z.string().nullable().optional(),
       until: z.string().nullable().optional(),
-      birthYear: z.number().int().min(1800).max(2100).nullable().optional(),
+      birthYear: z.number().int().min(1800).max(2200).nullable().optional(),
+      deathYear: z.number().int().min(1800).max(2200).nullable().optional(),
       note: z.string().optional(),
       sourceIds: z.array(z.string()).default([])
     })).default([]),
@@ -138,6 +165,13 @@ const parties = defineCollection({
       }).optional()
     }).optional(),
     internationalAffiliations: z.array(affiliationRecord).default([]),
+    electionResults: z.object({
+      parliamentary: z.array(parliamentaryElectionResult).default([]),
+      presidential: z.array(presidentialElectionResult).default([])
+    }).default({
+      parliamentary: [],
+      presidential: []
+    }),
     links: z.object({
       website: z.string().url().nullable().optional(),
       websiteArchive: z.string().url().nullable().optional(),
