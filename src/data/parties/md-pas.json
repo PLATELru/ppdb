@@ -13,7 +13,7 @@
     "name": "Moldova"
   },
   "status": "active",
-  "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Logo_of_the_Party_of_Action_and_Solidarity.svg",
+  "logo": "/logos/md-pas.svg"",
   "colors": [
     "#ffdd00",
     "#000000"
@@ -111,7 +111,7 @@
   "internationalAffiliations": [
     {
       "name": "European People's Party",
-      "status": "Associated Member Party",
+      "status": "associate",
       "since": "2017",
       "until": null,
       "sourceIds": [
@@ -120,7 +120,7 @@
     },
     {
       "name": "International Democracy Union",
-      "status": "Member",
+      "status": "member",
       "since": null,
       "until": null,
       "sourceIds": [
@@ -259,8 +259,8 @@
   "parliament": {
     "status": "represented",
     "since": null,
-    "seats": 55,
-    "totalSeats": 101,
+    "seats": null,
+    "totalSeats": null,
     "note": "",
     "sourceIds": [
       "cec-results-2025"
