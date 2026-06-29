@@ -15,8 +15,8 @@
   "status": "active",
   "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Logo_of_the_Party_of_Action_and_Solidarity.svg",
   "colors": [
-    "yellow",
-    "black"
+    "#ffdd00",
+    "#000000"
   ],
   "dates": {
     "founded": {
