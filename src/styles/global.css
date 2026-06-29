@@ -259,6 +259,21 @@ h2 {
   font-size: 1.18rem;
 }
 
+.party-card-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.party-color-dot {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 22%);
+}
+
 .party-logo {
   width: 72px;
   height: 72px;
