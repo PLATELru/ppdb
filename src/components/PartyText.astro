@@ -1,0 +1,147 @@
+---
+import { getCollection } from "astro:content";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  text?: string | null;
+}
+
+const { text = "" } = Astro.props;
+
+const parties = await getCollection("parties");
+
+const partyMap = new Map(
+  parties.map((entry) => [
+    entry.id,
+    {
+      name: entry.data.name.english,
+      color: entry.data.colors?.[0] ?? "#9ca3af"
+    }
+  ])
+);
+
+type TextSegment = {
+  type: "text";
+  value: string;
+};
+
+type PartySegment = {
+  type: "party";
+  id: string;
+  label: string;
+};
+
+type Segment = TextSegment | PartySegment;
+
+function parsePartyLinks(input: string): Segment[] {
+  const result: Segment[] = [];
+
+  /*
+   * Поддерживает:
+   * [[md-pldm]]
+   * [[md-pldm|Liberal Democratic Party]]
+   */
+  const pattern =
+    /\[\[([a-z0-9]+(?:-[a-z0-9]+)*)(?:\|([^\]]+))?\]\]/g;
+
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(input)) !== null) {
+    if (match.index > lastIndex) {
+      result.push({
+        type: "text",
+        value: input.slice(lastIndex, match.index)
+      });
+    }
+
+    const id = match[1];
+    const party = partyMap.get(id);
+
+    result.push({
+      type: "party",
+      id,
+      label: match[2]?.trim() || party?.name || id
+    });
+
+    lastIndex = pattern.lastIndex;
+  }
+
+  if (lastIndex < input.length) {
+    result.push({
+      type: "text",
+      value: input.slice(lastIndex)
+    });
+  }
+
+  return result;
+}
+
+const segments = parsePartyLinks(text);
+---
+
+<span class="party-text">
+  {
+    segments.map((segment) => {
+      if (segment.type === "text") {
+        return segment.value;
+      }
+
+      const party = partyMap.get(segment.id);
+
+      if (!party) {
+        return (
+          <span
+            class="missing-party-link"
+            title={`Unknown party ID: ${segment.id}`}
+          >
+            {segment.label}
+          </span>
+        );
+      }
+
+      return (
+        <span class="party-link">
+          <span
+            class="party-link-dot"
+            style={`--party-link-color: ${party.color};`}
+            aria-hidden="true"
+          ></span>
+
+          <a href={withBase(`/parties/${segment.id}/`)}>
+            {segment.label}
+          </a>
+        </span>
+      );
+    })
+  }
+</span>
+
+<style>
+  .party-text {
+    display: inline;
+  }
+
+  .party-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.28em;
+    white-space: nowrap;
+  }
+
+  .party-link-dot {
+    display: inline-block;
+    width: 0.62em;
+    height: 0.62em;
+    flex: 0 0 auto;
+    border: 1px solid rgb(0 0 0 / 25%);
+    border-radius: 50%;
+    background-color: var(--party-link-color);
+  }
+
+  .missing-party-link {
+    color: #b42318;
+    text-decoration: underline dotted;
+    cursor: help;
+  }
+</style>
