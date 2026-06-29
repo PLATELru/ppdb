@@ -1,0 +1,179 @@
+{
+  "id": "md-pdm",
+  "name": {
+    "english": "Democratic Party of Moldova",
+    "native": [
+      "Partidul Democrat din Moldova"
+    ],
+    "literal": null,
+    "abbreviation": "PDM"
+  },
+  "country": {
+    "id": "md",
+    "name": "Moldova"
+  },
+  "status": "dissolved",
+  "logo": "/logos/md-pdm.svg",
+  "colors": [
+    "#254b9c",
+    "#df0025"
+  ],
+  "dates": {
+    "founded": {
+      "date": "2000-04-15",
+      "precision": "day",
+      "sourceIds": []
+    },
+    "dissolved": {
+      "date": "2022-11-20",
+      "precision": "day",
+      "sourceIds": []
+    }
+  },
+  "summary": "Formerly known as the Movement for a Democratic and Prosperous Moldova (MDPM);\nRebranded to the European Social Democratic Party (PSDE)\n",
+  "history": {
+    "formation": "",
+    "formationSourceIds": [],
+    "predecessors": [],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": []
+  },
+  "ideology": {
+    "labels": [
+      {
+        "name": "Social democracy",
+        "sourceIds": []
+      },
+      {
+        "name": "Populism",
+        "sourceIds": []
+      },
+      {
+        "name": "Pro-Europeanism",
+        "sourceIds": []
+      }
+    ],
+    "position": {
+      "label": "Centre-left",
+      "sourceIds": []
+    }
+  },
+  "leadership": [
+    {
+      "title": "President (MDPM->PDM)",
+      "person": "Dumitru Diacov",
+      "since": "8 February 1997",
+      "until": "19 July 2009",
+      "birthYear": 1952,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Marian Lupu",
+      "since": "19 July 2009",
+      "until": "24 December 2016",
+      "birthYear": 1966,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Vladimir Plahotniuc",
+      "since": "24 December 2016",
+      "until": "24 June 2019",
+      "birthYear": 1966,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Pavel Filip",
+      "since": "7 September 2019",
+      "until": "30 October 2021",
+      "birthYear": 1966,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "Interim President",
+      "person": "Monica Babuc",
+      "since": "30 October 2021",
+      "until": "20 November 2022",
+      "birthYear": 1964,
+      "deathYear": null,
+      "sourceIds": []
+    }
+  ],
+  "governmentStatus": {
+    "label": "unknown",
+    "since": null,
+    "sourceIds": []
+  },
+  "representation": {
+    "parliament": {
+      "status": "unknown",
+      "since": null,
+      "seats": null,
+      "totalSeats": null,
+      "sourceIds": []
+    },
+    "government": {
+      "status": "unknown",
+      "since": null,
+      "sourceIds": []
+    }
+  },
+  "internationalAffiliations": [
+    {
+      "name": "Party of European Socialists",
+      "status": "associate",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Forum of Socialists of the CIS Countries",
+      "status": "participant",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Socialist International",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Progressive Alliance",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    }
+  ],
+  "electionResults": {
+    "parliamentary": [],
+    "presidential": []
+  },
+  "links": {
+    "website": "http://www.pdm.md/",
+    "websiteArchive": "https://web.archive.org/web/20220302002724/http://pdm.md/",
+    "facebook": null,
+    "x": null,
+    "instagram": null,
+    "youtube": null,
+    "socialMedia": [],
+    "other": []
+  },
+  "sources": [],
+  "lastUpdated": "2026-06-30",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true
+  }
+}
