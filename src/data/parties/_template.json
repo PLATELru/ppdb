@@ -44,13 +44,31 @@
     "description": "",
     "sourceIds": []
   },
+  "representation": {
+    "parliament": {
+      "status": "unknown",
+      "since": null,
+      "seats": null,
+      "totalSeats": null,
+      "note": "",
+      "sourceIds": []
+    },
+    "government": {
+      "status": "unknown",
+      "since": null,
+      "note": "",
+      "sourceIds": []
+    }
+  },
   "internationalAffiliations": [],
   "links": {
     "website": null,
+    "websiteArchive": null,
     "facebook": null,
     "x": null,
     "instagram": null,
     "youtube": null,
+    "socialMedia": [],
     "other": []
   },
   "sources": [],
