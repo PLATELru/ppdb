@@ -19,8 +19,8 @@ function sourceLinks(ids: string[] = []) {
 }
 
 const parliamentLabels: Record<string, string> = {
-  represented: "Represented",
-  "not-represented": "Not represented",
+  represented: "Parliamentary",
+  "not-represented": "Extra-parliamentary",
   unknown: "Unknown",
   "not-applicable": "Not applicable"
 };
@@ -92,16 +92,19 @@ const socialMedia = [
   }))
 ];
 
-function seatDescription(item: any) {
-  if (typeof item?.seats !== "number") return null;
-  if (typeof item?.totalSeats === "number") {
-    return `${item.seats}/${item.totalSeats} seats`;
-  }
-  return `${item.seats} seats`;
-}
+const hexColors = (party.colors ?? []).filter(
+  (color: unknown): color is string =>
+    typeof color === "string" &&
+    /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(color)
+);
+
+const primaryColor = hexColors[0] ?? null;
 ---
 
-<aside class="infobox">
+<aside
+  class="infobox"
+  style={primaryColor ? `--party-color: ${primaryColor};` : undefined}
+>
   <header class="infobox-heading">
     <h2>{party.name.english}</h2>
     {party.name.native.length > 0 && (
@@ -132,15 +135,11 @@ function seatDescription(item: any) {
     <div>
       <dt>Status</dt>
       <dd class="infobox-status-stack">
-        <span>
-          <strong>Activity:</strong> {statusLabels[party.status]}
-        </span>
+        <span>{statusLabels[party.status]}</span>
 
         {parliament && (
           <span>
-            <strong>Parliament:</strong>{" "}
             {parliamentLabels[parliament.status] ?? parliament.status}
-            {seatDescription(parliament) && ` (${seatDescription(parliament)})`}
             {parliament.since && ` since ${formatDate(parliament.since)}`}
             {sourceLinks(parliament.sourceIds).map((source) => (
               <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
@@ -150,7 +149,6 @@ function seatDescription(item: any) {
 
         {government && (
           <span>
-            <strong>Government:</strong>{" "}
             {governmentLabels[government.status] ?? government.status}
             {government.since && ` since ${formatDate(government.since)}`}
             {sourceLinks(government.sourceIds).map((source) => (
@@ -233,7 +231,7 @@ function seatDescription(item: any) {
             {party.internationalAffiliations.map((item: any) => (
               <li>
                 {item.name}
-                {item.status && <>{` — ${item.status}`}</>}
+                {item.status && <>{` – ${item.status}`}</>}
                 {item.since && <>{` (since ${formatDate(item.since)})`}</>}
                 {item.until && <>{` (until ${formatDate(item.until)})`}</>}
                 {sourceLinks(item.sourceIds).map((source) => (
@@ -242,6 +240,24 @@ function seatDescription(item: any) {
               </li>
             ))}
           </ul>
+        </dd>
+      </div>
+    )}
+
+    {hexColors.length > 0 && (
+      <div>
+        <dt>Colours</dt>
+        <dd class="infobox-colors">
+          {hexColors.map((color) => (
+            <span class="infobox-color-item">
+              <span
+                class="infobox-color-dot"
+                style={`background-color: ${color};`}
+                aria-hidden="true"
+              ></span>
+              <code>{color.toUpperCase()}</code>
+            </span>
+          ))}
         </dd>
       </div>
     )}
