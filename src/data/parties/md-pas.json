@@ -44,11 +44,19 @@
       "justice-registration-2016"
     ],
     "predecessors": [],
-    "successors": [],
-    "splitFrom": [],
-    "mergers": [],
-    "memberParties": []
-  },
+  "successors": [],
+  "splitFrom": [
+    {
+      "id": "md-pldm",
+      "name": "Liberal Democratic Party of Moldova",
+      "sourceIds": [
+        "pas-about"
+      ]
+    }
+  ],
+  "mergers": [],
+  "memberParties": []
+},
   "ideology": {
     "labels": [
       {
