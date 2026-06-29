@@ -537,3 +537,56 @@ th {
 .country-card-link {
   grid-template-columns: 1fr;
 }
+
+/* Party infobox: heading, lists, status and link stacks */
+
+.infobox-heading {
+  padding: 0.15rem 0.25rem 1rem;
+  text-align: center;
+}
+
+.infobox-heading h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+.infobox-native-name {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.infobox-abbreviation {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.infobox-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.infobox-list li + li {
+  margin-top: 0.35rem;
+}
+
+.infobox-status-stack,
+.infobox-link-stack {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.infobox-status-stack > span {
+  display: block;
+}
+
+.infobox-status-stack strong {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
