@@ -12,12 +12,13 @@ const { party, entryId } = Astro.props;
 const primaryColor =
   party.colors?.find(
     (color: string) =>
-      /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(color)
+      /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(color)
   ) ?? null;
 ---
 
 <article
   class="party-card"
+  style={primaryColor ? `--party-color: ${primaryColor};` : undefined}
   data-party-card
   data-search={[
     party.name.english,
@@ -39,22 +40,32 @@ const primaryColor =
       height="72"
       loading="lazy"
     />
+
     <div>
       <p class="eyebrow">{party.country.name}</p>
+
       <h2 class="party-card-title">
-  {primaryColor && (
-    <span
-      class="party-color-dot"
-      style={`background-color: ${primaryColor};`}
-      aria-hidden="true"
-    ></span>
-  )}
-  <span>{party.name.english}</span>
-</h2>
-      {party.name.native.length > 0 && <p class="native-name">{party.name.native.join(" · ")}</p>}
+        {primaryColor && (
+          <span
+            class="party-color-dot"
+            style={`background-color: ${primaryColor};`}
+            aria-hidden="true"
+          ></span>
+        )}
+        <span>{party.name.english}</span>
+      </h2>
+
+      {party.name.native.length > 0 && (
+        <p class="native-name">{party.name.native.join(" · ")}</p>
+      )}
+
       <div class="chips">
-        <span class={`status status-${party.status}`}>{statusLabels[party.status]}</span>
-        {party.ideology.position?.label && <span class="chip">{party.ideology.position.label}</span>}
+        <span class={`status status-${party.status}`}>
+          {statusLabels[party.status]}
+        </span>
+        {party.ideology.position?.label && (
+          <span class="chip">{party.ideology.position.label}</span>
+        )}
       </div>
     </div>
   </a>
