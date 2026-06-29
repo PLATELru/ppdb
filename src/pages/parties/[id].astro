@@ -24,6 +24,35 @@ function sourceLinks(ids: string[] = []) {
     .filter((id) => sourceMap.has(id))
     .map((id) => ({ id, label: sourceMap.get(id) }));
 }
+
+function formatLifeDates(leader: any): string | null {
+  const hasBirth = typeof leader.birthYear === "number";
+  const hasDeath = typeof leader.deathYear === "number";
+
+  if (hasBirth && hasDeath) {
+    return `(${leader.birthYear}–${leader.deathYear})`;
+  }
+  if (hasBirth) {
+    return `(b. ${leader.birthYear})`;
+  }
+  if (hasDeath) {
+    return `(d. ${leader.deathYear})`;
+  }
+  return null;
+}
+
+function formatInteger(value: unknown): string {
+  return typeof value === "number"
+    ? new Intl.NumberFormat("en-US").format(value)
+    : "—";
+}
+
+function formatPercentage(value: unknown): string {
+  return typeof value === "number" ? `${value}%` : "—";
+}
+
+const parliamentaryResults = party.electionResults?.parliamentary ?? [];
+const presidentialResults = party.electionResults?.presidential ?? [];
 ---
 
 <BaseLayout
@@ -42,21 +71,24 @@ function sourceLinks(ids: string[] = []) {
     <div>
       <p class="eyebrow">{party.country.name}</p>
       <h1>{party.name.english}</h1>
-      {party.name.native.length > 0 && <p class="native-heading">{party.name.native.join(" · ")}</p>}
-      {party.name.abbreviation && <p class="abbreviation">{party.name.abbreviation}</p>}
+      {party.name.native.length > 0 && (
+        <p class="native-heading">{party.name.native.join(" · ")}</p>
+      )}
+      {party.name.abbreviation && (
+        <p class="abbreviation">{party.name.abbreviation}</p>
+      )}
     </div>
   </header>
 
   <div class="article-layout">
     <article data-pagefind-body>
-      <section>
-        <h2>Overview</h2>
+      <section class="party-summary">
         <p>{party.summary}</p>
       </section>
 
       {party.history.formation && (
         <section>
-          <h2>History and formation</h2>
+          <h2>History</h2>
           <p>
             {party.history.formation}
             {sourceLinks(party.history.formationSourceIds).map((source) => (
@@ -104,7 +136,7 @@ function sourceLinks(ids: string[] = []) {
                   <th>Office</th>
                   <th>Person</th>
                   <th>Term</th>
-                  <th>Birth year</th>
+                  <th>References</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,15 +145,19 @@ function sourceLinks(ids: string[] = []) {
                     <td>{leader.title}</td>
                     <td>
                       {leader.person}
-                      {sourceLinks(leader.sourceIds).map((source) => (
-                        <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
-                      ))}
+                      {formatLifeDates(leader) && (
+                        <><br /><small class="life-dates">{formatLifeDates(leader)}</small></>
+                      )}
                     </td>
                     <td>
                       {leader.since ?? "Unknown"}{leader.until ? `–${leader.until}` : ""}
                       {leader.note && <><br /><small>{leader.note}</small></>}
                     </td>
-                    <td>{leader.birthYear ?? "Unknown"}</td>
+                    <td class="references-cell">
+                      {sourceLinks(leader.sourceIds).map((source) => (
+                        <><a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a>{" "}</>
+                      ))}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -158,6 +194,90 @@ function sourceLinks(ids: string[] = []) {
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {(parliamentaryResults.length > 0 || presidentialResults.length > 0) && (
+        <section>
+          <h2>Election results</h2>
+
+          {parliamentaryResults.length > 0 && (
+            <>
+              <h3>Parliamentary elections</h3>
+              <div class="table-wrap">
+                <table class="election-results-table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>List leader</th>
+                      <th>Votes</th>
+                      <th>%</th>
+                      <th>Seats</th>
+                      <th>Outcome</th>
+                      <th>References</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {parliamentaryResults.map((result: any) => (
+                      <tr>
+                        <td>{result.year}</td>
+                        <td>{result.listLeader ?? "—"}</td>
+                        <td class="numeric-cell">{formatInteger(result.votes)}</td>
+                        <td class="numeric-cell">{formatPercentage(result.percentage)}</td>
+                        <td class="numeric-cell">{formatInteger(result.seats)}</td>
+                        <td>{result.outcome ?? "—"}</td>
+                        <td class="references-cell">
+                          {sourceLinks(result.sourceIds).map((source) => (
+                            <><a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a>{" "}</>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {presidentialResults.length > 0 && (
+            <>
+              <h3>Presidential elections</h3>
+              <div class="table-wrap">
+                <table class="election-results-table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Candidate</th>
+                      <th>First-round votes</th>
+                      <th>%</th>
+                      <th>Second-round votes</th>
+                      <th>%</th>
+                      <th>Outcome</th>
+                      <th>References</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {presidentialResults.map((result: any) => (
+                      <tr>
+                        <td>{result.year}</td>
+                        <td>{result.candidate}</td>
+                        <td class="numeric-cell">{formatInteger(result.firstRoundVotes)}</td>
+                        <td class="numeric-cell">{formatPercentage(result.firstRoundPercentage)}</td>
+                        <td class="numeric-cell">{formatInteger(result.secondRoundVotes)}</td>
+                        <td class="numeric-cell">{formatPercentage(result.secondRoundPercentage)}</td>
+                        <td>{result.outcome ?? "—"}</td>
+                        <td class="references-cell">
+                          {sourceLinks(result.sourceIds).map((source) => (
+                            <><a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a>{" "}</>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </section>
       )}
 
