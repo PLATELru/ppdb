@@ -23,6 +23,14 @@ const sourceReference = z.object({
   note: z.string().optional()
 });
 
+const affiliationRecord = z.object({
+  name: z.string(),
+  status: z.string().optional(),
+  since: z.string().nullable().optional(),
+  until: z.string().nullable().optional(),
+  sourceIds: z.array(z.string()).default([])
+});
+
 const parties = defineCollection({
   loader: glob({
     pattern: "**/[^_]*.json",
@@ -51,27 +59,27 @@ const parties = defineCollection({
     }),
     summary: z.string(),
     history: z.object({
-  formation: z.string().optional(),
-  formationSourceIds: z.array(z.string()).default([]),
-  predecessors: z.array(z.string()).default([]),
-  successors: z.array(z.string()).default([]),
-  splitFrom: z.array(z.string()).default([]),
-  mergers: z.array(z.string()).default([]),
-  memberParties: z.array(z.string()).default([])
-}).default({
-  formationSourceIds: [],
-  predecessors: [],
-  successors: [],
-  splitFrom: [],
-  mergers: [],
-  memberParties: []
-}),
+      formation: z.string().optional(),
+      formationSourceIds: z.array(z.string()).default([]),
+      predecessors: z.array(z.string()).default([]),
+      successors: z.array(z.string()).default([]),
+      splitFrom: z.array(z.string()).default([]),
+      mergers: z.array(z.string()).default([]),
+      memberParties: z.array(z.string()).default([])
+    }).default({
+      formationSourceIds: [],
+      predecessors: [],
+      successors: [],
+      splitFrom: [],
+      mergers: [],
+      memberParties: []
+    }),
     ideology: z.object({
       labels: z.array(z.object({
         name: z.string(),
         sourceIds: z.array(z.string()).default([]),
         note: z.string().optional()
-      })).max(4).default([]),
+      })).default([]),
       position: z.object({
         label: z.string(),
         sourceIds: z.array(z.string()).default([]),
@@ -88,44 +96,84 @@ const parties = defineCollection({
       sourceIds: z.array(z.string()).default([])
     })).default([]),
     governmentStatus: z.object({
-      label: z.enum(["government", "opposition", "extra-parliamentary", "mixed", "not-applicable", "unknown"]),
+      label: z.enum([
+        "government",
+        "opposition",
+        "extra-parliamentary",
+        "mixed",
+        "not-applicable",
+        "unknown"
+      ]),
       since: z.string().nullable().optional(),
       description: z.string().optional(),
       sourceIds: z.array(z.string()).default([])
     }).optional(),
-    internationalAffiliations: z.array(z.object({
-      name: z.string(),
-      status: z.string().optional(),
-      since: z.string().nullable().optional(),
-      until: z.string().nullable().optional(),
-      sourceIds: z.array(z.string()).default([])
-    })).default([]),
+    representation: z.object({
+      parliament: z.object({
+        status: z.enum([
+          "represented",
+          "not-represented",
+          "unknown",
+          "not-applicable"
+        ]),
+        since: z.string().nullable().optional(),
+        seats: z.number().int().nonnegative().nullable().optional(),
+        totalSeats: z.number().int().positive().nullable().optional(),
+        note: z.string().optional(),
+        sourceIds: z.array(z.string()).default([])
+      }).optional(),
+      government: z.object({
+        status: z.enum([
+          "in-government",
+          "supports-government",
+          "opposition",
+          "neutral",
+          "mixed",
+          "unknown",
+          "not-applicable"
+        ]),
+        since: z.string().nullable().optional(),
+        note: z.string().optional(),
+        sourceIds: z.array(z.string()).default([])
+      }).optional()
+    }).optional(),
+    internationalAffiliations: z.array(affiliationRecord).default([]),
     links: z.object({
       website: z.string().url().nullable().optional(),
+      websiteArchive: z.string().url().nullable().optional(),
       facebook: z.string().url().nullable().optional(),
       x: z.string().url().nullable().optional(),
       instagram: z.string().url().nullable().optional(),
       youtube: z.string().url().nullable().optional(),
+      socialMedia: z.array(z.object({
+        label: z.string(),
+        url: z.string().url(),
+        archiveUrl: z.string().url().nullable().optional(),
+        sourceIds: z.array(z.string()).default([])
+      })).default([]),
       other: z.array(z.object({
         label: z.string(),
         url: z.string().url()
       })).default([])
-    }).default({ other: [] }),
+    }).default({
+      socialMedia: [],
+      other: []
+    }),
     sources: z.array(sourceReference).default([]),
     lastUpdated: z.string(),
     editorial: z.object({
-  completeness: z.enum([
-    "stub",
-    "partial",
-    "substantial",
-    "complete"
-  ]).default("partial"),
-  needsReview: z.boolean().default(false),
-  note: z.string().optional()
-}).default({
-  completeness: "partial",
-  needsReview: false
-})
+      completeness: z.enum([
+        "stub",
+        "partial",
+        "substantial",
+        "complete"
+      ]).default("partial"),
+      needsReview: z.boolean().default(false),
+      note: z.string().optional()
+    }).default({
+      completeness: "partial",
+      needsReview: false
+    })
   }).refine((data) => data.id.length > 0, {
     message: "Party ID must not be empty"
   })
