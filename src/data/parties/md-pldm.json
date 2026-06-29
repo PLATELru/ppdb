@@ -1,0 +1,204 @@
+{
+  "id": "md-pldm",
+  "name": {
+    "english": "Liberal Democratic Party of Moldova",
+    "native": [
+      "Partidul Liberal Democrat din Moldova"
+    ],
+    "literal": null,
+    "abbreviation": "PLDM"
+  },
+  "country": {
+    "id": "md",
+    "name": "Moldova"
+  },
+  "status": "active",
+  "logo": "/logos/md-pldm.png",
+  "colors": [
+    "#0E8A4A"
+  ],
+  "dates": {
+    "founded": {
+      "date": "2007-12-08",
+      "precision": "unknown",
+      "sourceIds": [
+        "had-been-founded"
+      ]
+    },
+    "registered": {
+      "date": "2008-01-29",
+      "precision": "day",
+      "sourceIds": [
+        "moj-registers"
+      ]
+    }
+  },
+  "summary": "Liberal conservative political party in Moldova",
+  "history": {
+    "formation": "Split from the Democratic Party of Moldova",
+    "formationSourceIds": [],
+    "predecessors": [],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": []
+  },
+  "ideology": {
+    "labels": [
+      {
+        "name": "Liberal conservatism",
+        "sourceIds": []
+      },
+      {
+        "name": "Conservative liberalism",
+        "sourceIds": []
+      },
+      {
+        "name": "Christian democracy",
+        "sourceIds": []
+      },
+      {
+        "name": "Moldovan–Romanian unionism",
+        "sourceIds": []
+      },
+      {
+        "name": "Pro-Europeanism",
+        "sourceIds": []
+      }
+    ],
+    "position": {
+      "label": "Centre-right",
+      "sourceIds": []
+    }
+  },
+  "leadership": [
+    {
+      "title": "President",
+      "person": "Vlad Filat",
+      "since": "2007-12-08",
+      "until": "2016-05-27",
+      "birthYear": 1969,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Viorel Cibotaru",
+      "since": "2016-06-18",
+      "until": "2018-09-09",
+      "birthYear": 1958,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Tudor Deliu",
+      "since": "2018-09-09",
+      "until": "2020-08-16",
+      "birthYear": 1955,
+      "deathYear": 2023,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Vlad Filat",
+      "since": "2020-08-16",
+      "until": "2021-04-29",
+      "birthYear": 1969,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "Interim President",
+      "person": "Iulian David",
+      "since": "2021-08-01",
+      "until": "2023-07-02",
+      "birthYear": null,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Vlad Filat",
+      "since": "2023-07-02",
+      "until": null,
+      "birthYear": 1969,
+      "deathYear": null,
+      "sourceIds": []
+    }
+  ],
+  "governmentStatus": {
+    "label": "extra-parliamentary",
+    "since": "2019",
+    "sourceIds": []
+  },
+  "representation": {
+    "parliament": {
+      "status": "not-represented",
+      "since": "2019",
+      "seats": null,
+      "totalSeats": null,
+      "sourceIds": []
+    },
+    "government": {
+      "status": "opposition",
+      "since": "2019-11-14",
+      "sourceIds": []
+    }
+  },
+  "internationalAffiliations": [
+    {
+      "name": "European People's Party",
+      "status": "observer",
+      "since": "2011",
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "International Democrat Union ",
+      "status": "former member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    }
+  ],
+  "electionResults": {
+    "parliamentary": [],
+    "presidential": []
+  },
+  "links": {
+    "website": "http://www.pldm.md/",
+    "websiteArchive": "https://web.archive.org/web/20260620070219/http://www.pldm.md/",
+    "facebook": "https://www.facebook.com/PLDMoldova/",
+    "x": null,
+    "instagram": null,
+    "youtube": null,
+    "socialMedia": [],
+    "other": []
+  },
+  "sources": [
+    {
+      "id": "had-been-founded",
+      "title": "Liberal Democratic Party of Moldova has been founded",
+      "publisher": "IPN",
+      "date": "2007-12-08",
+      "url": "https://www.old.ipn.md/en/liberal-democratic-party-of-moldova-has-been-founded-7965_967599.html",
+      "accessed": "2026-06-29",
+      "language": "English"
+    },
+    {
+      "id": "moj-registers",
+      "title": "PoliticsMoJ registers LDPM",
+      "author": "Moldova.org",
+      "date": "2008-01-29",
+      "url": "https://www.moldova.org/en/moj-registers-ldpm-91160-eng/",
+      "accessed": "2026-06-29",
+      "language": "English"
+    }
+  ],
+  "lastUpdated": "2026-06-29",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true
+  }
+}
