@@ -21,12 +21,16 @@
     "founded": {
       "date": "1993-10-22",
       "precision": "day",
-      "sourceIds": []
+      "sourceIds": [
+        "rianovosti2014"
+      ]
     },
     "registered": {
       "date": "1994-04-27",
       "precision": "day",
-      "sourceIds": []
+      "sourceIds": [
+        "edemocracymd"
+      ]
     }
   },
   "summary": "A major communist political party in Moldova. Governing party in 2001–2009.",
@@ -34,7 +38,7 @@
     "formation": "",
     "formationSourceIds": [],
     "predecessors": [
-      "Communist Party of Moldavia"
+      "md-PCM"
     ],
     "successors": [],
     "splitFrom": [],
@@ -60,6 +64,13 @@
         "sourceIds": []
       },
       {
+        "name": "Democratic socialism",
+        "sourceIds": [
+          "edemocracymd"
+        ],
+        "note": "Self-described"
+      },
+      {
         "name": "Russophilia",
         "sourceIds": []
       }
@@ -77,7 +88,9 @@
       "until": "2026-06-06",
       "birthYear": 1941,
       "deathYear": null,
-      "sourceIds": []
+      "sourceIds": [
+        "rianovosti2014"
+      ]
     },
     {
       "title": "President",
@@ -155,7 +168,25 @@
     "socialMedia": [],
     "other": []
   },
-  "sources": [],
+  "sources": [
+    {
+      "id": "rianovosti2014",
+      "title": "Партия коммунистов Республики Молдова",
+      "publisher": "RIA Novosti",
+      "date": "2014-12-01",
+      "url": "https://ria.ru/20141201/1035922212.html",
+      "accessed": "2026-06-29",
+      "language": "Russian"
+    },
+    {
+      "id": "edemocracymd",
+      "title": "Партия коммунистов Республики Молдова (ПКРМ)",
+      "publisher": "www.e-democracy.md",
+      "url": "http://www.e-democracy.md/ru/parties/pcrm/",
+      "accessed": "2026-06-29",
+      "language": "Russian"
+    }
+  ],
   "lastUpdated": "2026-06-29",
   "editorial": {
     "completeness": "stub",
