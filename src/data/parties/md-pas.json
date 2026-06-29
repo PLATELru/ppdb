@@ -254,5 +254,26 @@
     "completeness": "substantial",
     "needsReview": false,
     "note": "The logo is currently loaded from Wikimedia Commons. For maximum reliability, download the SVG to public/logos/md-pas.svg and replace the logo value with /logos/md-pas.svg. Exact brand colour hex values were not inferred; the colour field therefore uses the names yellow and black."
+  },
+  "representation": {
+  "parliament": {
+    "status": "represented",
+    "since": null,
+    "seats": 55,
+    "totalSeats": 101,
+    "note": "",
+    "sourceIds": [
+      "cec-results-2025"
+    ]
+  },
+  "government": {
+    "status": "in-government",
+    "since": "2021-08-06",
+    "note": "",
+    "sourceIds": [
+      "government-gavrilita-2021",
+      "government-munteanu-2025"
+    ]
   }
+}
 }
