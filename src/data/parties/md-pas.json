@@ -22,7 +22,7 @@
     "founded": {
       "date": "2016-05-15",
       "precision": "day",
-      "note": "Date of the constituent congress.",
+      "note": "",
       "sourceIds": [
         "justice-registration-2016",
         "pas-about"
@@ -36,9 +36,9 @@
       ]
     }
   },
-  "summary": "The Party of Action and Solidarity (PAS) is an active centre-right, pro-European political party in Moldova. Founded by Maia Sandu in 2016, it has led the national government since August 2021 and retained a parliamentary majority in the September 2025 election.",
+  "summary": "The <b>Party of Action and Solidarit</b> (PAS) is an currently ruling centre-right, pro-European political party in Moldova. Founded by Maia Sandu in 2016, it has led the national government since August 2021.",
   "history": {
-    "formation": "PAS developed from the civic-political initiative «În PAS cu Maia Sandu», announced by former education minister Maia Sandu on 23 December 2015. Its constituent congress was held on 15 May 2016 and unanimously elected Sandu as party president. The Ministry of Justice formally registered the party and its symbols on 26 May 2016.",
+    "formation": "PAS developed from the civic-political initiative «În PAS cu Maia Sandu», announced by former PLDM education minister Maia Sandu on 23 December 2015. Its constituent congress was held on 15 May 2016, Sandu was unanimously elected as party president. The Ministry of Justice formally registered the party on 26 May 2016.",
     "formationSourceIds": [
       "pas-about",
       "justice-registration-2016"
@@ -52,27 +52,27 @@
   "ideology": {
     "labels": [
       {
+        "name": "Conservative liberalism",
+        "sourceIds": [
+          "wolfram-wordsieck",
+        ],
+        "note": ""
+      },
+      {
         "name": "Social liberalism",
         "sourceIds": [
           "pas-about",
           "ku-leuven-monitor"
         ],
-        "note": "PAS itself uses the term social liberalism; the European Party Monitor describes its doctrine as New Liberalism, combining a free-market economy with a social welfare state."
+        "note": "Self-described"
       },
       {
         "name": "Pro-Europeanism",
         "sourceIds": [
           "ku-leuven-monitor"
         ],
-        "note": "European Union integration is a central programmatic objective."
+        "note": ""
       },
-      {
-        "name": "Anti-corruption",
-        "sourceIds": [
-          "ku-leuven-monitor"
-        ],
-        "note": "Anti-corruption and institutional integrity are central elements of the party programme."
-      }
     ],
     "position": {
       "label": "Centre-right",
@@ -86,11 +86,20 @@
   "leadership": [
     {
       "title": "President",
+      "person": "Maia Sandu",
+      "since": "2016-05-16",
+      "until": "2020-12-10",
+      "birthYear": 1972,
+      "note": "",
+      "sourceIds": null
+    },
+    {
+      "title": "President",
       "person": "Igor Grosu",
-      "since": "2022-05-15",
+      "since": "2020-12-10",
       "until": null,
       "birthYear": 1972,
-      "note": "Re-elected for a new four-year term on 14 June 2026.",
+      "note": "Acting until 15 May 2022",
       "sourceIds": [
         "ipn-congress-2022",
         "moldpres-congress-2026",
@@ -101,7 +110,7 @@
   "governmentStatus": {
     "label": "government",
     "since": "2021-08-06",
-    "description": "PAS has led majority governments since the Gavrilița cabinet took office on 6 August 2021. It won 55 of 101 parliamentary mandates in the September 2025 election and supports the government headed by Prime Minister Alexandru Munteanu, sworn in on 1 November 2025.",
+    "description": "",
     "sourceIds": [
       "government-gavrilita-2021",
       "cec-results-2025",
@@ -128,6 +137,22 @@
       ]
     }
   ],
+  "electionResults": {
+  "parliamentary": [
+    {
+      "year": 2025,
+      "listLeader": "Igor Grosu",
+      "votes": 792557,
+      "percentage": 50.20,
+      "seats": 55,
+      "outcome": "Majority",
+      "sourceIds": [
+        "cec-results-2025"
+      ]
+    }
+  ],
+  "presidential": []
+}
   "links": {
     "website": "https://www.unpaspentru.md/",
     "facebook": "https://www.facebook.com/partidulpas/",
@@ -150,6 +175,15 @@
       "url": "https://justice.gov.md/ro/content/partidul-politic-partidul-actiune-si-solidaritate-inregistrat-oficial-de-ministerul",
       "accessed": "2026-06-29",
       "language": "Romanian"
+    },
+    {
+      "id": "wolfram-wordsieck",
+      "title": "\"Moldova\". Parties and Elections in Europe.",
+      "publisher": "Nordsieck, Wolfram",
+      "date": null,
+      "url": "http://www.parties-and-elections.eu/moldova.html",
+      "accessed": "2019-04-13",
+      "language": "English"
     },
     {
       "id": "pas-about",
