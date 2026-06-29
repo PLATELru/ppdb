@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PartyInfobox from "../../components/PartyInfobox.astro";
 import SourceList from "../../components/SourceList.astro";
+import PartyText from "../../components/PartyText.astro";
 import { withBase } from "../../lib/paths";
 
 export async function getStaticPaths() {
@@ -83,14 +84,16 @@ const presidentialResults = party.electionResults?.presidential ?? [];
   <div class="article-layout">
     <article data-pagefind-body>
       <section class="party-summary">
-        <p>{party.summary}</p>
+        <p>
+  <PartyText text={party.summary} />
+</p>
       </section>
 
       {party.history.formation && (
         <section>
           <h2>History</h2>
           <p>
-            {party.history.formation}
+            <PartyText text={party.history.formation} />
             {sourceLinks(party.history.formationSourceIds).map((source) => (
               <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
             ))}
