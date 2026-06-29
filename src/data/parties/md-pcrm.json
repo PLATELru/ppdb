@@ -1,0 +1,164 @@
+{
+  "id": "md-pcrm",
+  "name": {
+    "english": "Party of Communists of the Republic of Moldova",
+    "native": [
+      "Partidul Comuniștilor din Republica Moldova"
+    ],
+    "literal": null,
+    "abbreviation": "PCRM"
+  },
+  "country": {
+    "id": "md",
+    "name": "Moldova"
+  },
+  "status": "active",
+  "logo": "/logos/md-prcm.svg",
+  "colors": [
+    "#D2222A"
+  ],
+  "dates": {
+    "founded": {
+      "date": "1993-10-22",
+      "precision": "day",
+      "sourceIds": []
+    },
+    "registered": {
+      "date": "1994-04-27",
+      "precision": "day",
+      "sourceIds": []
+    }
+  },
+  "summary": "A major communist political party in Moldova. Governing party in 2001–2009.",
+  "history": {
+    "formation": "",
+    "formationSourceIds": [],
+    "predecessors": [
+      "Communist Party of Moldavia"
+    ],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": []
+  },
+  "ideology": {
+    "labels": [
+      {
+        "name": "Communism",
+        "sourceIds": []
+      },
+      {
+        "name": "Marxism–Leninism",
+        "sourceIds": []
+      },
+      {
+        "name": "Moldovenism",
+        "sourceIds": []
+      },
+      {
+        "name": "Social conservatism",
+        "sourceIds": []
+      },
+      {
+        "name": "Russophilia",
+        "sourceIds": []
+      }
+    ],
+    "position": {
+      "label": "Far-left",
+      "sourceIds": []
+    }
+  },
+  "leadership": [
+    {
+      "title": "President",
+      "person": "Vladimir Voronin",
+      "since": "1994-12-24",
+      "until": "2026-06-06",
+      "birthYear": 1941,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Diana Caraman",
+      "since": "2026-06-06",
+      "until": null,
+      "birthYear": 1990,
+      "deathYear": null,
+      "sourceIds": []
+    }
+  ],
+  "governmentStatus": {
+    "label": "opposition",
+    "since": "2009-09-25",
+    "sourceIds": []
+  },
+  "representation": {
+    "parliament": {
+      "status": "represented",
+      "since": "2025",
+      "seats": null,
+      "totalSeats": null,
+      "sourceIds": []
+    },
+    "government": {
+      "status": "opposition",
+      "since": null,
+      "sourceIds": []
+    }
+  },
+  "internationalAffiliations": [
+    {
+      "name": "International Meeting of Communist and Workers' Parties",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Union of Communist Parties – Communist Party of the Soviet Union",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Party of the European Left",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    }
+  ],
+  "electionResults": {
+    "parliamentary": [
+      {
+        "year": 2025,
+        "listLeader": "Igor Dodon (BEP)",
+        "votes": 381984,
+        "percentage": 24.2,
+        "seats": 8,
+        "outcome": "Opposition",
+        "sourceIds": []
+      }
+    ],
+    "presidential": []
+  },
+  "links": {
+    "website": "https://www.pcrm.md/",
+    "websiteArchive": "https://web.archive.org/web/20260603054117/https://www.pcrm.md/",
+    "facebook": "https://www.facebook.com/groups/pcrm17/",
+    "x": null,
+    "instagram": null,
+    "youtube": "https://www.youtube.com/channel/UC7iS4-hRVe2HDGvX5Tpec-Q",
+    "socialMedia": [],
+    "other": []
+  },
+  "sources": [],
+  "lastUpdated": "2026-06-29",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true
+  }
+}
