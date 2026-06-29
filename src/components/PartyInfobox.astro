@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { party } = Astro.props;
+
 const sourceMap = new Map(
   party.sources.map((source: any, index: number) => [source.id, index + 1])
 );
@@ -16,19 +17,150 @@ function sourceLinks(ids: string[] = []) {
     .filter((id) => sourceMap.has(id))
     .map((id) => ({ id, label: sourceMap.get(id) }));
 }
+
+const parliamentLabels: Record<string, string> = {
+  represented: "Represented",
+  "not-represented": "Not represented",
+  unknown: "Unknown",
+  "not-applicable": "Not applicable"
+};
+
+const governmentLabels: Record<string, string> = {
+  "in-government": "In government",
+  "supports-government": "Supports government",
+  opposition: "Opposition",
+  neutral: "Neutral",
+  mixed: "Mixed",
+  unknown: "Unknown",
+  "not-applicable": "Not applicable"
+};
+
+const legacyGovernmentMap: Record<string, string> = {
+  government: "in-government",
+  opposition: "opposition",
+  mixed: "mixed",
+  unknown: "unknown",
+  "not-applicable": "not-applicable"
+};
+
+const parliament =
+  party.representation?.parliament ??
+  (
+    party.governmentStatus?.label === "extra-parliamentary"
+      ? {
+          status: "not-represented",
+          since: party.governmentStatus.since,
+          note: party.governmentStatus.description,
+          sourceIds: party.governmentStatus.sourceIds ?? []
+        }
+      : null
+  );
+
+const legacyGovernmentStatus =
+  party.governmentStatus &&
+  legacyGovernmentMap[party.governmentStatus.label]
+    ? {
+        status: legacyGovernmentMap[party.governmentStatus.label],
+        since: party.governmentStatus.since,
+        note: party.governmentStatus.description,
+        sourceIds: party.governmentStatus.sourceIds ?? []
+      }
+    : null;
+
+const government =
+  party.representation?.government ??
+  legacyGovernmentStatus;
+
+const socialMedia = [
+  ...(party.links?.facebook
+    ? [{ label: "Facebook", url: party.links.facebook, archiveUrl: null, sourceIds: [] }]
+    : []),
+  ...(party.links?.x
+    ? [{ label: "X", url: party.links.x, archiveUrl: null, sourceIds: [] }]
+    : []),
+  ...(party.links?.instagram
+    ? [{ label: "Instagram", url: party.links.instagram, archiveUrl: null, sourceIds: [] }]
+    : []),
+  ...(party.links?.youtube
+    ? [{ label: "YouTube", url: party.links.youtube, archiveUrl: null, sourceIds: [] }]
+    : []),
+  ...(party.links?.socialMedia ?? []),
+  ...(party.links?.other ?? []).map((link: any) => ({
+    ...link,
+    archiveUrl: null,
+    sourceIds: []
+  }))
+];
+
+function seatDescription(item: any) {
+  if (typeof item?.seats !== "number") return null;
+  if (typeof item?.totalSeats === "number") {
+    return `${item.seats}/${item.totalSeats} seats`;
+  }
+  return `${item.seats} seats`;
+}
 ---
 
 <aside class="infobox">
-  <img class="infobox-logo" src={assetPath(party.logo)} alt={`${party.name.english} logo`} />
+  <header class="infobox-heading">
+    <h2>{party.name.english}</h2>
+    {party.name.native.length > 0 && (
+      <p class="infobox-native-name">{party.name.native.join(" · ")}</p>
+    )}
+  </header>
+
+  <img
+    class="infobox-logo"
+    src={assetPath(party.logo)}
+    alt={`${party.name.english} logo`}
+  />
+
+  {party.name.abbreviation && (
+    <p class="infobox-abbreviation">{party.name.abbreviation}</p>
+  )}
+
   <dl>
     <div>
       <dt>Country</dt>
-      <dd><a href={withBase(`/countries/${party.country.id}/`)}>{party.country.name}</a></dd>
+      <dd>
+        <a href={withBase(`/countries/${party.country.id}/`)}>
+          {party.country.name}
+        </a>
+      </dd>
     </div>
+
     <div>
       <dt>Status</dt>
-      <dd>{statusLabels[party.status]}</dd>
+      <dd class="infobox-status-stack">
+        <span>
+          <strong>Activity:</strong> {statusLabels[party.status]}
+        </span>
+
+        {parliament && (
+          <span>
+            <strong>Parliament:</strong>{" "}
+            {parliamentLabels[parliament.status] ?? parliament.status}
+            {seatDescription(parliament) && ` (${seatDescription(parliament)})`}
+            {parliament.since && ` since ${formatDate(parliament.since)}`}
+            {sourceLinks(parliament.sourceIds).map((source) => (
+              <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+            ))}
+          </span>
+        )}
+
+        {government && (
+          <span>
+            <strong>Government:</strong>{" "}
+            {governmentLabels[government.status] ?? government.status}
+            {government.since && ` since ${formatDate(government.since)}`}
+            {sourceLinks(government.sourceIds).map((source) => (
+              <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+            ))}
+          </span>
+        )}
+      </dd>
     </div>
+
     <div>
       <dt>Founded</dt>
       <dd>
@@ -38,6 +170,7 @@ function sourceLinks(ids: string[] = []) {
         ))}
       </dd>
     </div>
+
     {party.dates.registered?.date && (
       <div>
         <dt>Registered</dt>
@@ -49,6 +182,7 @@ function sourceLinks(ids: string[] = []) {
         </dd>
       </div>
     )}
+
     {party.dates.dissolved?.date && (
       <div>
         <dt>Dissolved</dt>
@@ -60,12 +194,93 @@ function sourceLinks(ids: string[] = []) {
         </dd>
       </div>
     )}
+
+    {party.ideology.labels.length > 0 && (
+      <div>
+        <dt>Ideology</dt>
+        <dd>
+          <ul class="infobox-list">
+            {party.ideology.labels.map((item: any) => (
+              <li>
+                {item.name}
+                {sourceLinks(item.sourceIds).map((source) => (
+                  <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    )}
+
     {party.ideology.position?.label && (
       <div>
         <dt>Position</dt>
-        <dd>{party.ideology.position.label}</dd>
+        <dd>
+          {party.ideology.position.label}
+          {sourceLinks(party.ideology.position.sourceIds).map((source) => (
+            <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+          ))}
+        </dd>
       </div>
     )}
+
+    {party.internationalAffiliations.length > 0 && (
+      <div>
+        <dt>Supranational alliances</dt>
+        <dd>
+          <ul class="infobox-list">
+            {party.internationalAffiliations.map((item: any) => (
+              <li>
+                {item.name}
+                {item.status && <>{` — ${item.status}`}</>}
+                {item.since && <>{` (since ${formatDate(item.since)})`}</>}
+                {item.until && <>{` (until ${formatDate(item.until)})`}</>}
+                {sourceLinks(item.sourceIds).map((source) => (
+                  <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    )}
+
+    {(party.links?.website || party.links?.websiteArchive) && (
+      <div>
+        <dt>Website</dt>
+        <dd class="infobox-link-stack">
+          {party.links.website && (
+            <a href={party.links.website} rel="external">Official website</a>
+          )}
+          {party.links.websiteArchive && (
+            <a href={party.links.websiteArchive} rel="external">Archived version</a>
+          )}
+        </dd>
+      </div>
+    )}
+
+    {socialMedia.length > 0 && (
+      <div>
+        <dt>Social media</dt>
+        <dd>
+          <ul class="infobox-list">
+            {socialMedia.map((item: any) => (
+              <li>
+                <a href={item.url} rel="external">{item.label}</a>
+                {item.archiveUrl && (
+                  <> (<a href={item.archiveUrl} rel="external">archive</a>)</>
+                )}
+                {sourceLinks(item.sourceIds).map((source) => (
+                  <> <a class="source-ref" href={`#source-${source.id}`}>[{source.label}]</a></>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    )}
+
     {party.lastUpdated && (
       <div>
         <dt>Last reviewed</dt>
