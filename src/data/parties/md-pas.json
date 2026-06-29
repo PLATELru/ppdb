@@ -36,7 +36,7 @@
       ]
     }
   },
-  "summary": "The <b>Party of Action and Solidarit</b> (PAS) is an currently ruling centre-right, pro-European political party in Moldova. Founded by Maia Sandu in 2016, it has led the national government since August 2021.",
+  "summary": "The Party of Action and Solidarity (PAS) is an currently ruling centre-right, pro-European political party in Moldova. Founded by Maia Sandu in 2016, it has led the national government since August 2021.",
   "history": {
     "formation": "PAS developed from the civic-political initiative «În PAS cu Maia Sandu», announced by former PLDM education minister Maia Sandu on 23 December 2015. Its constituent congress was held on 15 May 2016, Sandu was unanimously elected as party president. The Ministry of Justice formally registered the party on 26 May 2016.",
     "formationSourceIds": [
@@ -286,7 +286,7 @@
   "editorial": {
     "completeness": "substantial",
     "needsReview": false,
-    "note": "The logo is currently loaded from Wikimedia Commons. For maximum reliability, download the SVG to public/logos/md-pas.svg and replace the logo value with /logos/md-pas.svg. Exact brand colour hex values were not inferred; the colour field therefore uses the names yellow and black."
+    "note": "Test page!!"
   },
   "representation": {
   "parliament": {
