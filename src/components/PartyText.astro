@@ -6,7 +6,7 @@ interface Props {
   text?: string | null;
 }
 
-const { text = "" } = Astro.props;
+const text: string = Astro.props.text ?? "";
 
 const parties = await getCollection("parties");
 
