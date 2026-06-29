@@ -13,9 +13,9 @@
     "name": "Moldova"
   },
   "status": "active",
-  "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Logo_of_the_Party_of_Socialists_of_the_Republic_of_Moldova.svg",
+  "logo": "/logos/md-psrm.svg",
   "colors": [
-    "red"
+    "#d12c26"
   ],
  "dates": {
     "founded": {
