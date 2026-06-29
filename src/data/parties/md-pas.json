@@ -54,7 +54,7 @@
       {
         "name": "Conservative liberalism",
         "sourceIds": [
-          "wolfram-wordsieck",
+          "wolfram-wordsieck"
         ],
         "note": ""
       },
@@ -91,7 +91,7 @@
       "until": "2020-12-10",
       "birthYear": 1972,
       "note": "",
-      "sourceIds": null
+      "sourceIds": []
     },
     {
       "title": "President",
@@ -152,7 +152,7 @@
     }
   ],
   "presidential": []
-}
+},
   "links": {
     "website": "https://www.unpaspentru.md/",
     "facebook": "https://www.facebook.com/partidulpas/",
@@ -180,7 +180,6 @@
       "id": "wolfram-wordsieck",
       "title": "\"Moldova\". Parties and Elections in Europe.",
       "publisher": "Nordsieck, Wolfram",
-      "date": null,
       "url": "http://www.parties-and-elections.eu/moldova.html",
       "accessed": "2019-04-13",
       "language": "English"
