@@ -590,3 +590,62 @@ th {
   font-size: 0.86rem;
 }
 
+/* Infobox layout and party-colour overrides */
+
+.article-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 480px);
+}
+
+.infobox {
+  position: static;
+  top: auto;
+  border-color: var(--party-color, var(--border));
+}
+
+.infobox-logo {
+  border: 1px solid var(--party-color, var(--border));
+}
+
+.infobox dl > div {
+  border-top-color: var(--party-color, var(--border));
+}
+
+.infobox-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.8rem;
+}
+
+.infobox-color-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.infobox-color-dot {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  border: 1px solid rgb(0 0 0 / 28%);
+  border-radius: 50%;
+}
+
+.infobox-color-item code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 1000px) {
+  .article-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .infobox {
+    grid-row: 1;
+  }
+}
+
