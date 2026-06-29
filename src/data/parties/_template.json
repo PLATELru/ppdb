@@ -61,6 +61,10 @@
     }
   },
   "internationalAffiliations": [],
+  "electionResults": {
+    "parliamentary": [],
+    "presidential": []
+  },
   "links": {
     "website": null,
     "websiteArchive": null,
