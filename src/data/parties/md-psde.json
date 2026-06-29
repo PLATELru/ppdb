@@ -1,0 +1,153 @@
+{
+  "id": "md-psde",
+  "name": {
+    "english": "European Social Democratic Party",
+    "native": [
+      "Partidul Social Democrat European"
+    ],
+    "literal": null,
+    "abbreviation": "PSDE"
+  },
+  "country": {
+    "id": "md",
+    "name": "Moldova"
+  },
+  "status": "active",
+  "logo": "/logos/md-psde.png",
+  "colors": [
+    "#FF2D2D",
+    "#004B96"
+  ],
+  "dates": {
+    "founded": {
+      "date": "2022-11-20",
+      "precision": "day",
+      "sourceIds": []
+    }
+  },
+  "summary": "Rebranded [[md-pdm|Democratic Party of Moldova]]",
+  "history": {
+    "formation": "",
+    "formationSourceIds": [],
+    "predecessors": [],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": []
+  },
+  "ideology": {
+    "labels": [
+      {
+        "name": "Social democracy",
+        "sourceIds": []
+      },
+      {
+        "name": "Left-wing populism",
+        "sourceIds": []
+      },
+      {
+        "name": "Pro-Europeanism",
+        "sourceIds": []
+      },
+      {
+        "name": "Social conservatism",
+        "sourceIds": []
+      }
+    ],
+    "position": {
+      "label": "Centre-left",
+      "sourceIds": []
+    }
+  },
+  "leadership": [
+    {
+      "title": "President",
+      "person": "Ion Sula",
+      "since": "20 November 2022",
+      "until": "22 December 2024",
+      "birthYear": 1980,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Tudor Ulianovschi",
+      "since": "22 December 2024",
+      "until": "5 November 2025",
+      "birthYear": 1983,
+      "deathYear": null,
+      "sourceIds": []
+    },
+    {
+      "title": "President",
+      "person": "Vasile Bumacov",
+      "since": "6 June 2026",
+      "until": null,
+      "birthYear": 1957,
+      "deathYear": null,
+      "sourceIds": []
+    }
+  ],
+  "governmentStatus": {
+    "label": "opposition",
+    "since": null,
+    "sourceIds": []
+  },
+  "representation": {
+    "parliament": {
+      "status": "not-represented",
+      "since": null,
+      "seats": null,
+      "totalSeats": null,
+      "sourceIds": []
+    },
+    "government": {
+      "status": "opposition",
+      "since": null,
+      "sourceIds": []
+    }
+  },
+  "internationalAffiliations": [
+    {
+      "name": "Party of European Socialists",
+      "status": "associate",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    },
+    {
+      "name": "Socialist International",
+      "status": "member",
+      "since": null,
+      "until": null,
+      "sourceIds": []
+    }
+  ],
+  "electionResults": {
+    "parliamentary": [],
+    "presidential": []
+  },
+  "links": {
+    "website": "https://psde.md/",
+    "websiteArchive": "https://web.archive.org/web/20260414212422/https://psde.md/",
+    "facebook": "https://www.facebook.com/PSDEMoldova",
+    "x": null,
+    "instagram": "https://www.instagram.com/psde_md/",
+    "youtube": "https://www.youtube.com/@partidulsocialdemocrateuropean",
+    "socialMedia": [
+      {
+        "label": "Telegram",
+        "url": "https://t.me/PSDEMoldova",
+        "archiveUrl": null,
+        "sourceIds": []
+      }
+    ],
+    "other": []
+  },
+  "sources": [],
+  "lastUpdated": "2026-06-29",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true
+  }
+}
