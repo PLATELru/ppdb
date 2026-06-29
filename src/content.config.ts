@@ -57,6 +57,21 @@ const presidentialElectionResult = z.object({
   sourceIds: z.array(z.string()).default([])
 });
 
+const partyRelation = z.union([
+  // temp
+  z.string(),
+
+  z.object({
+    id: z
+      .string()
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+      .nullable()
+      .optional(),
+    name: z.string(),
+    sourceIds: z.array(z.string()).default([])
+  })
+]);
+
 const parties = defineCollection({
   loader: glob({
     pattern: "**/[^_]*.json",
@@ -87,11 +102,11 @@ const parties = defineCollection({
     history: z.object({
       formation: z.string().optional(),
       formationSourceIds: z.array(z.string()).default([]),
-      predecessors: z.array(z.string()).default([]),
-      successors: z.array(z.string()).default([]),
-      splitFrom: z.array(z.string()).default([]),
-      mergers: z.array(z.string()).default([]),
-      memberParties: z.array(z.string()).default([])
+      predecessors: z.array(partyRelation).default([]),
+      successors: z.array(partyRelation).default([]),
+      splitFrom: z.array(partyRelation).default([]),
+      mergers: z.array(partyRelation).default([]),
+      memberParties: z.array(partyRelation).default([])
     }).default({
       formationSourceIds: [],
       predecessors: [],
