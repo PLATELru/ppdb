@@ -1,0 +1,1081 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Party editor — Political Parties Database"
+  description="A browser-based editor for creating and validating PPDB party JSON files."
+>
+  <header class="page-header editor-header">
+    <p class="eyebrow">Data tools</p>
+    <h1>Party editor</h1>
+    <p class="lead">
+      Create or edit a party entry without writing JSON manually. Data stays in this browser until you download it.
+    </p>
+  </header>
+
+  <noscript>
+    <p class="notice">This editor requires JavaScript.</p>
+  </noscript>
+
+  <div class="editor-toolbar" aria-label="Editor actions">
+    <button class="button" id="new-entry" type="button">New entry</button>
+    <label class="button button-secondary file-button">
+      Open JSON
+      <input id="open-json" type="file" accept="application/json,.json" />
+    </label>
+    <button class="button button-secondary" id="load-draft" type="button">Load draft</button>
+    <button class="button button-secondary" id="validate-entry" type="button">Validate</button>
+    <button class="button button-secondary" id="copy-json" type="button">Copy JSON</button>
+    <button class="button" id="download-json" type="button">Download JSON</button>
+  </div>
+
+  <div id="editor-message" class="editor-message" role="status" aria-live="polite"></div>
+
+  <div class="editor-layout">
+    <form id="party-editor" class="editor-form" novalidate>
+      <div id="editor-sections"></div>
+    </form>
+
+    <aside class="editor-preview" aria-label="Generated JSON">
+      <div class="preview-heading">
+        <div>
+          <p class="eyebrow">Output</p>
+          <h2>Generated JSON</h2>
+        </div>
+        <span id="draft-status">Not saved</span>
+      </div>
+      <pre id="json-preview" tabindex="0"></pre>
+    </aside>
+  </div>
+
+  <script>
+    // @ts-nocheck
+    const DRAFT_KEY = 'ppdb-party-editor-draft-v1';
+
+    const precisionOptions = ['day', 'month', 'year', 'circa', 'unknown'];
+    const statusOptions = ['active', 'inactive', 'dissolved', 'historical', 'unknown'];
+    const governmentStatusOptions = [
+      'government',
+      'opposition',
+      'extra-parliamentary',
+      'mixed',
+      'not-applicable',
+      'unknown'
+    ];
+    const parliamentStatusOptions = ['represented', 'not-represented', 'unknown', 'not-applicable'];
+    const governmentRepresentationOptions = [
+      'in-government',
+      'supports-government',
+      'opposition',
+      'neutral',
+      'mixed',
+      'unknown',
+      'not-applicable'
+    ];
+    const completenessOptions = ['stub', 'partial', 'substantial', 'complete'];
+
+    const today = () => new Date().toISOString().slice(0, 10);
+
+    const defaultData = () => ({
+      id: '',
+      name: {
+        english: '',
+        native: [],
+        literal: null,
+        abbreviation: null
+      },
+      country: {
+        id: '',
+        name: ''
+      },
+      status: 'unknown',
+      logo: null,
+      colors: [],
+      dates: {
+        founded: { date: null, precision: 'unknown', sourceIds: [] },
+        registered: { date: null, precision: 'unknown', sourceIds: [] },
+        dissolved: { date: null, precision: 'unknown', sourceIds: [] }
+      },
+      summary: '',
+      history: {
+        formation: '',
+        formationSourceIds: [],
+        predecessors: [],
+        successors: [],
+        splitFrom: [],
+        mergers: [],
+        memberParties: []
+      },
+      ideology: {
+        labels: [],
+        position: null
+      },
+      leadership: [],
+      governmentStatus: {
+        label: 'unknown',
+        since: null,
+        description: '',
+        sourceIds: []
+      },
+      representation: {
+        parliament: {
+          status: 'unknown',
+          since: null,
+          seats: null,
+          totalSeats: null,
+          note: '',
+          sourceIds: []
+        },
+        government: {
+          status: 'unknown',
+          since: null,
+          note: '',
+          sourceIds: []
+        }
+      },
+      internationalAffiliations: [],
+      electionResults: {
+        parliamentary: [],
+        presidential: []
+      },
+      links: {
+        website: null,
+        websiteArchive: null,
+        facebook: null,
+        x: null,
+        instagram: null,
+        youtube: null,
+        socialMedia: [],
+        other: []
+      },
+      sources: [],
+      lastUpdated: today(),
+      editorial: {
+        completeness: 'stub',
+        needsReview: true,
+        note: ''
+      }
+    });
+
+    const sections = [
+      {
+        id: 'basic',
+        title: 'Basic information',
+        description: 'Names, country, status and visual identity.',
+        fields: [
+          { path: 'id', label: 'Party ID', required: true, placeholder: 'md-pas', help: 'Lowercase letters, numbers and hyphens only.' },
+          { path: 'name.english', label: 'English name', required: true },
+          { path: 'name.native', label: 'Native name(s)', type: 'list', wide: true, placeholder: 'One name per line' },
+          { path: 'name.literal', label: 'Literal translation', nullable: true },
+          { path: 'name.abbreviation', label: 'Abbreviation', nullable: true },
+          { path: 'country.id', label: 'Country ID', required: true, placeholder: 'md' },
+          { path: 'country.name', label: 'Country name', required: true, placeholder: 'Moldova' },
+          { path: 'status', label: 'Status', type: 'select', options: statusOptions, required: true },
+          { path: 'logo', label: 'Logo path', nullable: true, placeholder: '/logos/md-pas.svg' },
+          { path: 'colors', label: 'Party colours', type: 'list', wide: true, placeholder: '#ffdd00\n#000000', help: 'One colour value per line.' },
+          { path: 'summary', label: 'Summary', type: 'textarea', required: true, wide: true, rows: 4 }
+        ]
+      },
+      {
+        id: 'dates',
+        title: 'Dates',
+        description: 'Partial dates such as 2016 or 2016-05 are allowed.',
+        fields: [
+          { path: 'dates.founded.date', label: 'Founded — date', nullable: true, placeholder: 'YYYY-MM-DD' },
+          { path: 'dates.founded.precision', label: 'Founded — precision', type: 'select', options: precisionOptions },
+          { path: 'dates.founded.note', label: 'Founded — note', optional: true, wide: true },
+          { path: 'dates.founded.sourceIds', label: 'Founded — source IDs', type: 'list', wide: true },
+          { path: 'dates.registered.date', label: 'Registered — date', nullable: true, placeholder: 'YYYY-MM-DD' },
+          { path: 'dates.registered.precision', label: 'Registered — precision', type: 'select', options: precisionOptions },
+          { path: 'dates.registered.note', label: 'Registered — note', optional: true, wide: true },
+          { path: 'dates.registered.sourceIds', label: 'Registered — source IDs', type: 'list', wide: true },
+          { path: 'dates.dissolved.date', label: 'Dissolved — date', nullable: true, placeholder: 'YYYY-MM-DD' },
+          { path: 'dates.dissolved.precision', label: 'Dissolved — precision', type: 'select', options: precisionOptions },
+          { path: 'dates.dissolved.note', label: 'Dissolved — note', optional: true, wide: true },
+          { path: 'dates.dissolved.sourceIds', label: 'Dissolved — source IDs', type: 'list', wide: true }
+        ]
+      },
+      {
+        id: 'history',
+        title: 'Formation and history',
+        fields: [
+          { path: 'history.formation', label: 'Formation history', type: 'textarea', wide: true, rows: 6 },
+          { path: 'history.formationSourceIds', label: 'Formation source IDs', type: 'list', wide: true },
+          { path: 'history.predecessors', label: 'Predecessors', type: 'list' },
+          { path: 'history.successors', label: 'Successors', type: 'list' },
+          { path: 'history.splitFrom', label: 'Split from', type: 'list' },
+          { path: 'history.mergers', label: 'Mergers', type: 'list' },
+          { path: 'history.memberParties', label: 'Member parties', type: 'list', wide: true }
+        ]
+      },
+      {
+        id: 'ideology-position',
+        title: 'Political position',
+        description: 'Ideology labels are added in the repeatable section below.',
+        fields: [
+          { path: 'ideology.position.label', label: 'Left–right position', optional: true, placeholder: 'Centre-right' },
+          { path: 'ideology.position.sourceIds', label: 'Position source IDs', type: 'list' },
+          { path: 'ideology.position.note', label: 'Position note', optional: true, wide: true }
+        ]
+      },
+      {
+        id: 'government',
+        title: 'Government and representation',
+        fields: [
+          { path: 'governmentStatus.label', label: 'General government status', type: 'select', options: governmentStatusOptions },
+          { path: 'governmentStatus.since', label: 'General status since', nullable: true, placeholder: 'YYYY-MM-DD' },
+          { path: 'governmentStatus.description', label: 'General status description', optional: true, wide: true },
+          { path: 'governmentStatus.sourceIds', label: 'General status source IDs', type: 'list', wide: true },
+          { path: 'representation.parliament.status', label: 'Parliamentary representation', type: 'select', options: parliamentStatusOptions },
+          { path: 'representation.parliament.since', label: 'Represented since', nullable: true },
+          { path: 'representation.parliament.seats', label: 'Seats', type: 'number', nullable: true, min: 0 },
+          { path: 'representation.parliament.totalSeats', label: 'Total seats', type: 'number', nullable: true, min: 1 },
+          { path: 'representation.parliament.note', label: 'Parliament note', optional: true, wide: true },
+          { path: 'representation.parliament.sourceIds', label: 'Parliament source IDs', type: 'list', wide: true },
+          { path: 'representation.government.status', label: 'Government representation', type: 'select', options: governmentRepresentationOptions },
+          { path: 'representation.government.since', label: 'Government status since', nullable: true },
+          { path: 'representation.government.note', label: 'Government note', optional: true, wide: true },
+          { path: 'representation.government.sourceIds', label: 'Government source IDs', type: 'list', wide: true }
+        ]
+      },
+      {
+        id: 'links-editorial',
+        title: 'Links and editorial data',
+        fields: [
+          { path: 'links.website', label: 'Website', type: 'url', nullable: true },
+          { path: 'links.websiteArchive', label: 'Archived website', type: 'url', nullable: true },
+          { path: 'links.facebook', label: 'Facebook', type: 'url', nullable: true },
+          { path: 'links.x', label: 'X / Twitter', type: 'url', nullable: true },
+          { path: 'links.instagram', label: 'Instagram', type: 'url', nullable: true },
+          { path: 'links.youtube', label: 'YouTube', type: 'url', nullable: true },
+          { path: 'lastUpdated', label: 'Last updated', required: true, placeholder: 'YYYY-MM-DD' },
+          { path: 'editorial.completeness', label: 'Completeness', type: 'select', options: completenessOptions },
+          { path: 'editorial.needsReview', label: 'Needs review', type: 'checkbox' },
+          { path: 'editorial.note', label: 'Editorial note', optional: true, wide: true }
+        ]
+      }
+    ];
+
+    const repeaters = [
+      {
+        path: 'ideology.labels',
+        title: 'Ideologies',
+        itemLabel: 'Ideology',
+        fields: [
+          { key: 'name', label: 'Ideology', required: true },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list' },
+          { key: 'note', label: 'Note', optional: true, wide: true }
+        ],
+        make: () => ({ name: '', sourceIds: [], note: '' })
+      },
+      {
+        path: 'leadership',
+        title: 'Leadership',
+        itemLabel: 'Leader',
+        fields: [
+          { key: 'title', label: 'Title', required: true, placeholder: 'President' },
+          { key: 'person', label: 'Person', required: true },
+          { key: 'since', label: 'Since', nullable: true },
+          { key: 'until', label: 'Until', nullable: true },
+          { key: 'birthYear', label: 'Birth year', type: 'number', nullable: true, min: 1800, max: 2200 },
+          { key: 'deathYear', label: 'Death year', type: 'number', nullable: true, min: 1800, max: 2200 },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list', wide: true },
+          { key: 'note', label: 'Note', optional: true, wide: true }
+        ],
+        make: () => ({ title: '', person: '', since: null, until: null, birthYear: null, deathYear: null, sourceIds: [], note: '' })
+      },
+      {
+        path: 'internationalAffiliations',
+        title: 'International affiliations',
+        itemLabel: 'Affiliation',
+        fields: [
+          { key: 'name', label: 'Organisation', required: true },
+          { key: 'status', label: 'Status', optional: true, placeholder: 'member' },
+          { key: 'since', label: 'Since', nullable: true },
+          { key: 'until', label: 'Until', nullable: true },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list', wide: true }
+        ],
+        make: () => ({ name: '', status: '', since: null, until: null, sourceIds: [] })
+      },
+      {
+        path: 'electionResults.parliamentary',
+        title: 'Parliamentary election results',
+        itemLabel: 'Election',
+        fields: [
+          { key: 'year', label: 'Year', type: 'year', required: true },
+          { key: 'listLeader', label: 'List leader', nullable: true },
+          { key: 'votes', label: 'Votes', type: 'number', nullable: true, min: 0 },
+          { key: 'percentage', label: 'Percentage', type: 'number', nullable: true, min: 0, max: 100, step: 'any' },
+          { key: 'seats', label: 'Seats', type: 'number', nullable: true, min: 0 },
+          { key: 'outcome', label: 'Outcome', nullable: true },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list', wide: true }
+        ],
+        make: () => ({ year: '', listLeader: null, votes: null, percentage: null, seats: null, outcome: null, sourceIds: [] })
+      },
+      {
+        path: 'electionResults.presidential',
+        title: 'Presidential election results',
+        itemLabel: 'Election',
+        fields: [
+          { key: 'year', label: 'Year', type: 'year', required: true },
+          { key: 'candidate', label: 'Candidate', required: true },
+          { key: 'firstRoundVotes', label: 'First-round votes', type: 'number', nullable: true, min: 0 },
+          { key: 'firstRoundPercentage', label: 'First-round %', type: 'number', nullable: true, min: 0, max: 100, step: 'any' },
+          { key: 'secondRoundVotes', label: 'Second-round votes', type: 'number', nullable: true, min: 0 },
+          { key: 'secondRoundPercentage', label: 'Second-round %', type: 'number', nullable: true, min: 0, max: 100, step: 'any' },
+          { key: 'outcome', label: 'Outcome', nullable: true },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list', wide: true }
+        ],
+        make: () => ({ year: '', candidate: '', firstRoundVotes: null, firstRoundPercentage: null, secondRoundVotes: null, secondRoundPercentage: null, outcome: null, sourceIds: [] })
+      },
+      {
+        path: 'links.socialMedia',
+        title: 'Additional social media',
+        itemLabel: 'Social link',
+        fields: [
+          { key: 'label', label: 'Label', required: true },
+          { key: 'url', label: 'URL', type: 'url', required: true },
+          { key: 'archiveUrl', label: 'Archive URL', type: 'url', nullable: true },
+          { key: 'sourceIds', label: 'Source IDs', type: 'list', wide: true }
+        ],
+        make: () => ({ label: '', url: '', archiveUrl: null, sourceIds: [] })
+      },
+      {
+        path: 'links.other',
+        title: 'Other links',
+        itemLabel: 'Link',
+        fields: [
+          { key: 'label', label: 'Label', required: true },
+          { key: 'url', label: 'URL', type: 'url', required: true }
+        ],
+        make: () => ({ label: '', url: '' })
+      },
+      {
+        path: 'sources',
+        title: 'Sources',
+        itemLabel: 'Source',
+        fields: [
+          { key: 'id', label: 'Source ID', required: true, placeholder: 'publisher-topic-year' },
+          { key: 'title', label: 'Title', required: true, wide: true },
+          { key: 'publisher', label: 'Publisher', optional: true },
+          { key: 'author', label: 'Author', optional: true },
+          { key: 'date', label: 'Publication date', optional: true },
+          { key: 'url', label: 'URL', type: 'url', optional: true, wide: true },
+          { key: 'archiveUrl', label: 'Archive URL', type: 'url', optional: true, wide: true },
+          { key: 'accessed', label: 'Accessed', optional: true },
+          { key: 'pages', label: 'Pages', optional: true },
+          { key: 'language', label: 'Language', optional: true },
+          { key: 'note', label: 'Note', type: 'textarea', optional: true, wide: true, rows: 3 }
+        ],
+        make: () => ({ id: '', title: '', publisher: '', author: '', date: '', url: '', archiveUrl: '', accessed: today(), pages: '', language: '', note: '' })
+      }
+    ];
+
+    let state = defaultData();
+    let draftTimer;
+
+    const form = document.querySelector('#party-editor');
+    const sectionsRoot = document.querySelector('#editor-sections');
+    const preview = document.querySelector('#json-preview');
+    const message = document.querySelector('#editor-message');
+    const draftStatus = document.querySelector('#draft-status');
+
+    const escapeHtml = (value) => String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+
+    const getPath = (object, path) => path.split('.').reduce((value, key) => value?.[key], object);
+
+    const setPath = (object, path, value) => {
+      const keys = path.split('.');
+      const finalKey = keys.pop();
+      const target = keys.reduce((cursor, key) => {
+        if (!cursor[key] || typeof cursor[key] !== 'object') cursor[key] = {};
+        return cursor[key];
+      }, object);
+      target[finalKey] = value;
+    };
+
+    const mergeDefaults = (defaults, incoming) => {
+      if (Array.isArray(incoming)) return structuredClone(incoming);
+      if (!incoming || typeof incoming !== 'object') return incoming ?? defaults;
+      const result = defaults && typeof defaults === 'object' && !Array.isArray(defaults)
+        ? structuredClone(defaults)
+        : {};
+      for (const [key, value] of Object.entries(incoming)) {
+        if (Array.isArray(value)) result[key] = structuredClone(value);
+        else if (value && typeof value === 'object') result[key] = mergeDefaults(result[key] ?? {}, value);
+        else result[key] = value;
+      }
+      return result;
+    };
+
+    const parseList = (value) => String(value ?? '')
+      .split(/[\n,]/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    const convertValue = (field, raw, checked = false) => {
+      if (field.type === 'checkbox') return checked;
+      if (field.type === 'list') return parseList(raw);
+      if (field.type === 'number') return raw === '' ? null : Number(raw);
+      if (field.type === 'year') {
+        if (raw === '') return '';
+        return /^\d{4}$/.test(raw) ? Number(raw) : raw;
+      }
+      if (raw === '' && field.nullable) return null;
+      if (raw === '' && field.optional) return undefined;
+      return raw;
+    };
+
+    const formatValue = (field, value) => {
+      if (field.type === 'list') return Array.isArray(value) ? value.join('\n') : '';
+      if (field.type === 'checkbox') return Boolean(value);
+      return value ?? '';
+    };
+
+    const renderField = (field, path, value, context = 'scalar') => {
+      const id = `${context}-${path.replaceAll('.', '-').replaceAll('[', '-').replaceAll(']', '')}`;
+      const classes = ['editor-field'];
+      if (field.wide) classes.push('editor-field-wide');
+      const requiredMark = field.required ? '<span aria-hidden="true">*</span>' : '';
+      const common = `id="${escapeHtml(id)}" data-field-path="${escapeHtml(path)}" data-field-type="${escapeHtml(field.type ?? 'text')}"`;
+      let control = '';
+
+      if (field.type === 'select') {
+        control = `<select ${common}>${field.options.map((option) => `<option value="${escapeHtml(option)}" ${option === value ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select>`;
+      } else if (field.type === 'textarea' || field.type === 'list') {
+        control = `<textarea ${common} rows="${field.rows ?? (field.type === 'list' ? 3 : 4)}" placeholder="${escapeHtml(field.placeholder ?? '')}">${escapeHtml(formatValue(field, value))}</textarea>`;
+      } else if (field.type === 'checkbox') {
+        control = `<label class="checkbox-control"><input ${common} type="checkbox" ${value ? 'checked' : ''} /><span>Yes</span></label>`;
+      } else {
+        const type = field.type === 'url' ? 'url' : field.type === 'number' ? 'number' : 'text';
+        const numberAttrs = field.type === 'number'
+          ? `${field.min !== undefined ? ` min="${field.min}"` : ''}${field.max !== undefined ? ` max="${field.max}"` : ''}${field.step ? ` step="${field.step}"` : ''}`
+          : '';
+        control = `<input ${common} type="${type}" value="${escapeHtml(formatValue(field, value))}" placeholder="${escapeHtml(field.placeholder ?? '')}"${numberAttrs} />`;
+      }
+
+      return `<div class="${classes.join(' ')}"><label for="${escapeHtml(id)}">${escapeHtml(field.label)} ${requiredMark}</label>${control}${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</div>`;
+    };
+
+    const renderStaticSections = () => {
+      const staticHtml = sections.map((section) => {
+        const fields = section.fields.map((field) => renderField(field, field.path, getPath(state, field.path))).join('');
+        return `<section class="editor-section" id="section-${escapeHtml(section.id)}"><div class="editor-section-heading"><div><h2>${escapeHtml(section.title)}</h2>${section.description ? `<p>${escapeHtml(section.description)}</p>` : ''}</div></div><div class="editor-field-grid">${fields}</div></section>`;
+      }).join('');
+
+      const repeaterHtml = repeaters.map((repeater) => `<section class="editor-section" data-repeater-section="${escapeHtml(repeater.path)}"><div class="editor-section-heading"><h2>${escapeHtml(repeater.title)}</h2><button class="button button-secondary add-item" type="button" data-repeater="${escapeHtml(repeater.path)}">+ Add</button></div><div class="repeater-items" data-repeater-items="${escapeHtml(repeater.path)}"></div></section>`).join('');
+
+      sectionsRoot.innerHTML = `${staticHtml}${repeaterHtml}`;
+      renderAllRepeaters();
+    };
+
+    const renderRepeater = (definition) => {
+      const root = document.querySelector(`[data-repeater-items="${definition.path}"]`);
+      const items = getPath(state, definition.path) ?? [];
+      if (!items.length) {
+        root.innerHTML = '<p class="empty-repeater">No items added.</p>';
+        return;
+      }
+
+      root.innerHTML = items.map((item, index) => {
+        const fields = definition.fields.map((field) => renderField(field, `${definition.path}[${index}].${field.key}`, item[field.key], 'repeater')).join('');
+        return `<article class="repeater-card" data-repeater-card="${escapeHtml(definition.path)}" data-index="${index}"><div class="repeater-card-heading"><h3>${escapeHtml(definition.itemLabel)} ${index + 1}</h3><button class="remove-item" type="button" data-repeater="${escapeHtml(definition.path)}" data-index="${index}">Remove</button></div><div class="editor-field-grid">${fields}</div></article>`;
+      }).join('');
+    };
+
+    const renderAllRepeaters = () => repeaters.forEach(renderRepeater);
+
+    const readStaticFields = (data) => {
+      for (const section of sections) {
+        for (const field of section.fields) {
+          const control = form.querySelector(`[data-field-path="${field.path}"]`);
+          if (!control) continue;
+          setPath(data, field.path, convertValue(field, control.value, control.checked));
+        }
+      }
+    };
+
+    const readRepeaters = (data) => {
+      for (const definition of repeaters) {
+        const cards = [...form.querySelectorAll(`[data-repeater-card="${definition.path}"]`)];
+        const items = cards.map((card) => {
+          const item = {};
+          for (const field of definition.fields) {
+            const suffix = `.${field.key}`;
+            const control = [...card.querySelectorAll('[data-field-path]')].find((element) => element.dataset.fieldPath.endsWith(suffix));
+            item[field.key] = convertValue(field, control?.value ?? '', control?.checked ?? false);
+          }
+          return item;
+        });
+        setPath(data, definition.path, items);
+      }
+    };
+
+    const omitEmptyDate = (record) => {
+      if (!record) return true;
+      return record.date === null && record.precision === 'unknown' && !record.note && record.sourceIds.length === 0;
+    };
+
+    const normalizeData = (data) => {
+      if (!data.ideology.position?.label) data.ideology.position = null;
+      if (omitEmptyDate(data.dates.registered)) delete data.dates.registered;
+      if (omitEmptyDate(data.dates.dissolved)) delete data.dates.dissolved;
+      return data;
+    };
+
+    const readForm = () => {
+      const data = defaultData();
+      readStaticFields(data);
+      readRepeaters(data);
+      return normalizeData(data);
+    };
+
+    const jsonText = () => `${JSON.stringify(state, null, 2)}\n`;
+
+    const renderPreview = () => {
+      preview.textContent = jsonText();
+    };
+
+    const setMessage = (text, type = 'neutral', details = []) => {
+      message.className = `editor-message editor-message-${type}`;
+      message.innerHTML = `<p>${escapeHtml(text)}</p>${details.length ? `<ul>${details.map((detail) => `<li>${escapeHtml(detail)}</li>`).join('')}</ul>` : ''}`;
+    };
+
+    const saveDraftSoon = () => {
+      clearTimeout(draftTimer);
+      draftStatus.textContent = 'Saving…';
+      draftTimer = setTimeout(() => {
+        localStorage.setItem(DRAFT_KEY, jsonText());
+        draftStatus.textContent = 'Draft saved locally';
+      }, 350);
+    };
+
+    const updateFromForm = () => {
+      state = readForm();
+      renderPreview();
+      saveDraftSoon();
+    };
+
+    const writeStateToForm = () => {
+      renderStaticSections();
+      renderPreview();
+      saveDraftSoon();
+    };
+
+    const isValidUrl = (value) => {
+      if (!value) return true;
+      try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+      } catch {
+        return false;
+      }
+    };
+
+    const collectSourceReferences = (value, references = []) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => collectSourceReferences(item, references));
+      } else if (value && typeof value === 'object') {
+        for (const [key, item] of Object.entries(value)) {
+          if (key === 'sourceIds' && Array.isArray(item)) references.push(...item);
+          else collectSourceReferences(item, references);
+        }
+      }
+      return references;
+    };
+
+    const validate = () => {
+      state = readForm();
+      renderPreview();
+      const errors = [];
+
+      if (!state.id) errors.push('Party ID is required.');
+      else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(state.id)) errors.push('Party ID may contain only lowercase letters, numbers and single hyphens.');
+      if (!state.name.english) errors.push('English name is required.');
+      if (!state.country.id) errors.push('Country ID is required.');
+      else if (!/^[a-z0-9-]+$/.test(state.country.id)) errors.push('Country ID contains invalid characters.');
+      if (!state.country.name) errors.push('Country name is required.');
+      if (!state.summary) errors.push('Summary is required.');
+      if (!state.lastUpdated) errors.push('Last updated date is required.');
+
+      const sourceIds = state.sources.map((source) => source.id).filter(Boolean);
+      const duplicateIds = sourceIds.filter((id, index) => sourceIds.indexOf(id) !== index);
+      [...new Set(duplicateIds)].forEach((id) => errors.push(`Duplicate source ID: ${id}.`));
+
+      state.sources.forEach((source, index) => {
+        if (!source.id) errors.push(`Source ${index + 1}: source ID is required.`);
+        if (!source.title) errors.push(`Source ${index + 1}: title is required.`);
+        if (source.url && !isValidUrl(source.url)) errors.push(`Source ${index + 1}: URL is invalid.`);
+        if (source.archiveUrl && !isValidUrl(source.archiveUrl)) errors.push(`Source ${index + 1}: archive URL is invalid.`);
+      });
+
+      const referencedIds = [...new Set(collectSourceReferences(state))];
+      referencedIds.filter((id) => !sourceIds.includes(id)).forEach((id) => errors.push(`Referenced source ID does not exist: ${id}.`));
+
+      const scalarUrls = ['links.website', 'links.websiteArchive', 'links.facebook', 'links.x', 'links.instagram', 'links.youtube'];
+      scalarUrls.forEach((path) => {
+        const value = getPath(state, path);
+        if (value && !isValidUrl(value)) errors.push(`${path} is not a valid HTTP(S) URL.`);
+      });
+      state.links.socialMedia.forEach((link, index) => {
+        if (!link.label) errors.push(`Social link ${index + 1}: label is required.`);
+        if (!link.url) errors.push(`Social link ${index + 1}: URL is required.`);
+        else if (!isValidUrl(link.url)) errors.push(`Social link ${index + 1}: URL is invalid.`);
+        if (link.archiveUrl && !isValidUrl(link.archiveUrl)) errors.push(`Social link ${index + 1}: archive URL is invalid.`);
+      });
+      state.links.other.forEach((link, index) => {
+        if (!link.label) errors.push(`Other link ${index + 1}: label is required.`);
+        if (!link.url) errors.push(`Other link ${index + 1}: URL is required.`);
+        else if (!isValidUrl(link.url)) errors.push(`Other link ${index + 1}: URL is invalid.`);
+      });
+
+      state.ideology.labels.forEach((item, index) => {
+        if (!item.name) errors.push(`Ideology ${index + 1}: name is required.`);
+      });
+      state.leadership.forEach((item, index) => {
+        if (!item.title) errors.push(`Leader ${index + 1}: title is required.`);
+        if (!item.person) errors.push(`Leader ${index + 1}: person is required.`);
+      });
+      state.internationalAffiliations.forEach((item, index) => {
+        if (!item.name) errors.push(`Affiliation ${index + 1}: organisation name is required.`);
+      });
+      state.electionResults.parliamentary.forEach((item, index) => {
+        if (item.year === '') errors.push(`Parliamentary election ${index + 1}: year is required.`);
+        if (item.percentage !== null && (item.percentage < 0 || item.percentage > 100)) errors.push(`Parliamentary election ${index + 1}: percentage must be between 0 and 100.`);
+      });
+      state.electionResults.presidential.forEach((item, index) => {
+        if (item.year === '') errors.push(`Presidential election ${index + 1}: year is required.`);
+        if (!item.candidate) errors.push(`Presidential election ${index + 1}: candidate is required.`);
+        for (const [round, percentage] of [['first', item.firstRoundPercentage], ['second', item.secondRoundPercentage]]) {
+          if (percentage !== null && (percentage < 0 || percentage > 100)) errors.push(`Presidential election ${index + 1}: ${round}-round percentage must be between 0 and 100.`);
+        }
+      });
+
+      if (errors.length) {
+        setMessage(`Validation found ${errors.length} problem${errors.length === 1 ? '' : 's'}.`, 'error', errors);
+        return false;
+      }
+      setMessage('The entry passed the editor checks. The Astro build may still detect schema-level problems.', 'success');
+      return true;
+    };
+
+    const download = () => {
+      state = readForm();
+      renderPreview();
+      if (!validate()) return;
+      const filename = `${state.id || 'party-entry'}.json`;
+      const blob = new Blob([jsonText()], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = filename;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      setMessage(`Downloaded ${filename}.`, 'success');
+    };
+
+    form.addEventListener('input', updateFromForm);
+    form.addEventListener('change', updateFromForm);
+
+    form.addEventListener('click', (event) => {
+      const addButton = event.target.closest('.add-item');
+      if (addButton) {
+        event.preventDefault();
+        state = readForm();
+        const definition = repeaters.find((item) => item.path === addButton.dataset.repeater);
+        const items = getPath(state, definition.path) ?? [];
+        items.push(definition.make());
+        setPath(state, definition.path, items);
+        renderRepeater(definition);
+        renderPreview();
+        saveDraftSoon();
+        const cards = form.querySelectorAll(`[data-repeater-card="${definition.path}"]`);
+        cards[cards.length - 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      const removeButton = event.target.closest('.remove-item');
+      if (removeButton) {
+        event.preventDefault();
+        state = readForm();
+        const definition = repeaters.find((item) => item.path === removeButton.dataset.repeater);
+        const items = getPath(state, definition.path) ?? [];
+        items.splice(Number(removeButton.dataset.index), 1);
+        setPath(state, definition.path, items);
+        renderRepeater(definition);
+        renderPreview();
+        saveDraftSoon();
+      }
+    });
+
+    document.querySelector('#new-entry').addEventListener('click', () => {
+      if (!confirm('Clear the form and start a new entry?')) return;
+      state = defaultData();
+      writeStateToForm();
+      setMessage('New blank entry created.');
+    });
+
+    document.querySelector('#open-json').addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        const imported = JSON.parse(await file.text());
+        if (!imported || Array.isArray(imported) || typeof imported !== 'object') throw new Error('The root value must be an object.');
+        state = mergeDefaults(defaultData(), imported);
+        writeStateToForm();
+        setMessage(`Opened ${file.name}.`, 'success');
+      } catch (error) {
+        setMessage(`Could not open JSON: ${error.message}`, 'error');
+      } finally {
+        event.target.value = '';
+      }
+    });
+
+    document.querySelector('#load-draft').addEventListener('click', () => {
+      const draft = localStorage.getItem(DRAFT_KEY);
+      if (!draft) {
+        setMessage('No local draft was found.', 'error');
+        return;
+      }
+      try {
+        state = mergeDefaults(defaultData(), JSON.parse(draft));
+        writeStateToForm();
+        setMessage('Local draft loaded.', 'success');
+      } catch (error) {
+        setMessage(`The local draft is invalid: ${error.message}`, 'error');
+      }
+    });
+
+    document.querySelector('#validate-entry').addEventListener('click', validate);
+
+    document.querySelector('#copy-json').addEventListener('click', async () => {
+      state = readForm();
+      renderPreview();
+      try {
+        await navigator.clipboard.writeText(jsonText());
+        setMessage('JSON copied to the clipboard.', 'success');
+      } catch {
+        setMessage('Clipboard access was blocked. Select the JSON in the output panel manually.', 'error');
+      }
+    });
+
+    document.querySelector('#download-json').addEventListener('click', download);
+
+    renderStaticSections();
+    renderPreview();
+    if (localStorage.getItem(DRAFT_KEY)) draftStatus.textContent = 'Local draft available';
+  </script>
+
+  <style>
+    .editor-header {
+      padding-bottom: 1.5rem;
+    }
+
+    .editor-header h1 {
+      margin-bottom: 0.6rem;
+    }
+
+    .editor-toolbar {
+      position: sticky;
+      top: 68px;
+      z-index: 8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      padding: 0.85rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgb(255 255 255 / 96%);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .editor-toolbar button,
+    .file-button {
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .file-button input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .editor-message {
+      display: none;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+
+    .editor-message:not(:empty) {
+      display: block;
+    }
+
+    .editor-message p {
+      margin: 0;
+    }
+
+    .editor-message ul {
+      margin: 0.65rem 0 0;
+      padding-left: 1.25rem;
+    }
+
+    .editor-message-error {
+      border-color: #c84a4a;
+      background: #fff3f3;
+      color: #812525;
+    }
+
+    .editor-message-success {
+      border-color: #2f8a52;
+      background: #effaf3;
+      color: #1d663b;
+    }
+
+    .editor-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(330px, 0.58fr);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .editor-form {
+      min-width: 0;
+    }
+
+    .editor-section {
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .editor-section-heading,
+    .preview-heading,
+    .repeater-card-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .editor-section-heading {
+      margin-bottom: 1rem;
+    }
+
+    .editor-section-heading h2,
+    .preview-heading h2,
+    .repeater-card-heading h3 {
+      margin: 0;
+    }
+
+    .editor-section-heading p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+    }
+
+    .editor-section-heading .button {
+      flex: 0 0 auto;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .editor-field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .editor-field {
+      display: grid;
+      align-content: start;
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
+    .editor-field-wide {
+      grid-column: 1 / -1;
+    }
+
+    .editor-field > label {
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .editor-field > label span {
+      color: #a72c2c;
+    }
+
+    .editor-field small {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .editor-field textarea,
+    .editor-field input,
+    .editor-field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.7rem;
+      background: white;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .editor-field textarea {
+      min-height: 76px;
+      resize: vertical;
+    }
+
+    .checkbox-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 44px;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .checkbox-control input {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+    }
+
+    .repeater-items {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .repeater-card {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-alt);
+    }
+
+    .repeater-card-heading {
+      margin-bottom: 0.8rem;
+    }
+
+    .repeater-card-heading h3 {
+      font-size: 1rem;
+    }
+
+    .remove-item {
+      border: 0;
+      padding: 0.25rem 0;
+      background: transparent;
+      color: #9b2929;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .empty-repeater {
+      margin: 0;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .editor-preview {
+      position: sticky;
+      top: 150px;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .preview-heading {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-heading .eyebrow {
+      margin-bottom: 0.25rem;
+    }
+
+    #draft-status {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: right;
+    }
+
+    #json-preview {
+      max-height: calc(100vh - 240px);
+      min-height: 420px;
+      overflow: auto;
+      margin: 0;
+      padding: 1rem;
+      background: #17202a;
+      color: #edf4fb;
+      font: 0.78rem/1.5 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      tab-size: 2;
+      white-space: pre;
+    }
+
+    @media (max-width: 980px) {
+      .editor-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .editor-preview {
+        position: static;
+      }
+
+      #json-preview {
+        max-height: 620px;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .editor-toolbar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .editor-field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .editor-field-wide {
+        grid-column: auto;
+      }
+
+      .editor-section-heading,
+      .preview-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .editor-toolbar .button,
+      .file-button {
+        flex: 1 1 calc(50% - 0.65rem);
+        text-align: center;
+      }
+    }
+  </style>
+</BaseLayout>
