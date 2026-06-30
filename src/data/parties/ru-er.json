@@ -1,0 +1,93 @@
+{
+  "id": "ru-er",
+  "name": {
+    "english": "United Russia",
+    "native": [
+      "Единая Россия"
+    ],
+    "literal": null,
+    "abbreviation": "ER"
+  },
+  "country": {
+    "id": "ru",
+    "name": "Russia"
+  },
+  "status": "active",
+  "logo": "/logos/ru-er.svg",
+  "colors": [
+    "#004f9f",
+    "#ffffff",
+    "#009bdc",
+    "#df182e"
+  ],
+  "dates": {
+    "founded": {
+      "date": "2001-11-01",
+      "precision": "day",
+      "sourceIds": []
+    },
+    "registered": {
+      "date": "2003-01-31",
+      "precision": "day",
+      "sourceIds": []
+    }
+  },
+  "summary": "Ruling political party in Russia.",
+  "history": {
+    "formation": "Merger of the {{ru-unity}} and {{ru-ovr}} parties: ({{ru-otech}} and {{ru-vsyar}})",
+    "formationSourceIds": [],
+    "predecessors": [],
+    "successors": [],
+    "splitFrom": [],
+    "mergers": [],
+    "memberParties": []
+  },
+  "ideology": {
+    "labels": [],
+    "position": {
+      "label": "Big tent",
+      "sourceIds": []
+    }
+  },
+  "leadership": [],
+  "governmentStatus": {
+    "label": "government",
+    "since": null,
+    "sourceIds": []
+  },
+  "representation": {
+    "parliament": {
+      "status": "represented",
+      "since": null,
+      "seats": null,
+      "totalSeats": null,
+      "sourceIds": []
+    },
+    "government": {
+      "status": "in-government",
+      "since": null,
+      "sourceIds": []
+    }
+  },
+  "internationalAffiliations": [],
+  "electionResults": {
+    "parliamentary": [],
+    "presidential": []
+  },
+  "links": {
+    "website": "https://er.ru/",
+    "websiteArchive": null,
+    "facebook": null,
+    "x": null,
+    "instagram": null,
+    "youtube": null,
+    "socialMedia": [],
+    "other": []
+  },
+  "sources": [],
+  "lastUpdated": "2026-06-30",
+  "editorial": {
+    "completeness": "stub",
+    "needsReview": true
+  }
+}
