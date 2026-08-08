@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "source": "data/PPDB database.xlsx",
+  "count": 3,
+  "parties": [
+    {
+      "country": "Austria",
+      "id": "atOVP",
+      "name": "Austrian People's Party",
+      "nativeName": "Österreichische Volkspartei",
+      "acronym": "ÖVP",
+      "seats": {
+        "lowerHouse": 51,
+        "upperHouse": 26,
+        "mep": 5
+      },
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Volkspartei_Logo_2022.svg",
+      "color": "#63c3d1",
+      "established": "1945-04-17",
+      "dissolved": null,
+      "labels": [
+        "Christian democracy",
+        "Liberal conservatism",
+        "Centre-right"
+      ],
+      "status": "Parliamentary",
+      "description": null,
+      "formerLogos": [
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Volkspartei_Logo_2018.svg/960px-Volkspartei_Logo_2018.svg.png",
+          "until": "2019-01-01"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/en/b/b5/Austrian_People%27s_Party_logo.png",
+          "until": "2017-01-01"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/ÖVP-Logo_%2880er%29.svg/330px-ÖVP-Logo_%2880er%29.svg.png",
+          "until": "2000-01-01"
+        }
+      ],
+      "formerNames": "The new People's Party (Die neue Volkspartei, 2017-2022, unofficial)",
+      "website": "https://www.dievolkspartei.at/",
+      "lastEdited": null,
+      "sources": []
+    },
+    {
+      "country": "Austria",
+      "id": "atFPO",
+      "name": "Freedom Party of Austria",
+      "nativeName": "Freiheitliche Partei Österreichs",
+      "acronym": "FPÖ",
+      "seats": {
+        "lowerHouse": 57,
+        "upperHouse": 16,
+        "mep": 6
+      },
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Logo_of_the_Freedom_Party_of_Austria.svg/330px-Logo_of_the_Freedom_Party_of_Austria.svg.png",
+      "color": "#005EA8",
+      "established": "1955-11-03",
+      "dissolved": null,
+      "labels": [
+        "National conservatism",
+        "Right-wing populism",
+        "Euroscepticism",
+        "Far-right",
+        "National liberalism"
+      ],
+      "status": "Parliamentary",
+      "description": "Right-wing populist party, formed in 1955-1956 as successor of [[atVdU|Federation of Independents]], representing pan-Germanists and national liberals opposed to socialism and Catholic clericalism, represented by the [[atSPO|Social Democratic Party of Austria]] (SPÖ) and the [[atOVP|Austrian People's Party]] (ÖVP), respectively. Its first leader, Anton Reinthaller, was a former Nazi functionary and SS officer, but the FPÖ did not advocate far-right policies and presented itself as a centrist party. The FPÖ was long the third largest in Austria and had modest support. Under the leadership of Norbert Steger in the early 1980s, it sought to style itself on Germany's [[deFDP|Free Democratic Party]] (FDP) The FPÖ gave external support to SPÖ chancellor Bruno Kreisky (SPÖ) after the 1970 election and joined Fred Sinowatz's government, as the SPÖ's junior partner, after the 1983 election.\n\nJörg Haider became leader of the party in 1986, after which it began an ideological turn towards right-wing populism. This resulted in a strong surge in electoral support, but also led the SPÖ to break ties, and a splinter in the form of the [[atLiF|Liberal Forum]] in 1993. In the 1999 election, the FPÖ won 26.9% of the vote, becoming the second-most popular party, ahead of the ÖVP by around 500 votes. The two parties eventually reached a coalition agreement in which the ÖVP retained the office of chancellor. The FPÖ soon lost most of its popularity, falling to 10% in the 2002 election, but remained in government as junior partner. Internal tensions led Haider and much of the party leadership to leave in 2005, forming the [[atBZO|Alliance for the Future of Austria]] (BZÖ), which replaced the FPÖ as governing partner. Heinz-Christian Strache then became leader, and the party gradually regained its popularity, peaking at 26.0% in the 2017 election. The FPÖ once again became junior partner in government with the ÖVP. In May 2019, the Ibiza affair led to the collapse of the government and the resignation of Strache from both the offices of vice-chancellor and party leader. The resulting snap election saw the FPÖ fall to 16.2% and return to opposition. On 30 June 2024, ANO 2011, the Freedom Party of Austria, and [[huFidesz|Fidesz]] created a new alliance named [[euPfE|Patriots for Europe]].",
+      "formerLogos": [
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/de/4/4c/Die_Freiheitlichen_Logo_1991.svg",
+          "until": "2000-01-01"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Altes_FPÖ_logo.png",
+          "until": "1990-01-01"
+        }
+      ],
+      "formerNames": null,
+      "website": "https://www.fpoe.at/",
+      "lastEdited": null,
+      "sources": []
+    },
+    {
+      "country": "Lithuania",
+      "id": "ltLDDP",
+      "name": "Democratic Labour Party of Lithuania",
+      "nativeName": "Lietuvos demokratinė darbo partija",
+      "acronym": "LDDP",
+      "seats": {
+        "lowerHouse": null,
+        "upperHouse": null,
+        "mep": null
+      },
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/LDDP-logo.svg/330px-LDDP-logo.svg.png",
+      "color": "#E75480",
+      "established": "1989-12-19",
+      "dissolved": "2001-05-01",
+      "labels": [
+        "Social democracy",
+        "Post-communism",
+        "Centre-left"
+      ],
+      "status": "Dissolved",
+      "description": "Direct successor to the Soviet-era [[ltLKP|Communist Party of Lithuania]]. Merged into the [[ltLSDP|Social Democratic Party of Lithuania]].",
+      "formerLogos": [],
+      "formerNames": "Communist Party of Lithuania (Independent) (Lietuvos komunistų partija (nepriklausoma), until 1990)",
+      "website": "https://web.archive.org/web/20010721040116/http://www.lddp.lt/",
+      "lastEdited": null,
+      "sources": []
+    }
+  ]
+}
