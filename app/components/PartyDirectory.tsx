@@ -80,19 +80,19 @@ export function PartyDirectory({ countries, parties }: Props) {
 
   function chooseLabel(label: string) {
     setQuery("");
-    updateUrlFilters({ label, country: "", status: "" });
+    updateUrlFilters({ label });
     document.getElementById("party-index-heading")?.scrollIntoView({ block: "start" });
   }
 
   function chooseCountry(value: string) {
     setQuery("");
-    updateUrlFilters({ country: value, status: "", label: "" });
+    updateUrlFilters({ country: value });
     document.getElementById("party-index-heading")?.scrollIntoView({ block: "start" });
   }
 
   function chooseStatus(value: string) {
     setQuery("");
-    updateUrlFilters({ status: value, country: "", label: "" });
+    updateUrlFilters({ status: value });
     document.getElementById("party-index-heading")?.scrollIntoView({ block: "start" });
   }
 
@@ -169,7 +169,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           <select
             value={country}
             onChange={(event) => {
-              updateUrlFilters({ country: event.target.value, label: "" });
+              updateUrlFilters({ country: event.target.value });
             }}
           >
             <option value="all">All countries</option>
@@ -185,7 +185,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           <select
             value={status}
             onChange={(event) => {
-              updateUrlFilters({ status: event.target.value, label: "" });
+              updateUrlFilters({ status: event.target.value });
             }}
           >
             <option value="all">All statuses</option>

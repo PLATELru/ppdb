@@ -7,7 +7,11 @@ const fields = [
   ["NAME", "Required", "English-language party name."],
   ["NATIVE_NAME / ACRONYM", "Text", "Optional native-language name and abbreviation."],
   ["LOWER_HOUSE / UPPER_HOUSE / MEP", "Number", "Current seat counts. Leave blank when not applicable."],
-  ["LOGO / COLORCODE", "URL / hex", "Current logo URL and party colour, e.g. #005EA8."],
+  [
+    "LOGO / COLORCODE",
+    "Path or URL / hex",
+    "Use an external URL or a local path such as /media/logos/atFPO.png, plus a party colour such as #005EA8.",
+  ],
   ["ESTABLISHMENT / DISSOLUTION", "Date", "Use true spreadsheet dates, not prose."],
   ["LABEL1–LABEL5", "Text", "Ideology, political position or other concise classification labels."],
   ["STATUS", "Text", "For example Parliamentary, Extra-parliamentary, Regional, Local or Dissolved."],
@@ -56,6 +60,16 @@ export default function DataGuidePage() {
         </section>
 
         <div className="guide-grid">
+          <section className="panel">
+            <div className="section-label">Local logo storage</div>
+            <div className="guide-copy">
+              <p>
+                Upload logo files to <code>public/media/logos/</code>, then put a path such as
+                <code> /media/logos/atFPO.png</code> in the LOGO cell. These files are deployed with
+                the site and do not depend on an external image host.
+              </p>
+            </div>
+          </section>
           <section className="panel">
             <div className="section-label">Internal links</div>
             <div className="guide-copy">

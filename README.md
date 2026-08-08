@@ -13,6 +13,14 @@ The ID is the stable key used in URLs and internal links. For example, `atOVP` b
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
 
+## Store a logo in the repository
+
+1. Add the image file to `public/media/logos/`.
+2. In the party row's `LOGO` cell, enter `/media/logos/<filename>` — for example, `/media/logos/atFPO.png`.
+3. Commit both the image and the workbook. The same path works on the Sites deployment and GitHub Pages.
+
+External image URLs remain supported, but repository-hosted files avoid broken links when an external host moves or removes an image.
+
 ## Local use
 
 ```bash
