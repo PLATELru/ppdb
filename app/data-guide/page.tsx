@@ -6,7 +6,7 @@ const fields = [
   ["ID", "Required", "Stable, unique record ID, e.g. atOVP. Changing it changes the party URL."],
   ["NAME", "Required", "English-language party name."],
   ["NATIVE_NAME / ACRONYM", "Text", "Optional native-language name and abbreviation."],
-  ["LOWER_HOUSE / UPPER_HOUSE / MEP", "Number", "Current seat counts. Leave blank when not applicable."],
+  ["LOWER_HOUSE / UPPER_HOUSE / MEP", "Number", "The party's current seat counts. Leave blank when not applicable."],
   [
     "LOGO / COLORCODE",
     "Path or URL / hex",
@@ -60,6 +60,16 @@ export default function DataGuidePage() {
         </section>
 
         <div className="guide-grid">
+          <section className="panel">
+            <div className="section-label">Legislature totals</div>
+            <div className="guide-copy">
+              <p>
+                The <code>Legislatures</code> sheet stores each country&apos;s total lower-house,
+                upper-house and European Parliament seats. PPDB combines those totals with the
+                party values above and displays entries such as <code>57 / 183</code>.
+              </p>
+            </div>
+          </section>
           <section className="panel">
             <div className="section-label">Local logo storage</div>
             <div className="guide-copy">

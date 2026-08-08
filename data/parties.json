@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "source": "data/PPDB database.xlsx",
   "count": 3,
   "parties": [
@@ -11,8 +11,11 @@
       "acronym": "ÖVP",
       "seats": {
         "lowerHouse": 51,
+        "lowerHouseTotal": 183,
         "upperHouse": 26,
-        "mep": 5
+        "upperHouseTotal": 60,
+        "mep": 5,
+        "mepTotal": 20
       },
       "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Volkspartei_Logo_2022.svg",
       "color": "#63c3d1",
@@ -52,8 +55,11 @@
       "acronym": "FPÖ",
       "seats": {
         "lowerHouse": 57,
+        "lowerHouseTotal": 183,
         "upperHouse": 16,
-        "mep": 6
+        "upperHouseTotal": 60,
+        "mep": 5,
+        "mepTotal": 20
       },
       "logo": "/media/logos/atFPO.png",
       "color": "#005EA8",
@@ -91,8 +97,11 @@
       "acronym": "LDDP",
       "seats": {
         "lowerHouse": null,
+        "lowerHouseTotal": null,
         "upperHouse": null,
-        "mep": null
+        "upperHouseTotal": null,
+        "mep": null,
+        "mepTotal": null
       },
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/LDDP-logo.svg/330px-LDDP-logo.svg.png",
       "color": "#E75480",

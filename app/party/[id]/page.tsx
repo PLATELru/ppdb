@@ -37,7 +37,9 @@ export default async function PartyPage({ params }: PageProps) {
   const established = formatDate(party.established);
   const dissolved = formatDate(party.dissolved);
   const lastEdited = formatDate(party.lastEdited);
-  const hasSeats = Object.values(party.seats).some((value) => value != null);
+  const hasSeats = [party.seats.lowerHouse, party.seats.upperHouse, party.seats.mep].some(
+    (value) => value != null,
+  );
 
   return (
     <main className="site-shell">
@@ -96,12 +98,32 @@ export default async function PartyPage({ params }: PageProps) {
               <div className="seat-table">
                 <h2>Representation</h2>
                 {party.seats.lowerHouse != null ? (
-                  <div><span>Lower house</span><strong>{party.seats.lowerHouse}</strong></div>
+                  <div>
+                    <span>Lower house</span>
+                    <strong>
+                      {party.seats.lowerHouse}
+                      {party.seats.lowerHouseTotal != null ? ` / ${party.seats.lowerHouseTotal}` : ""}
+                    </strong>
+                  </div>
                 ) : null}
                 {party.seats.upperHouse != null ? (
-                  <div><span>Upper house</span><strong>{party.seats.upperHouse}</strong></div>
+                  <div>
+                    <span>Upper house</span>
+                    <strong>
+                      {party.seats.upperHouse}
+                      {party.seats.upperHouseTotal != null ? ` / ${party.seats.upperHouseTotal}` : ""}
+                    </strong>
+                  </div>
                 ) : null}
-                {party.seats.mep != null ? <div><span>MEPs</span><strong>{party.seats.mep}</strong></div> : null}
+                {party.seats.mep != null ? (
+                  <div>
+                    <span>MEPs</span>
+                    <strong>
+                      {party.seats.mep}
+                      {party.seats.mepTotal != null ? ` / ${party.seats.mepTotal}` : ""}
+                    </strong>
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </aside>

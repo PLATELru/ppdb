@@ -10,8 +10,9 @@ export const metadata: Metadata = {
     "codex-preview": "development",
   },
   icons: {
-    icon: `${assetPrefix}/favicon.svg`,
-    shortcut: `${assetPrefix}/favicon.svg`,
+    icon: `${assetPrefix}/branding/PPDB.png`,
+    shortcut: `${assetPrefix}/branding/PPDB.png`,
+    apple: `${assetPrefix}/branding/PPDB.png`,
   },
 };
 

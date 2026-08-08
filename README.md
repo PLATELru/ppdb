@@ -13,6 +13,8 @@ The ID is the stable key used in URLs and internal links. For example, `atOVP` b
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
 
+Country-level chamber sizes live on the `Legislatures` sheet. PPDB combines those totals with each party's `LOWER_HOUSE`, `UPPER_HOUSE` and `MEP` values, so a record can display a share such as `57 / 183` without duplicating the total in every party row.
+
 ## Store a logo in the repository
 
 1. Add the image file to `public/media/logos/`.

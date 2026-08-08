@@ -30,6 +30,33 @@ function number(value) {
   return Number.isFinite(result) ? result : null;
 }
 
+const legislatureSheet = workbook.Sheets.Legislatures;
+const legislatureRows = legislatureSheet
+  ? XLSX.utils.sheet_to_json(legislatureSheet, { header: 1, raw: true, defval: null })
+  : [];
+const legislatureHeaders = (legislatureRows[1] ?? []).map((value) =>
+  String(value ?? "").trim(),
+);
+const legislatureIndex = Object.fromEntries(
+  legislatureHeaders.map((header, column) => [header, column]),
+);
+const legislatureTotals = new Map(
+  legislatureRows.slice(2).flatMap((row) => {
+    const country = text(row[legislatureIndex.COUNTRY]);
+    if (!country) return [];
+    return [
+      [
+        country,
+        {
+          lowerHouse: number(row[legislatureIndex.LOWER_HOUSE_TOTAL]),
+          upperHouse: number(row[legislatureIndex.UPPER_HOUSE_TOTAL]),
+          mep: number(row[legislatureIndex.MEP_TOTAL]),
+        },
+      ],
+    ];
+  }),
+);
+
 function isoDate(value) {
   if (!value) return null;
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
@@ -59,6 +86,8 @@ const parties = rows
   .slice(2)
   .filter((row) => text(valueAt(row, "ID")))
   .map((row) => {
+    const country = text(valueAt(row, "COUNTRY"));
+    const totals = legislatureTotals.get(country) ?? {};
     const formerLogos = [];
     for (let i = 1; i <= 5; i += 1) {
       const url = text(valueAt(row, `FORMER_LOGO${i}`));
@@ -71,15 +100,18 @@ const parties = rows
     }
 
     return {
-      country: text(valueAt(row, "COUNTRY")),
+      country,
       id: text(valueAt(row, "ID")),
       name: text(valueAt(row, "NAME")),
       nativeName: text(valueAt(row, "NATIVE_NAME")),
       acronym: text(valueAt(row, "ACRONYM")),
       seats: {
         lowerHouse: number(valueAt(row, "LOWER_HOUSE")),
+        lowerHouseTotal: totals.lowerHouse ?? null,
         upperHouse: number(valueAt(row, "UPPER_HOUSE")),
+        upperHouseTotal: totals.upperHouse ?? null,
         mep: number(valueAt(row, "MEP")),
+        mepTotal: totals.mep ?? null,
       },
       logo: text(valueAt(row, "LOGO")),
       color: text(valueAt(row, "COLORCODE")) ?? "#666666",
@@ -117,7 +149,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 1,
+      schemaVersion: 2,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,

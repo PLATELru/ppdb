@@ -10,11 +10,19 @@ type Props = {
   parties: Party[];
 };
 
-function SeatValue({ label, value }: { label: string; value: number | null }) {
+function SeatValue({
+  label,
+  total,
+  value,
+}: {
+  label: string;
+  total: number | null;
+  value: number | null;
+}) {
   if (value == null) return null;
   return (
     <span>
-      <b>{value}</b> {label}
+      <b>{value}{total != null ? ` / ${total}` : ""}</b> {label}
     </span>
   );
 }
@@ -264,14 +272,22 @@ export function PartyDirectory({ countries, parties }: Props) {
                     ) : null}
                   </div>
                   <div className="label-list">
-                    {party.labels.slice(0, 3).map((label) => (
+                    {party.labels.map((label) => (
                       <button type="button" key={label} onClick={() => chooseLabel(label)}>{label}</button>
                     ))}
                   </div>
                   <div className="seat-line">
-                    <SeatValue label="lower" value={party.seats.lowerHouse} />
-                    <SeatValue label="upper" value={party.seats.upperHouse} />
-                    <SeatValue label="MEPs" value={party.seats.mep} />
+                    <SeatValue
+                      label="lower"
+                      value={party.seats.lowerHouse}
+                      total={party.seats.lowerHouseTotal}
+                    />
+                    <SeatValue
+                      label="upper"
+                      value={party.seats.upperHouse}
+                      total={party.seats.upperHouseTotal}
+                    />
+                    <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
                   </div>
                 </div>
                 <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>

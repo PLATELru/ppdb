@@ -80,13 +80,23 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   border-color: #fff #454545 #454545 #fff;
 }
 .brand {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   color: #fff;
   font-family: "Courier New", Courier, monospace;
   font-size: clamp(19px, 3vw, 28px);
   font-weight: 800;
   letter-spacing: -0.04em;
   text-decoration: none;
+}
+.brand img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  border: 1px solid #fff;
+  image-rendering: pixelated;
 }
 .site-header p { max-width: 650px; margin: 9px 0 0; font-size: 13px; line-height: 1.45; }
 .retro-button { min-width: 92px; padding: 9px 13px; cursor: pointer; color: #111; background: #d7d7d7; }
@@ -302,6 +312,16 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .record-prose { padding: 8px 12px; background: var(--panel-light); border: 1px solid var(--line); font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.7; }
 .record-prose p { margin: 0 0 1em; }
 .record-prose p:last-child { margin-bottom: 0; }
+.party-inline-link { display: inline-flex; align-items: baseline; gap: 0.24em; white-space: nowrap; }
+.party-link-swatch {
+  display: inline-block;
+  width: 0.82em;
+  height: 0.82em;
+  flex: 0 0 auto;
+  background: var(--party-link-color);
+  border: 1px solid currentColor;
+  vertical-align: -0.05em;
+}
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
@@ -343,6 +363,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 @media (max-width: 620px) {
   .site-header { align-items: flex-start; min-height: auto; padding: 15px; }
   .site-header p { display: none; }
+  .brand img { width: 44px; height: 44px; }
   .main-nav { overflow-x: auto; }
   .main-nav a { white-space: nowrap; }
   .intro-strip { padding: 18px 5px; }

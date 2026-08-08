@@ -2,12 +2,16 @@ import Link from "next/link";
 import { ThemeButton } from "./ThemeButton";
 
 export function SiteHeader() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
   return (
     <>
       <header className="site-header">
-        <div>
+        <div className="site-identity">
           <Link className="brand" href="/">
-            Political Parties Database
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`${basePath}/branding/PPDB.png`} alt="PPDB logo" />
+            <span>Political Parties Database</span>
           </Link>
           <p>Open-source database of political parties worldwide.</p>
         </div>
