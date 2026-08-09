@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState, useSyncExternalStore } from "react";
-import type { Party } from "../../lib/parties";
+import { dateSortKey, type Party } from "../../lib/parties";
 import { LogoImage } from "./LogoImage";
+import { RichText } from "./WikiText";
 
 type Props = {
   countries: string[];
@@ -111,9 +112,11 @@ export function PartyDirectory({ countries, parties }: Props) {
         const searchable = [
           party.name,
           party.nativeName,
+          party.literalName,
           party.acronym,
           party.country,
           party.status,
+          party.formerNames,
           ...party.labels,
         ]
           .filter(Boolean)
@@ -131,7 +134,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           return `${a.country}\u0000${a.name}`.localeCompare(`${b.country}\u0000${b.name}`, "en");
         }
         if (sort === "newest") {
-          return (b.established ?? "").localeCompare(a.established ?? "");
+          return dateSortKey(b.established).localeCompare(dateSortKey(a.established));
         }
         if (sort === "status") {
           return `${a.status ?? ""}\u0000${a.name}`.localeCompare(
@@ -260,30 +263,56 @@ export function PartyDirectory({ countries, parties }: Props) {
                   />
                 </Link>
                 <div className="party-card-copy">
-                  <h2><Link href={`/party/${party.id}`}>{party.name}</Link></h2>
-                  {party.nativeName && party.nativeName !== party.name ? <p>{party.nativeName}</p> : null}
+                  <h2>
+                    <Link href={`/party/${party.id}`}>
+                      <RichText text={party.name} runs={party.formatting.name} />
+                    </Link>
+                  </h2>
+                  {party.nativeName && party.nativeName !== party.name ? (
+                    <p className="native-party-name">
+                      <RichText text={party.nativeName} runs={party.formatting.nativeName} />
+                    </p>
+                  ) : null}
+                  {party.literalName ? (
+                    <p className="literal-party-name">
+                      (<RichText text={party.literalName} runs={party.formatting.literalName} />)
+                    </p>
+                  ) : null}
                   <div className="party-meta">
-                    {party.acronym ? <span>{party.acronym}</span> : null}
+                    {party.acronym ? (
+                      <span><RichText text={party.acronym} runs={party.formatting.acronym} /></span>
+                    ) : null}
                   </div>
                   <div className="context-filter-list">
-                    <button type="button" onClick={() => chooseCountry(party.country)}>{party.country}</button>
+                    <button type="button" onClick={() => chooseCountry(party.country)}>
+                      <RichText text={party.country} runs={party.formatting.country} />
+                    </button>
                     {party.status ? (
-                      <button type="button" onClick={() => chooseStatus(party.status)}>{party.status}</button>
+                      <button type="button" onClick={() => chooseStatus(party.status)}>
+                        <RichText text={party.status} runs={party.formatting.status} />
+                      </button>
                     ) : null}
                   </div>
                   <div className="label-list">
-                    {party.labels.map((label) => (
-                      <button type="button" key={label} onClick={() => chooseLabel(label)}>{label}</button>
+                    {party.labels.map((label, labelIndex) => (
+                      <button type="button" key={label} onClick={() => chooseLabel(label)}>
+                        <RichText text={label} runs={party.formatting.labels[labelIndex]} />
+                      </button>
                     ))}
                   </div>
                   <div className="seat-line">
                     <SeatValue
-                      label="lower"
+                      label={party.seats.legislatureName}
+                      value={party.seats.legislature}
+                      total={party.seats.legislatureTotal}
+                    />
+                    <SeatValue
+                      label={party.seats.lowerHouseName}
                       value={party.seats.lowerHouse}
                       total={party.seats.lowerHouseTotal}
                     />
                     <SeatValue
-                      label="upper"
+                      label={party.seats.upperHouseName}
                       value={party.seats.upperHouse}
                       total={party.seats.upperHouseTotal}
                     />

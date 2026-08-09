@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "../../components/SiteHeader";
 import { LogoImage } from "../../components/LogoImage";
-import { WikiText } from "../../components/WikiText";
+import { RichText, WikiText } from "../../components/WikiText";
 import { formatDate, getParty, parties } from "../../../lib/parties";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -37,9 +37,12 @@ export default async function PartyPage({ params }: PageProps) {
   const established = formatDate(party.established);
   const dissolved = formatDate(party.dissolved);
   const lastEdited = formatDate(party.lastEdited);
-  const hasSeats = [party.seats.lowerHouse, party.seats.upperHouse, party.seats.mep].some(
-    (value) => value != null,
-  );
+  const hasSeats = [
+    party.seats.legislature,
+    party.seats.lowerHouse,
+    party.seats.upperHouse,
+    party.seats.mep,
+  ].some((value) => value != null);
 
   return (
     <main className="site-shell">
@@ -62,16 +65,31 @@ export default async function PartyPage({ params }: PageProps) {
           <div>
             <span className="eyebrow">Party record / {party.id}</span>
             <div className="record-context">
-              <Link href={`/?country=${encodeURIComponent(party.country)}`}>{party.country}</Link>
+              <Link href={`/?country=${encodeURIComponent(party.country)}`}>
+                <RichText text={party.country} runs={party.formatting.country} />
+              </Link>
               {party.status ? (
-                <Link href={`/?status=${encodeURIComponent(party.status)}`}>{party.status}</Link>
+                <Link href={`/?status=${encodeURIComponent(party.status)}`}>
+                  <RichText text={party.status} runs={party.formatting.status} />
+                </Link>
               ) : null}
             </div>
-            <h1>{party.name}</h1>
-            {party.nativeName && party.nativeName !== party.name ? <p>{party.nativeName}</p> : null}
+            <h1><RichText text={party.name} runs={party.formatting.name} /></h1>
+            {party.nativeName && party.nativeName !== party.name ? (
+              <p className="native-party-name">
+                <RichText text={party.nativeName} runs={party.formatting.nativeName} />
+              </p>
+            ) : null}
+            {party.literalName ? (
+              <p className="literal-party-name">
+                (<RichText text={party.literalName} runs={party.formatting.literalName} />)
+              </p>
+            ) : null}
             <div className="record-tags">
-              {party.labels.map((label) => (
-                <Link key={label} href={`/?label=${encodeURIComponent(label)}`}>{label}</Link>
+              {party.labels.map((label, labelIndex) => (
+                <Link key={label} href={`/?label=${encodeURIComponent(label)}`}>
+                  <RichText text={label} runs={party.formatting.labels[labelIndex]} />
+                </Link>
               ))}
             </div>
           </div>
@@ -81,10 +99,18 @@ export default async function PartyPage({ params }: PageProps) {
           <aside className="panel infobox">
             <div className="section-label">Party details</div>
             <dl>
-              {party.acronym ? <InfoRow label="Acronym">{party.acronym}</InfoRow> : null}
+              {party.acronym ? (
+                <InfoRow label="Acronym">
+                  <RichText text={party.acronym} runs={party.formatting.acronym} />
+                </InfoRow>
+              ) : null}
               {established ? <InfoRow label="Established">{established}</InfoRow> : null}
               {dissolved ? <InfoRow label="Dissolved">{dissolved}</InfoRow> : null}
-              {party.formerNames ? <InfoRow label="Former names">{party.formerNames}</InfoRow> : null}
+              {party.formerNames ? (
+                <InfoRow label="Former names">
+                  <RichText text={party.formerNames} runs={party.formatting.formerNames} />
+                </InfoRow>
+              ) : null}
               {party.website ? (
                 <InfoRow label="Website">
                   <a href={party.website} target="_blank" rel="noreferrer">
@@ -97,9 +123,18 @@ export default async function PartyPage({ params }: PageProps) {
             {hasSeats ? (
               <div className="seat-table">
                 <h2>Representation</h2>
+                {party.seats.legislature != null ? (
+                  <div>
+                    <span>{party.seats.legislatureName}</span>
+                    <strong>
+                      {party.seats.legislature}
+                      {party.seats.legislatureTotal != null ? ` / ${party.seats.legislatureTotal}` : ""}
+                    </strong>
+                  </div>
+                ) : null}
                 {party.seats.lowerHouse != null ? (
                   <div>
-                    <span>Lower house</span>
+                    <span>{party.seats.lowerHouseName}</span>
                     <strong>
                       {party.seats.lowerHouse}
                       {party.seats.lowerHouseTotal != null ? ` / ${party.seats.lowerHouseTotal}` : ""}
@@ -108,7 +143,7 @@ export default async function PartyPage({ params }: PageProps) {
                 ) : null}
                 {party.seats.upperHouse != null ? (
                   <div>
-                    <span>Upper house</span>
+                    <span>{party.seats.upperHouseName}</span>
                     <strong>
                       {party.seats.upperHouse}
                       {party.seats.upperHouseTotal != null ? ` / ${party.seats.upperHouseTotal}` : ""}
@@ -132,11 +167,22 @@ export default async function PartyPage({ params }: PageProps) {
             <section className="panel prose-panel">
               <div className="section-label">Overview</div>
               {party.description ? (
-                <div className="record-prose"><WikiText text={party.description} /></div>
+                <div className="record-prose">
+                  <WikiText text={party.description} runs={party.formatting.description} />
+                </div>
               ) : (
                 <p className="missing-copy">No descriptive text has been added to this record yet.</p>
               )}
             </section>
+
+            {party.leadership ? (
+              <section className="panel prose-panel">
+                <div className="section-label">Leadership</div>
+                <div className="record-prose">
+                  <WikiText text={party.leadership} runs={party.formatting.leadership} />
+                </div>
+              </section>
+            ) : null}
 
             {party.formerLogos.length ? (
               <section className="panel archive-panel">

@@ -1,6 +1,11 @@
 import database from "../data/parties.json";
 
 export type Party = (typeof database.parties)[number];
+export type RichTextRun = {
+  text: string;
+  bold: boolean;
+  italic: boolean;
+};
 
 export const parties = database.parties;
 export const countries = Array.from(
@@ -13,12 +18,23 @@ export function getParty(id: string) {
 
 export function formatDate(value: string | null) {
   if (!value) return null;
-  const date = new Date(`${value}T00:00:00Z`);
+  if (/^\d{4}$/.test(value)) return value;
+
+  const isMonthOnly = /^\d{4}-\d{2}$/.test(value);
+  const normalized = isMonthOnly ? `${value}-01` : value;
+  const date = new Date(`${normalized}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return value;
   return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
+    ...(isMonthOnly ? {} : { day: "numeric" as const }),
     month: "long",
     year: "numeric",
     timeZone: "UTC",
   }).format(date);
+}
+
+export function dateSortKey(value: string | null) {
+  if (!value) return "";
+  if (/^\d{4}$/.test(value)) return `${value}-01-01`;
+  if (/^\d{4}-\d{2}$/.test(value)) return `${value}-01`;
+  return value;
 }

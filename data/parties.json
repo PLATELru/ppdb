@@ -1,18 +1,24 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "source": "data/PPDB database.xlsx",
-  "count": 3,
+  "count": 5,
   "parties": [
     {
       "country": "Austria",
       "id": "atOVP",
       "name": "Austrian People's Party",
       "nativeName": "Österreichische Volkspartei",
+      "literalName": null,
       "acronym": "ÖVP",
       "seats": {
+        "legislature": null,
+        "legislatureName": "National Council",
+        "legislatureTotal": 183,
         "lowerHouse": 51,
+        "lowerHouseName": "National Council",
         "lowerHouseTotal": 183,
         "upperHouse": 26,
+        "upperHouseName": "National Council",
         "upperHouseTotal": 60,
         "mep": 5,
         "mepTotal": 20
@@ -28,6 +34,7 @@
       ],
       "status": "Parliamentary",
       "description": null,
+      "leadership": null,
       "formerLogos": [
         {
           "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Volkspartei_Logo_2018.svg/960px-Volkspartei_Logo_2018.svg.png",
@@ -45,18 +52,94 @@
       "formerNames": "The new People's Party (Die neue Volkspartei, 2017-2022, unofficial)",
       "website": "https://www.dievolkspartei.at/",
       "lastEdited": null,
-      "sources": []
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Austria",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Austrian People's Party",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Österreichische Volkspartei",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "ÖVP",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Christian democracy",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Liberal conservatism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Centre-right",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [],
+        "leadership": [],
+        "formerNames": [
+          {
+            "text": "The new People's Party (Die neue Volkspartei, 2017-2022, unofficial)",
+            "bold": true,
+            "italic": false
+          }
+        ]
+      }
     },
     {
       "country": "Austria",
       "id": "atFPO",
       "name": "Freedom Party of Austria",
       "nativeName": "Freiheitliche Partei Österreichs",
+      "literalName": null,
       "acronym": "FPÖ",
       "seats": {
+        "legislature": null,
+        "legislatureName": "National Council",
+        "legislatureTotal": 183,
         "lowerHouse": 57,
+        "lowerHouseName": "National Council",
         "lowerHouseTotal": 183,
         "upperHouse": 16,
+        "upperHouseName": "National Council",
         "upperHouseTotal": 60,
         "mep": 5,
         "mepTotal": 20
@@ -73,7 +156,8 @@
         "National liberalism"
       ],
       "status": "Parliamentary",
-      "description": "Right-wing populist party, formed in 1955-1956 as successor of [[atVdU|Federation of Independents]], representing pan-Germanists and national liberals opposed to socialism and Catholic clericalism, represented by the [[atSPO|Social Democratic Party of Austria]] (SPÖ) and the [[atOVP|Austrian People's Party]] (ÖVP), respectively. Its first leader, Anton Reinthaller, was a former Nazi functionary and SS officer, but the FPÖ did not advocate far-right policies and presented itself as a centrist party. The FPÖ was long the third largest in Austria and had modest support. Under the leadership of Norbert Steger in the early 1980s, it sought to style itself on Germany's [[deFDP|Free Democratic Party]] (FDP) The FPÖ gave external support to SPÖ chancellor Bruno Kreisky (SPÖ) after the 1970 election and joined Fred Sinowatz's government, as the SPÖ's junior partner, after the 1983 election.\n\nJörg Haider became leader of the party in 1986, after which it began an ideological turn towards right-wing populism. This resulted in a strong surge in electoral support, but also led the SPÖ to break ties, and a splinter in the form of the [[atLiF|Liberal Forum]] in 1993. In the 1999 election, the FPÖ won 26.9% of the vote, becoming the second-most popular party, ahead of the ÖVP by around 500 votes. The two parties eventually reached a coalition agreement in which the ÖVP retained the office of chancellor. The FPÖ soon lost most of its popularity, falling to 10% in the 2002 election, but remained in government as junior partner. Internal tensions led Haider and much of the party leadership to leave in 2005, forming the [[atBZO|Alliance for the Future of Austria]] (BZÖ), which replaced the FPÖ as governing partner. Heinz-Christian Strache then became leader, and the party gradually regained its popularity, peaking at 26.0% in the 2017 election. The FPÖ once again became junior partner in government with the ÖVP. In May 2019, the Ibiza affair led to the collapse of the government and the resignation of Strache from both the offices of vice-chancellor and party leader. The resulting snap election saw the FPÖ fall to 16.2% and return to opposition. On 30 June 2024, ANO 2011, the Freedom Party of Austria, and [[huFidesz|Fidesz]] created a new alliance named [[euPfE|Patriots for Europe]].",
+      "description": "Right-wing populist party, formed in 1955-1956 as successor of [[atVdU|Federation of Independents]], representing pan-Germanists and national liberals opposed to socialism and Catholic clericalism, represented by the [[atSPO|Social Democratic Party of Austria]] (SPÖ) and the [[atOVP|Austrian People's Party]] (ÖVP), respectively. Its first leader, Anton Reinthaller, was a former Nazi functionary and SS officer, but the FPÖ did not advocate far-right policies and presented itself as a centrist party. The FPÖ was long the third largest in Austria and had modest support. Under the leadership of Norbert Steger in the early 1980s, it sought to style itself on Germany's [[deFDP|Free Democratic Party]] (FDP) The FPÖ gave external support to SPÖ chancellor Bruno Kreisky (SPÖ) after the 1970 election and joined Fred Sinowatz's government, as the SPÖ's junior partner, after the 1983 election.\n \n Jörg Haider became leader of the party in 1986, after which it began an ideological turn towards right-wing populism. This resulted in a strong surge in electoral support, but also led the SPÖ to break ties, and a splinter in the form of the [[atLiF|Liberal Forum]] in 1993. In the 1999 election, the FPÖ won 26.9% of the vote, becoming the second-most popular party, ahead of the ÖVP by around 500 votes. The two parties eventually reached a coalition agreement in which the ÖVP retained the office of chancellor. The FPÖ soon lost most of its popularity, falling to 10% in the 2002 election, but remained in government as junior partner. Internal tensions led Haider and much of the party leadership to leave in 2005, forming the [[atBZO|Alliance for the Future of Austria]] (BZÖ), which replaced the FPÖ as governing partner. Heinz-Christian Strache then became leader, and the party gradually regained its popularity, peaking at 26.0% in the 2017 election. The FPÖ once again became junior partner in government with the ÖVP. In May 2019, the Ibiza affair led to the collapse of the government and the resignation of Strache from both the offices of vice-chancellor and party leader. The resulting snap election saw the FPÖ fall to 16.2% and return to opposition. On 30 June 2024, ANO 2011, the Freedom Party of Austria, and [[huFidesz|Fidesz]] created a new alliance named [[euPfE|Patriots for Europe]].",
+      "leadership": null,
       "formerLogos": [
         {
           "url": "https://upload.wikimedia.org/wikipedia/de/4/4c/Die_Freiheitlichen_Logo_1991.svg",
@@ -87,18 +171,108 @@
       "formerNames": null,
       "website": "https://www.fpoe.at/",
       "lastEdited": null,
-      "sources": []
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Austria",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Freedom Party of Austria",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Freiheitliche Partei Österreichs",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "FPÖ",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "National conservatism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Right-wing populism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Euroscepticism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Far-right",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "National liberalism",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Right-wing populist party, formed in 1955-1956 as successor of [[atVdU|Federation of Independents]], representing pan-Germanists and national liberals opposed to socialism and Catholic clericalism, represented by the [[atSPO|Social Democratic Party of Austria]] (SPÖ) and the [[atOVP|Austrian People's Party]] (ÖVP), respectively. Its first leader, Anton Reinthaller, was a former Nazi functionary and SS officer, but the FPÖ did not advocate far-right policies and presented itself as a centrist party. The FPÖ was long the third largest in Austria and had modest support. Under the leadership of Norbert Steger in the early 1980s, it sought to style itself on Germany's [[deFDP|Free Democratic Party]] (FDP) The FPÖ gave external support to SPÖ chancellor Bruno Kreisky (SPÖ) after the 1970 election and joined Fred Sinowatz's government, as the SPÖ's junior partner, after the 1983 election.\n \n Jörg Haider became leader of the party in 1986, after which it began an ideological turn towards right-wing populism. This resulted in a strong surge in electoral support, but also led the SPÖ to break ties, and a splinter in the form of the [[atLiF|Liberal Forum]] in 1993. In the 1999 election, the FPÖ won 26.9% of the vote, becoming the second-most popular party, ahead of the ÖVP by around 500 votes. The two parties eventually reached a coalition agreement in which the ÖVP retained the office of chancellor. The FPÖ soon lost most of its popularity, falling to 10% in the 2002 election, but remained in government as junior partner. Internal tensions led Haider and much of the party leadership to leave in 2005, forming the [[atBZO|Alliance for the Future of Austria]] (BZÖ), which replaced the FPÖ as governing partner. Heinz-Christian Strache then became leader, and the party gradually regained its popularity, peaking at 26.0% in the 2017 election. The FPÖ once again became junior partner in government with the ÖVP. In May 2019, the Ibiza affair led to the collapse of the government and the resignation of Strache from both the offices of vice-chancellor and party leader. The resulting snap election saw the FPÖ fall to 16.2% and return to opposition. On 30 June 2024, ANO 2011, the Freedom Party of Austria, and [[huFidesz|Fidesz]] created a new alliance named [[euPfE|Patriots for Europe]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [],
+        "formerNames": []
+      }
     },
     {
       "country": "Lithuania",
       "id": "ltLDDP",
       "name": "Democratic Labour Party of Lithuania",
       "nativeName": "Lietuvos demokratinė darbo partija",
+      "literalName": null,
       "acronym": "LDDP",
       "seats": {
+        "legislature": null,
+        "legislatureName": "Seimas",
+        "legislatureTotal": 141,
         "lowerHouse": null,
+        "lowerHouseName": "Lower house",
         "lowerHouseTotal": null,
         "upperHouse": null,
+        "upperHouseName": "Upper house",
         "upperHouseTotal": null,
         "mep": null,
         "mepTotal": null
@@ -114,11 +288,361 @@
       ],
       "status": "Dissolved",
       "description": "Direct successor to the Soviet-era [[ltLKP|Communist Party of Lithuania]]. Merged into the [[ltLSDP|Social Democratic Party of Lithuania]].",
+      "leadership": null,
       "formerLogos": [],
       "formerNames": "Communist Party of Lithuania (Independent) (Lietuvos komunistų partija (nepriklausoma), until 1990)",
       "website": "https://web.archive.org/web/20010721040116/http://www.lddp.lt/",
       "lastEdited": null,
-      "sources": []
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Lithuania",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Democratic Labour Party of Lithuania",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Lietuvos demokratinė darbo partija",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "LDDP",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Social democracy",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Post-communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Centre-left",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Dissolved",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Direct successor to the Soviet-era [[ltLKP|Communist Party of Lithuania]]. Merged into the [[ltLSDP|Social Democratic Party of Lithuania]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [],
+        "formerNames": [
+          {
+            "text": "Communist Party of Lithuania (Independent) (Lietuvos komunistų partija (nepriklausoma), until 1990)",
+            "bold": true,
+            "italic": false
+          }
+        ]
+      }
+    },
+    {
+      "country": "Lithuania",
+      "id": "ltTSLKD",
+      "name": "Homeland Union – Lithuanian Christian Democrats",
+      "nativeName": "Tėvynės sąjunga – Lietuvos krikščionys demokratai",
+      "literalName": null,
+      "acronym": "TS–LKD",
+      "seats": {
+        "legislature": 28,
+        "legislatureName": "Seimas",
+        "legislatureTotal": 141,
+        "lowerHouse": null,
+        "lowerHouseName": "Lower house",
+        "lowerHouseTotal": null,
+        "upperHouse": null,
+        "upperHouseName": "Upper house",
+        "upperHouseTotal": null,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "https://upload.wikimedia.org/wikipedia/en/b/b3/Homeland_Union_–_Lithuanian_Christian_Democrats.svg",
+      "color": "#00a59b",
+      "established": "1993-05-01",
+      "dissolved": null,
+      "labels": [
+        "Christian democracy",
+        "Liberal conservatism",
+        "Economic liberalism",
+        "Pro-Europeanism",
+        "Centre-right"
+      ],
+      "status": "Parliamentary",
+      "description": "Formed by right-wing of the [[ltSajudis|Sąjūdis]] movement.",
+      "leadership": "Chairmen:\nVytautas Landsbergis (1 May 1993–24 May 2003)\nAndrius Kubilius (24 May 2003–9 May 2015)\nGabrielius Landsbergis (9 May 2015–28 October 2024)\nRadvilė Morkūnaitė-Mikulėnienė (acting, 28 October 2024–9 February 2025)\nAndrius Kubilius (since 9 February 2025)",
+      "formerLogos": [
+        {
+          "url": "/media/logos/ltTSLKDold.svg",
+          "until": "2020-05"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/lt/a/a3/Tėvynės_sąjungos_%28Lietuvos_konservatorių%29_logotipas.png",
+          "until": "2004"
+        }
+      ],
+      "formerNames": "1993–2004: Homeland Union (Lithuanian Conservatives) (TS)\n2004–2008: Homeland Union (Conservatives, Political Prisoners and the Exiled, Christian Democrats) (TS)",
+      "website": "https://tsajunga.lt/",
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Lithuania",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Homeland Union – Lithuanian Christian Democrats",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Tėvynės sąjunga – Lietuvos krikščionys demokratai",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "TS–LKD",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Christian democracy",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Liberal conservatism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Economic liberalism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Pro-Europeanism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Centre-right",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Formed by right-wing of the [[ltSajudis|Sąjūdis]] movement.",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "Chairmen:\nVytautas Landsbergis (1 May 1993–24 May 2003)\nAndrius Kubilius (24 May 2003–9 May 2015)\nGabrielius Landsbergis (9 May 2015–28 October 2024)\nRadvilė Morkūnaitė-Mikulėnienė (acting, 28 October 2024–9 February 2025)\nAndrius Kubilius (since 9 February 2025)",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "formerNames": [
+          {
+            "text": "1993–2004: Homeland Union (Lithuanian Conservatives) (TS)\n2004–2008: Homeland Union (Conservatives, Political Prisoners and the Exiled, Christian Democrats) (TS)",
+            "bold": false,
+            "italic": false
+          }
+        ]
+      }
+    },
+    {
+      "country": "Lithuania",
+      "id": "ltSajudis",
+      "name": "Sąjūdis",
+      "nativeName": "Lietuvos Persitvarkymo Sąjūdis",
+      "literalName": "Reform Movement of Lithuania",
+      "acronym": "Sąjūdis",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Seimas",
+        "legislatureTotal": 141,
+        "lowerHouse": null,
+        "lowerHouseName": "Lower house",
+        "lowerHouseTotal": null,
+        "upperHouse": null,
+        "upperHouseName": "Upper house",
+        "upperHouseTotal": null,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "/media/logos/ltSajudis.svg",
+      "color": "#3A923A",
+      "established": "1988-10-23",
+      "dissolved": null,
+      "labels": [
+        "Lithuanian nationalism",
+        "Anti-communism",
+        "Anti-Sovietism",
+        "Big tent"
+      ],
+      "status": "Extra-parliamentary",
+      "description": "A political organisation which led the struggle for Lithuanian independence in the late 1980s and early 1990s. It was established on 3 June 1988 as the first opposition party in Soviet Lithuania, and was led by Vytautas Landsbergis. Its goal was to seek the return of independent status for Lithuania.\n\nSince 1993, Sąjūdis has operated as a public association, and its right wing founded the [[ltTSLKD|Homeland Union]].",
+      "leadership": "Chairmen:\r\nVytautas Landsbergis, 1988-1990\r\nJuozas Tumelis, 1990-1992\r\nJuozapas Algirdas Katkus, 1992-1993\r\nRomas Batūra, 1993-2000\r\nRytas Kupčinskas, 2000-2007\r\nVidmantas Žilius, 2009-2013\r\nAndrius Tučkus, 2013\r\nVidmantas Žilius, 2016–",
+      "formerLogos": [],
+      "formerNames": null,
+      "website": "https://web.archive.org/web/20260511084158/http://www.lietsajudis.lt/",
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Lithuania",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Sąjūdis",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Lietuvos Persitvarkymo Sąjūdis",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "literalName": [
+          {
+            "text": "Reform Movement of Lithuania",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "acronym": [
+          {
+            "text": "Sąjūdis",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Lithuanian nationalism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Anti-communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Anti-Sovietism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Big tent",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Extra-parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "A political organisation which led the struggle for Lithuanian independence in the late 1980s and early 1990s. It was established on 3 June 1988 as the first opposition party in Soviet Lithuania, and was led by Vytautas Landsbergis. Its goal was to seek the return of independent status for Lithuania.\n\nSince 1993, Sąjūdis has operated as a public association, and its right wing founded the [[ltTSLKD|Homeland Union]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "Chairmen:\r\nVytautas Landsbergis, 1988-1990\r\nJuozas Tumelis, 1990-1992\r\nJuozapas Algirdas Katkus, 1992-1993\r\nRomas Batūra, 1993-2000\r\nRytas Kupčinskas, 2000-2007\r\nVidmantas Žilius, 2009-2013\r\nAndrius Tučkus, 2013\r\nVidmantas Žilius, 2016–",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "formerNames": []
+      }
     }
   ]
 }
