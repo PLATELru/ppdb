@@ -1,6 +1,6 @@
 # Political Parties Database (PPDB)
 
-PPDB is a compact, spreadsheet-driven reference site. The workbook is the source of truth: one party row becomes one catalogue card and one permanent party page.
+Everything below is AI-written.
 
 ## Add or edit a party
 
