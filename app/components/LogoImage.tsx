@@ -20,9 +20,9 @@ export function LogoImage({
   src,
 }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
-  const isRemoteOrEmbedded = Boolean(src) && (
-    /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src)
-  );
+  const isRemoteOrEmbedded = src
+    ? /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src)
+    : false;
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const resolvedSrc = !src
     ? ""
