@@ -45,3 +45,13 @@ test("accepts the three-letter international ID prefix and its cross-reference",
   assert.equal(international?.status, "International");
   assert.match(byId.get("suCPSU")?.description ?? "", /\[\[intUCPCPSU\|/);
 });
+
+test("preserves spreadsheet line breaks inside rich text", () => {
+  const party = byId.get("ruKPRF");
+  assert.equal(
+    party?.nativeName,
+    "Коммунистическая партия Российской Федерации\nKommunisticheskaya partiya Rossiyskoy Federatsiyi",
+  );
+  assert.equal(party?.formatting.nativeName[0]?.text.endsWith("\n"), true);
+  assert.equal(party?.formatting.nativeName[1]?.italic, true);
+});

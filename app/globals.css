@@ -236,8 +236,19 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   color: var(--ink);
   text-decoration: none;
   overflow: hidden;
+  overflow: clip;
 }
-.party-logo { display: block; width: 100%; height: 100%; object-fit: contain; }
+.party-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  overflow: hidden;
+  clip-path: inset(0);
+}
 .logo-placeholder {
   display: grid;
   place-items: center;
@@ -248,10 +259,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   font-weight: 800;
 }
 .party-card-copy { grid-area: copy; min-width: 0; text-align: left; }
-.party-card h2 { margin: 0; font-size: 15px; line-height: 1.2; }
+.party-card h2 { margin: 0; font-size: 15px; line-height: 1.2; white-space: pre-line; }
 .party-card h2 a { color: var(--ink); text-decoration: none; }
 .party-card h2 a:hover { text-decoration: underline; }
-.party-card-copy > p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+.party-card-copy > p { margin: 5px 0 0; color: var(--muted); font-size: 11px; white-space: pre-line; }
 .party-card-copy > .literal-party-name { margin-top: 3px; font-size: 10px; font-style: italic; }
 .party-meta, .context-filter-list, .label-list, .seat-line { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 5px; }
 .party-meta { margin-top: 10px; }
@@ -343,13 +354,24 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   height: 150px;
   padding: 0;
   overflow: hidden;
+  overflow: clip;
   background: var(--logo-frame);
   border: 1px solid #777;
 }
-.record-logo-wrap img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.record-logo-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  overflow: hidden;
+  clip-path: inset(0);
+}
 .record-logo-wrap span { display: grid; place-items: center; width: 100%; height: 100%; color: var(--ink); font-size: 28px; font-weight: 800; }
-.record-heading h1 { margin: 7px 0 0; font-size: clamp(28px, 5vw, 46px); line-height: 1; letter-spacing: -0.04em; }
-.record-heading p { margin: 7px 0 0; color: var(--muted); font-size: 16px; }
+.record-heading h1 { margin: 7px 0 0; font-size: clamp(28px, 5vw, 46px); line-height: 1; letter-spacing: -0.04em; white-space: pre-line; }
+.record-heading p { margin: 7px 0 0; color: var(--muted); font-size: 16px; white-space: pre-line; }
 .record-heading .literal-party-name { margin-top: 4px; font-size: 13px; font-style: italic; }
 .record-context { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .record-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 15px; }
@@ -382,8 +404,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
-.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; background: var(--logo-frame); border: 1px solid #777; color: var(--ink); }
-.former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; background: var(--logo-frame); border: 1px solid #777; color: var(--ink); }
+.former-logo-grid img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
 .former-logo-grid figure > div > span { display: grid; place-items: center; width: 100%; height: 100%; }
 .former-logo-grid figcaption { padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
 .sources-panel ol { margin: 0; padding: 8px 8px 8px 32px; background: var(--panel-light); border: 1px solid var(--line); }
