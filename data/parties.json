@@ -144,7 +144,7 @@
         "mep": 5,
         "mepTotal": 20
       },
-      "logo": "/media/logos/atFPO.png",
+      "logo": "/media/logos/atFPO.svg",
       "color": "#005EA8",
       "established": "1955-11-03",
       "dissolved": null,
@@ -536,7 +536,7 @@
         "mep": null,
         "mepTotal": null
       },
-      "logo": "/media/logos/ltSajudis.svg",
+      "logo": "/media/logos/ltSajudis.png",
       "color": "#3A923A",
       "established": "1988-10-23",
       "dissolved": null,

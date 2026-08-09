@@ -262,6 +262,7 @@ export function PartyDirectory({ countries, parties }: Props) {
                     fallbackClassName="logo-placeholder"
                   />
                 </Link>
+                <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>
                 <div className="party-card-copy">
                   <h2>
                     <Link href={`/party/${party.id}`}>
@@ -319,7 +320,6 @@ export function PartyDirectory({ countries, parties }: Props) {
                     <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
                   </div>
                 </div>
-                <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>
               </div>
             </article>
           ))}

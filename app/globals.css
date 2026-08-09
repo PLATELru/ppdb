@@ -13,6 +13,10 @@
   --shadow-light: #ffffff;
   --shadow-dark: #555555;
   --focus: #ffdd00;
+  --logo-frame: #ffffff;
+  --panel-hover: #ffffff;
+  --button-face: #d8d8d8;
+  --button-hover: #ececec;
 }
 
 :root[data-theme="dark"] {
@@ -27,6 +31,10 @@
   --link: #a9c5ff;
   --shadow-light: #595b64;
   --shadow-dark: #101116;
+  --logo-frame: #272a33;
+  --panel-hover: #373a45;
+  --button-face: #343741;
+  --button-hover: #444853;
 }
 
 * { box-sizing: border-box; }
@@ -189,7 +197,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .party-card {
   position: relative;
   min-width: 0;
-  min-height: 238px;
+  min-height: 218px;
   background: var(--panel-light);
   border: 2px solid;
   border-color: var(--shadow-light) var(--shadow-dark) var(--shadow-dark) var(--shadow-light);
@@ -200,9 +208,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   grid-template-columns: 92px minmax(0, 1fr);
   grid-template-areas:
     "logo copy"
-    "open open";
-  gap: 10px 12px;
-  min-height: 234px;
+    "open copy";
+  grid-template-rows: 92px auto;
+  gap: 7px 12px;
+  min-height: 214px;
   padding: 14px 12px 10px 18px;
   color: var(--ink);
   text-decoration: none;
@@ -215,9 +224,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   height: 92px;
   margin: 0;
   padding: 0;
-  background: #fff;
+  background: var(--logo-frame);
   border: 1px solid #777;
-  color: #111;
+  color: var(--ink);
   text-decoration: none;
   overflow: hidden;
 }
@@ -262,37 +271,42 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   font-size: 10px;
 }
 .context-filter-list button:hover, .label-list button:hover, .record-context a:hover, .record-tags a:hover {
-  background: #fff;
-  color: #111;
+  background: var(--panel-hover);
+  color: var(--ink);
 }
 .seat-line { margin-top: 12px; font-family: "Courier New", Courier, monospace; font-size: 10px; }
 .seat-line span { padding-right: 5px; }
 .open-record {
   grid-area: open;
-  align-self: end;
-  padding: 6px 8px;
-  color: #111;
-  background: #d8d8d8;
+  align-self: start;
+  width: 92px;
+  padding: 5px 4px;
+  color: var(--ink);
+  background: var(--button-face);
   border: 2px solid;
-  border-color: #fff #666 #666 #fff;
+  border-color: var(--shadow-light) var(--shadow-dark) var(--shadow-dark) var(--shadow-light);
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
+  white-space: nowrap;
 }
-.party-card:hover { background: #fff; }
-.party-card:hover .open-record { background: #ececec; }
+.party-card:hover { background: var(--panel-hover); }
+.party-card:hover .open-record { background: var(--button-hover); }
 .party-grid.row-view { grid-template-columns: 1fr; }
-.party-grid.row-view .party-card { min-height: 130px; }
+.party-grid.row-view .party-card { min-height: 138px; }
 .party-grid.row-view .card-link {
-  min-height: 126px;
-  grid-template-columns: 100px minmax(0, 1fr) 130px;
-  grid-template-areas: "logo copy open";
-  align-items: center;
+  min-height: 134px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  grid-template-areas:
+    "logo copy"
+    "open copy";
+  grid-template-rows: 96px auto;
+  align-items: start;
   padding: 12px 16px 12px 20px;
 }
 .party-grid.row-view .party-logo-wrap { width: 96px; height: 96px; }
 .party-grid.row-view .party-card-copy { text-align: left; }
 .party-grid.row-view .party-meta, .party-grid.row-view .context-filter-list, .party-grid.row-view .label-list, .party-grid.row-view .seat-line { justify-content: flex-start; }
-.party-grid.row-view .open-record { align-self: center; }
+.party-grid.row-view .open-record { width: 96px; align-self: start; }
 .empty-state { display: grid; gap: 6px; padding: 60px 20px; background: var(--panel-light); border: 1px solid var(--line); text-align: center; }
 .notes-panel { margin-top: 12px; }
 .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -322,11 +336,11 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   height: 150px;
   padding: 0;
   overflow: hidden;
-  background: #fff;
+  background: var(--logo-frame);
   border: 1px solid #777;
 }
 .record-logo-wrap img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.record-logo-wrap span { display: grid; place-items: center; width: 100%; height: 100%; color: #333; font-size: 28px; font-weight: 800; }
+.record-logo-wrap span { display: grid; place-items: center; width: 100%; height: 100%; color: var(--ink); font-size: 28px; font-weight: 800; }
 .record-heading h1 { margin: 7px 0 0; font-size: clamp(28px, 5vw, 46px); line-height: 1; letter-spacing: -0.04em; }
 .record-heading p { margin: 7px 0 0; color: var(--muted); font-size: 16px; }
 .record-heading .literal-party-name { margin-top: 4px; font-size: 13px; font-style: italic; }
@@ -361,7 +375,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
-.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; background: #fff; border: 1px solid #777; color: #111; }
+.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; background: var(--logo-frame); border: 1px solid #777; color: var(--ink); }
 .former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .former-logo-grid figure > div > span { display: grid; place-items: center; width: 100%; height: 100%; }
 .former-logo-grid figcaption { padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
