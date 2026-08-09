@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "source": "data/PPDB database.xlsx",
-  "count": 5,
+  "count": 10,
   "parties": [
     {
       "country": "Austria",
@@ -12,13 +12,13 @@
       "acronym": "ÖVP",
       "seats": {
         "legislature": null,
-        "legislatureName": "National Council",
-        "legislatureTotal": 183,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
         "lowerHouse": 51,
         "lowerHouseName": "National Council",
         "lowerHouseTotal": 183,
         "upperHouse": 26,
-        "upperHouseName": "National Council",
+        "upperHouseName": "Federal Council",
         "upperHouseTotal": 60,
         "mep": 5,
         "mepTotal": 20
@@ -38,15 +38,15 @@
       "formerLogos": [
         {
           "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Volkspartei_Logo_2018.svg/960px-Volkspartei_Logo_2018.svg.png",
-          "until": "2019-01-01"
+          "until": "2019"
         },
         {
           "url": "https://upload.wikimedia.org/wikipedia/en/b/b5/Austrian_People%27s_Party_logo.png",
-          "until": "2017-01-01"
+          "until": "2017"
         },
         {
           "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/ÖVP-Logo_%2880er%29.svg/330px-ÖVP-Logo_%2880er%29.svg.png",
-          "until": "2000-01-01"
+          "until": "2000"
         }
       ],
       "formerNames": "The new People's Party (Die neue Volkspartei, 2017-2022, unofficial)",
@@ -117,7 +117,17 @@
         "leadership": [],
         "formerNames": [
           {
-            "text": "The new People's Party (Die neue Volkspartei, 2017-2022, unofficial)",
+            "text": "The new People's Party (",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Die neue Volkspartei",
+            "bold": true,
+            "italic": true
+          },
+          {
+            "text": ", 2017-2022, unofficial)",
             "bold": true,
             "italic": false
           }
@@ -133,13 +143,13 @@
       "acronym": "FPÖ",
       "seats": {
         "legislature": null,
-        "legislatureName": "National Council",
-        "legislatureTotal": 183,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
         "lowerHouse": 57,
         "lowerHouseName": "National Council",
         "lowerHouseTotal": 183,
         "upperHouse": 16,
-        "upperHouseName": "National Council",
+        "upperHouseName": "Federal Council",
         "upperHouseTotal": 60,
         "mep": 5,
         "mepTotal": 20
@@ -258,6 +268,133 @@
       }
     },
     {
+      "country": "International",
+      "id": "intUCPCPSU",
+      "name": "Union of Communist Parties – Communist Party of the Soviet Union",
+      "nativeName": "Союз коммунистических партий – Коммунистическая партия Советского Союза\nSoyuz kommunisticheskikh partiy – Kommunisticheskaya partiya Sovetskogo Soyuza",
+      "literalName": null,
+      "acronym": "UCP–CPSU",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
+        "lowerHouse": null,
+        "lowerHouseName": "Lower house",
+        "lowerHouseTotal": null,
+        "upperHouse": null,
+        "upperHouseName": "Upper house",
+        "upperHouseTotal": null,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "/media/logos/intUCPCPSU.svg",
+      "color": "#DD0302",
+      "established": "1993-03-26",
+      "dissolved": null,
+      "labels": [
+        "Communism",
+        "Marxism–Leninism",
+        "Soviet patriotism",
+        "Far-left"
+      ],
+      "status": "International",
+      "description": "The Federation of Communist Parties in the Post-Soviet Space, led by the [[ruKPRF|Communist Party of the Russian Federation]], founded in 1993 and considering itself the direct successor of the united [[suCPSU|Communist Party of the Soviet Union]].",
+      "leadership": "From 27 March 1993 to 20 January 2001, the post of Chairman of the UCP–CPSU Council was held by Oleg Shenin. In 2001, Shenin was expelled from the Central Committee of the [[ruKPRF|KPRF]] for split-off activities (the creation of the Communist Party of the Union State of Russia and Belarus). \n\nOn 20 January 2001, KPRF chairman, Gennady Zyuganov became Chairman of the SKP-CPSU Council.",
+      "formerLogos": [],
+      "formerNames": null,
+      "website": "https://skpkpss.ru/",
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "International",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Union of Communist Parties – Communist Party of the Soviet Union",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Союз коммунистических партий – Коммунистическая партия Советского Союза\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Soyuz kommunisticheskikh partiy – Kommunisticheskaya partiya Sovetskogo Soyuza",
+            "bold": false,
+            "italic": true
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "UCP–CPSU",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Marxism–Leninism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Soviet patriotism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Far-left",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "International",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "The Federation of Communist Parties in the Post-Soviet Space, led by the [[ruKPRF|Communist Party of the Russian Federation]], founded in 1993 and considering itself the direct successor of the united [[suCPSU|Communist Party of the Soviet Union]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "From 27 March 1993 to 20 January 2001, the post of Chairman of the UCP–CPSU Council was held by Oleg Shenin. In 2001, Shenin was expelled from the Central Committee of the [[ruKPRF|KPRF]] for split-off activities (the creation of the Communist Party of the Union State of Russia and Belarus). \n\nOn 20 January 2001, KPRF chairman, Gennady Zyuganov became Chairman of the SKP-CPSU Council.",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "formerNames": []
+      }
+    },
+    {
       "country": "Lithuania",
       "id": "ltLDDP",
       "name": "Democratic Labour Party of Lithuania",
@@ -364,7 +501,17 @@
         "leadership": [],
         "formerNames": [
           {
-            "text": "Communist Party of Lithuania (Independent) (Lietuvos komunistų partija (nepriklausoma), until 1990)",
+            "text": "Communist Party of Lithuania (Independent) (",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Lietuvos komunistų partija (nepriklausoma)",
+            "bold": true,
+            "italic": true
+          },
+          {
+            "text": ", until 1990)",
             "bold": true,
             "italic": false
           }
@@ -639,6 +786,595 @@
             "text": "Chairmen:\r\nVytautas Landsbergis, 1988-1990\r\nJuozas Tumelis, 1990-1992\r\nJuozapas Algirdas Katkus, 1992-1993\r\nRomas Batūra, 1993-2000\r\nRytas Kupčinskas, 2000-2007\r\nVidmantas Žilius, 2009-2013\r\nAndrius Tučkus, 2013\r\nVidmantas Žilius, 2016–",
             "bold": false,
             "italic": false
+          }
+        ],
+        "formerNames": []
+      }
+    },
+    {
+      "country": "Russia",
+      "id": "ruKPRSFSR",
+      "name": "Communist Party of the RSFSR",
+      "nativeName": "Коммунистическая партия РСФСР\nKommunisticheskaya partiya RSRSR",
+      "literalName": null,
+      "acronym": "KP RSFSR",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
+        "lowerHouse": null,
+        "lowerHouseName": "State Duma",
+        "lowerHouseTotal": 450,
+        "upperHouse": null,
+        "upperHouseName": "Federation Council",
+        "upperHouseTotal": 178,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "/media/logos/ruKPRSFSR.svg",
+      "color": "#cc0000",
+      "established": "1990-06-19",
+      "dissolved": "1991-11-06",
+      "labels": [
+        "Communism",
+        "Marxism–Leninism",
+        "Soviet patriotism",
+        "Far-left"
+      ],
+      "status": "Banned",
+      "description": "Republican branch of the [[suCPSU|Communist Party of the Soviet Union]] in the Russian Soviet Federative Socialist Republic. Established on 19 June 1990 (before that, the RSFSR remained the only republic of the Soviet Union that did not have a republican communist party). The CP RSFSR was not an independent party and did not have its own charter or program.\n\nPolitically, CP RSFSR became a centre for communist opponents of Gorbachev's CPSU leadership.\n\nThe August putsch (19-21 August 1991) served as the basis for accusing the CPSU of unconstitutional activity. By decree of RSFSR President Boris Yeltsin on 6 November 1991, the activities of the CPSU and its republican organization, the CP RSFSR, were terminated, and their property was confiscated. However, the Constitutional Court of the Russian Federation issued a ruling on 30 November 1992, declaring the ban on the activities of the primary organizations of the CPSU/CP RSFSR unconstitutional.\n\nDespite the ban, the party's activities continued until February 1993, when a restoration congress was held. Based on the primary organizations, the CPSU RSFSR was re-established as the [[ruKPRF|Communist Party of the Russian Federation]].",
+      "leadership": "First Secretaries of the Central Committee of the KP RSFSR:\nIvan Polozkov (22 June 1990 – 6 August 1991),\nValentin Kuptsov (6 August 1991 – 7 November 1991 (de jure) / 14 February 1993 (de facto))",
+      "formerLogos": [],
+      "formerNames": "Full name: Communist Party of the Russian Soviet Federative Socialist Republic (Коммунистическая партия Российской Советской Федеративной Социалистической Республики; КПРСФСР; Kommunisticheskaya partiya Rossiyskoy Sovetskoy Federativnoy Sotsialisticheskoy Respubliki)",
+      "website": null,
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Russia",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Communist Party of the RSFSR",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Коммунистическая партия РСФСР\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Kommunisticheskaya partiya RSRSR",
+            "bold": false,
+            "italic": true
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "KP RSFSR",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Marxism–Leninism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Soviet patriotism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Far-left",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Banned",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Republican branch of the [[suCPSU|Communist Party of the Soviet Union]] in the Russian Soviet Federative Socialist Republic. Established on 19 June 1990 (before that, the RSFSR remained the only republic of the Soviet Union that did not have a republican communist party). The CP RSFSR was not an independent party and did not have its own charter or program.\n\nPolitically, CP RSFSR became a centre for communist opponents of Gorbachev's CPSU leadership.\n\nThe August putsch (19-21 August 1991) served as the basis for accusing the CPSU of unconstitutional activity. By decree of RSFSR President Boris Yeltsin on 6 November 1991, the activities of the CPSU and its republican organization, the CP RSFSR, were terminated, and their property was confiscated. However, the Constitutional Court of the Russian Federation issued a ruling on 30 November 1992, declaring the ban on the activities of the primary organizations of the CPSU/CP RSFSR unconstitutional.\n\nDespite the ban, the party's activities continued until February 1993, when a restoration congress was held. Based on the primary organizations, the CPSU RSFSR was re-established as the [[ruKPRF|Communist Party of the Russian Federation]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "First Secretaries of the Central Committee of the KP RSFSR:\nIvan Polozkov (22 June 1990 – 6 August 1991),\nValentin Kuptsov (6 August 1991 – 7 November 1991 (de jure) / 14 February 1993 (de facto))",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "formerNames": [
+          {
+            "text": "Full name: ",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Communist Party of the Russian Soviet Federative Socialist Republic",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": " (",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Коммунистическая партия Российской Советской Федеративной Социалистической Республики; КПРСФСР; Kommunisticheskaya partiya Rossiyskoy Sovetskoy Federativnoy Sotsialisticheskoy Respubliki",
+            "bold": false,
+            "italic": true
+          },
+          {
+            "text": ")",
+            "bold": false,
+            "italic": false
+          }
+        ]
+      }
+    },
+    {
+      "country": "Russia",
+      "id": "ruKPRF",
+      "name": "Communist Party of the Russian Federation",
+      "nativeName": "Коммунистическая партия Российской Федерации\nKommunisticheskaya partiya Rossiyskoy Federatsiyi",
+      "literalName": null,
+      "acronym": "KPRF",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
+        "lowerHouse": 57,
+        "lowerHouseName": "State Duma",
+        "lowerHouseTotal": 450,
+        "upperHouse": 2,
+        "upperHouseName": "Federation Council",
+        "upperHouseTotal": 178,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "/media/logos/ruKPRF.svg",
+      "color": "#c40a00",
+      "established": "1993-02-14",
+      "dissolved": null,
+      "labels": [
+        "Communism",
+        "Marxism–Leninism",
+        "Social conservatism",
+        "Left-wing nationalism",
+        "Far-left"
+      ],
+      "status": "Parliamentary",
+      "description": "Direct successor of the [[ruKPRSFSR|Communist Party of the RSFSR]], a Russian branch of the [[suCPSU|Communist Party of the Soviet Union]].",
+      "leadership": "Gennady Zyuganov - party chairman since 1993",
+      "formerLogos": [
+        {
+          "url": "/media/logos/ruKPRFold.png",
+          "until": "2000"
+        }
+      ],
+      "formerNames": null,
+      "website": "https://kprf.ru/",
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Russia",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Communist Party of the Russian Federation",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Коммунистическая партия Российской Федерации\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Kommunisticheskaya partiya Rossiyskoy Federatsiyi",
+            "bold": false,
+            "italic": true
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "KPRF",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Marxism–Leninism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Social conservatism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Left-wing nationalism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Far-left",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Direct successor of the [[ruKPRSFSR|Communist Party of the RSFSR]], a Russian branch of the [[suCPSU|Communist Party of the Soviet Union]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "Gennady Zyuganov - party chairman since 1993",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "formerNames": []
+      }
+    },
+    {
+      "country": "Russia",
+      "id": "ruER",
+      "name": "United Russia",
+      "nativeName": "Единая Россия\nYedinaya Rossiya",
+      "literalName": null,
+      "acronym": "ER",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
+        "lowerHouse": 315,
+        "lowerHouseName": "State Duma",
+        "lowerHouseTotal": 450,
+        "upperHouse": 136,
+        "upperHouseName": "Federation Council",
+        "upperHouseTotal": 178,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "/media/logos/ruER.svg",
+      "color": "#2e4ea4",
+      "established": "2001-12-01",
+      "dissolved": null,
+      "labels": [
+        "Conservatism",
+        "Centrism",
+        "Statism",
+        "Nationalism",
+        "Putinism"
+      ],
+      "status": "Parliamentary",
+      "description": "Merger of the [[ruUnity|Unity]] party and [[ruOVR|Fatherland – All Russia]] bloc parties ([[ruOtech|Fatherland]] and [[ruVsyaR|All Russia]]).",
+      "leadership": null,
+      "formerLogos": [
+        {
+          "url": "/media/logos/ruERold.png",
+          "until": "2005-11-26"
+        }
+      ],
+      "formerNames": null,
+      "website": "https://er.ru/",
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Russia",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "United Russia",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Единая Россия\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Yedinaya Rossiya",
+            "bold": false,
+            "italic": true
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "ER",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Conservatism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Centrism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Statism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Nationalism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Putinism",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Parliamentary",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Merger of the [[ruUnity|Unity]] party and [[ruOVR|Fatherland – All Russia]] bloc parties ([[ruOtech|Fatherland]] and [[ruVsyaR|All Russia]]).",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [],
+        "formerNames": []
+      }
+    },
+    {
+      "country": "Soviet Union",
+      "id": "suCPSU",
+      "name": "Communist Party of the Soviet Union",
+      "nativeName": "Коммунистическая партия Советского Союза\nKommunisticheskaya partiya Sovetskogo Soyuza",
+      "literalName": null,
+      "acronym": "CPSU",
+      "seats": {
+        "legislature": null,
+        "legislatureName": "Legislature",
+        "legislatureTotal": null,
+        "lowerHouse": null,
+        "lowerHouseName": "Lower house",
+        "lowerHouseTotal": null,
+        "upperHouse": null,
+        "upperHouseName": "Upper house",
+        "upperHouseTotal": null,
+        "mep": null,
+        "mepTotal": null
+      },
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fe/КПСС.svg",
+      "color": "#c90000",
+      "established": "1952-10-14",
+      "dissolved": "1991-11-06",
+      "labels": [
+        "Communism",
+        "Marxism–Leninism",
+        "Soviet patriotism",
+        "Far-left"
+      ],
+      "status": "Banned",
+      "description": "Ruling political party of the Soviet Union; the sole legal and governing party of the Soviet Union until 1990.\n\nRenamed from [[suVKPb|All-Union Communist Party (Bolsheviks)]] at the 19th Congress in October 1952, last under Joseph Stalin's leadership.\n\nThe party was outlawed under Russian president Boris Yeltsin's decree on 6 November 1991, citing the August 1991 Soviet coup attempt as a reason. The de facto successor of the CPSU in the post-Soviet space is the party federation [[intUCPCPSU|Union of Communist Parties – Communist Party of the Soviet Union]], led by the [[ruKPRF|Communist Party of the Russian Federation]].",
+      "leadership": "De facto presiding Secretary of the Central Committee:\nJoseph Stalin (16 October 1952–5 March 1953).\nFirst Secretary of the Central Committee:\nNikita Khrushchev (7 September 1953–14 October 1964),\nLeonid Brezhnev (14 October 1964–8 April 1966).\nGeneral Secretary of the Central Committee:\nLeonid Brezhnev (8 April 1966–10 November 1982),\nYuri Andropov (12 November 1982–9 February 1984),\nKonstantin Chernenko (13 February 1984–10 March 1985),\nMikhail Gorbachev (11 March 1985–24 August 1991),\nVladimir Ivashko (acting, 24 August 1991–6 November 1991)",
+      "formerLogos": [],
+      "formerNames": null,
+      "website": null,
+      "lastEdited": null,
+      "sources": [],
+      "formatting": {
+        "country": [
+          {
+            "text": "Soviet Union",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "name": [
+          {
+            "text": "Communist Party of the Soviet Union",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "nativeName": [
+          {
+            "text": "Коммунистическая партия Советского Союза\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Kommunisticheskaya partiya Sovetskogo Soyuza",
+            "bold": false,
+            "italic": true
+          }
+        ],
+        "literalName": [],
+        "acronym": [
+          {
+            "text": "CPSU",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "labels": [
+          [
+            {
+              "text": "Communism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Marxism–Leninism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Soviet patriotism",
+              "bold": false,
+              "italic": false
+            }
+          ],
+          [
+            {
+              "text": "Far-left",
+              "bold": false,
+              "italic": false
+            }
+          ]
+        ],
+        "status": [
+          {
+            "text": "Banned",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "description": [
+          {
+            "text": "Ruling political party of the Soviet Union; the sole legal and governing party of the Soviet Union until 1990.\n\nRenamed from [[suVKPb|All-Union Communist Party (Bolsheviks)]] at the 19th Congress in October 1952, last under Joseph Stalin's leadership.\n\nThe party was outlawed under Russian president Boris Yeltsin's decree on 6 November 1991, citing the August 1991 Soviet coup attempt as a reason. The de facto successor of the CPSU in the post-Soviet space is the party federation [[intUCPCPSU|Union of Communist Parties – Communist Party of the Soviet Union]], led by the [[ruKPRF|Communist Party of the Russian Federation]].",
+            "bold": false,
+            "italic": false
+          }
+        ],
+        "leadership": [
+          {
+            "text": "De facto presiding",
+            "bold": true,
+            "italic": true
+          },
+          {
+            "text": " Secretary of the Central Committee:",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "\nJoseph Stalin (16 October 1952–5 March 1953).\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "First Secretary of the Central Committee:",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "\nNikita Khrushchev (7 September 1953–14 October 1964),\nLeonid Brezhnev (14 October 1964–8 April 1966).\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "General Secretary of the Central Committee:\n",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Leonid Brezhnev (8 April 1966–10 November 1982),\nYuri Andropov (12 November 1982–9 February 1984),\nKonstantin Chernenko (13 February 1984–10 March 1985),\nMikhail Gorbachev (11 March 1985–24 August 1991),\n",
+            "bold": false,
+            "italic": false
+          },
+          {
+            "text": "Vladimir Ivashko (acting, 24 August 1991–6 November 1991)",
+            "bold": false,
+            "italic": true
           }
         ],
         "formerNames": []

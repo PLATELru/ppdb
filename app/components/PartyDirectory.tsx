@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { dateSortKey, type Party } from "../../lib/parties";
 import { LogoImage } from "./LogoImage";
 import { RichText } from "./WikiText";
@@ -64,6 +64,7 @@ function updateUrlFilters(filters: { label?: string; country?: string; status?: 
 }
 
 export function PartyDirectory({ countries, parties }: Props) {
+  const gridRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("name");
   const [view, setView] = useState<"cards" | "rows">("cards");
@@ -151,6 +152,55 @@ export function PartyDirectory({ countries, parties }: Props) {
         return a.name.localeCompare(b.name, "en");
       });
   }, [activeLabel, country, parties, query, sort, status]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>(".party-card"));
+    if (view === "rows") {
+      cards.forEach((card) => card.style.removeProperty("grid-row-end"));
+      return;
+    }
+
+    let animationFrame = 0;
+    const measureCards = () => {
+      const gridStyle = window.getComputedStyle(grid);
+      const rowHeight = Number.parseFloat(gridStyle.gridAutoRows);
+      const rowGap = Number.parseFloat(gridStyle.rowGap);
+      if (!Number.isFinite(rowHeight) || !Number.isFinite(rowGap)) return;
+
+      cards.forEach((card) => {
+        const content = card.querySelector<HTMLElement>(".card-link");
+        if (!content) return;
+        const cardStyle = window.getComputedStyle(card);
+        const borderHeight =
+          Number.parseFloat(cardStyle.borderTopWidth) +
+          Number.parseFloat(cardStyle.borderBottomWidth);
+        const span = Math.ceil((content.scrollHeight + borderHeight + rowGap) / (rowHeight + rowGap));
+        const nextValue = `span ${span}`;
+        if (card.style.gridRowEnd !== nextValue) card.style.gridRowEnd = nextValue;
+      });
+    };
+    const scheduleMeasure = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(measureCards);
+    };
+
+    const resizeObserver = new ResizeObserver(scheduleMeasure);
+    resizeObserver.observe(grid);
+    cards.forEach((card) => {
+      const content = card.querySelector<HTMLElement>(".card-link");
+      if (content) resizeObserver.observe(content);
+    });
+    scheduleMeasure();
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+      cards.forEach((card) => card.style.removeProperty("grid-row-end"));
+    };
+  }, [view, visible]);
 
   return (
     <section className="panel directory-panel" aria-labelledby="party-index-heading">
@@ -245,7 +295,7 @@ export function PartyDirectory({ countries, parties }: Props) {
       </div>
 
       {visible.length ? (
-        <div className={`party-grid ${view === "rows" ? "row-view" : ""}`}>
+        <div ref={gridRef} className={`party-grid ${view === "rows" ? "row-view" : ""}`}>
           {visible.map((party) => (
             <article
               className="party-card"
