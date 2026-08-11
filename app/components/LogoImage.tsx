@@ -20,6 +20,7 @@ export function LogoImage({
   src,
 }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [fillsSquareFrame, setFillsSquareFrame] = useState(false);
   const [useRepositoryFallback, setUseRepositoryFallback] = useState(false);
   const isRemoteOrEmbedded = src
     ? /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src)
@@ -38,9 +39,16 @@ export function LogoImage({
     : resolvedSrc;
 
   const captureImage = useCallback((image: HTMLImageElement | null) => {
-    if (!image?.complete || image.naturalWidth !== 0) return;
-    if (!useRepositoryFallback && repositoryFallback) setUseRepositoryFallback(true);
-    else setFailedSrc(activeSrc);
+    if (!image?.complete) return;
+    if (image.naturalWidth === 0) {
+      if (!useRepositoryFallback && repositoryFallback) setUseRepositoryFallback(true);
+      else setFailedSrc(activeSrc);
+      return;
+    }
+
+    const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
+    const sideDifference = Math.abs(image.naturalWidth - image.naturalHeight);
+    setFillsSquareFrame(sideDifference / longestSide <= 0.04);
   }, [activeSrc, repositoryFallback, useRepositoryFallback]);
 
   if (!src || failedSrc === activeSrc) {
@@ -53,9 +61,11 @@ export function LogoImage({
     <img
       ref={captureImage}
       className={className}
+      data-fill-square-frame={fillsSquareFrame ? "true" : undefined}
       src={activeSrc}
       alt={alt}
       loading={loading}
+      onLoad={(event) => captureImage(event.currentTarget)}
       onError={() => {
         if (!useRepositoryFallback && repositoryFallback) setUseRepositoryFallback(true);
         else setFailedSrc(activeSrc);
