@@ -232,6 +232,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-width: 0;
 }
 .party-logo-wrap {
+  --logo-frame-size: var(--card-logo-size, 92px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -259,8 +260,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   position: relative;
   display: grid;
   place-items: center;
-  max-width: calc(var(--card-logo-size, 92px) - 2px);
-  max-height: calc(var(--card-logo-size, 92px) - 2px);
+  max-width: calc(var(--logo-frame-size, 100%) - 2px);
+  max-height: calc(var(--logo-frame-size, 100%) - 2px);
   aspect-ratio: var(--logo-aspect, 1 / 1);
   min-width: 0;
   min-height: 0;
@@ -275,7 +276,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 .logo-frame-portrait {
   width: auto;
-  height: calc(var(--card-logo-size, 92px) - 2px);
+  height: calc(var(--logo-frame-size, 100%) - 2px);
 }
 .logo-image-stack > img {
   display: block;
