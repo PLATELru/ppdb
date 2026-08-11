@@ -11,6 +11,8 @@ type Props = {
   parties: Party[];
 };
 
+const INDEX_PAGE_SIZE = 100;
+
 function SeatValue({
   label,
   total,
@@ -70,6 +72,7 @@ function updateUrlFilters(filters: { label?: string; country?: string; type?: st
 
 export function PartyDirectory({ countries, parties }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("name");
   const [view, setView] = useState<"cards" | "rows">("cards");
@@ -77,6 +80,9 @@ export function PartyDirectory({ countries, parties }: Props) {
   const country = useSyncExternalStore(subscribeToUrlFilters, getUrlCountry, () => "all");
   const type = useSyncExternalStore(subscribeToUrlFilters, getUrlType, () => "all");
   const status = useSyncExternalStore(subscribeToUrlFilters, getUrlStatus, () => "all");
+  const paginationKey = JSON.stringify([activeLabel, country, query, sort, status, type]);
+  const [pagination, setPagination] = useState({ key: paginationKey, limit: INDEX_PAGE_SIZE });
+  const renderLimit = pagination.key === paginationKey ? pagination.limit : INDEX_PAGE_SIZE;
 
   const types = useMemo(
     () =>
@@ -190,6 +196,33 @@ export function PartyDirectory({ countries, parties }: Props) {
       });
   }, [activeLabel, country, parties, query, sort, status, type]);
 
+  const renderedParties = useMemo(
+    () => visible.slice(0, renderLimit),
+    [renderLimit, visible],
+  );
+  const hasMore = renderedParties.length < visible.length;
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasMore || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setPagination((current) => ({
+          key: paginationKey,
+          limit: Math.min(
+            (current.key === paginationKey ? current.limit : INDEX_PAGE_SIZE) + INDEX_PAGE_SIZE,
+            visible.length,
+          ),
+        }));
+      },
+      { rootMargin: "600px 0px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasMore, paginationKey, visible.length]);
+
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -237,7 +270,7 @@ export function PartyDirectory({ countries, parties }: Props) {
       resizeObserver.disconnect();
       cards.forEach((card) => card.style.removeProperty("grid-row-end"));
     };
-  }, [view, visible]);
+  }, [renderedParties, view]);
 
   return (
     <section className="panel directory-panel" aria-labelledby="party-index-heading">
@@ -349,8 +382,9 @@ export function PartyDirectory({ countries, parties }: Props) {
       </div>
 
       {visible.length ? (
-        <div ref={gridRef} className={`party-grid ${view === "rows" ? "row-view" : ""}`}>
-          {visible.map((party) => (
+        <>
+          <div ref={gridRef} className={`party-grid ${view === "rows" ? "row-view" : ""}`}>
+          {renderedParties.map((party) => (
             <article
               className="party-card"
               key={party.id}
@@ -438,7 +472,27 @@ export function PartyDirectory({ countries, parties }: Props) {
               </div>
             </article>
           ))}
-        </div>
+          </div>
+          {hasMore ? (
+            <div className="directory-load-more" ref={loadMoreRef}>
+              <button
+                type="button"
+                onClick={() =>
+                  setPagination((current) => ({
+                    key: paginationKey,
+                    limit: Math.min(
+                      (current.key === paginationKey ? current.limit : INDEX_PAGE_SIZE) +
+                        INDEX_PAGE_SIZE,
+                      visible.length,
+                    ),
+                  }))
+                }
+              >
+                Load next {Math.min(INDEX_PAGE_SIZE, visible.length - renderedParties.length)} entries
+              </button>
+            </div>
+          ) : null}
+        </>
       ) : (
         <div className="empty-state">
           <strong>No matching records.</strong>

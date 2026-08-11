@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, type CSSProperties } from "react";
 
 type Props = {
   alt: string;
@@ -20,7 +20,10 @@ export function LogoImage({
   src,
 }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
-  const [needsEdgeFill, setNeedsEdgeFill] = useState(false);
+  const [frame, setFrame] = useState<{
+    aspectRatio: string;
+    orientation: "landscape" | "portrait";
+  } | null>(null);
   const [useRepositoryFallback, setUseRepositoryFallback] = useState(false);
   const isRemoteOrEmbedded = src
     ? /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src)
@@ -46,28 +49,29 @@ export function LogoImage({
       return;
     }
 
-    const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
-    const sideDifference = Math.abs(image.naturalWidth - image.naturalHeight);
-    setNeedsEdgeFill(sideDifference > 0 && sideDifference / longestSide <= 0.04);
+    setFrame({
+      aspectRatio: `${image.naturalWidth} / ${image.naturalHeight}`,
+      orientation: image.naturalWidth >= image.naturalHeight ? "landscape" : "portrait",
+    });
   }, [activeSrc, repositoryFallback, useRepositoryFallback]);
 
   if (!src || failedSrc === activeSrc) {
-    return <span className={fallbackClassName}>{fallback}</span>;
+    return (
+      <span className="logo-image-stack logo-frame-landscape">
+        <span className={fallbackClassName}>{fallback}</span>
+      </span>
+    );
   }
 
+  const frameStyle = frame
+    ? ({ "--logo-aspect": frame.aspectRatio } as CSSProperties)
+    : undefined;
+
   return (
-    <span className="logo-image-stack">
-      {needsEdgeFill ? (
-        // A cropped copy fills subpixel letterboxing behind the intact foreground logo.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          className="logo-edge-fill"
-          src={activeSrc}
-          alt=""
-          aria-hidden="true"
-          loading={loading}
-        />
-      ) : null}
+    <span
+      className={`logo-image-stack logo-frame-${frame?.orientation ?? "landscape"}`}
+      style={frameStyle}
+    >
       {/* Remote party logos are user-supplied spreadsheet data, so Next image allowlists are impractical here. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img

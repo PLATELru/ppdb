@@ -232,8 +232,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   height: 92px;
   margin: 0;
   padding: 0;
-  background: var(--logo-frame);
-  border: 1px solid #777;
   color: var(--ink);
   text-decoration: none;
   overflow: hidden;
@@ -243,8 +241,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
   object-fit: contain;
   object-position: center;
   overflow: hidden;
@@ -253,28 +249,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .logo-image-stack {
   position: relative;
   display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 100%;
   place-items: center;
-  width: 100%;
-  height: 100%;
+  max-width: calc(100% - 2px);
+  max-height: calc(100% - 2px);
+  aspect-ratio: var(--logo-aspect, 1 / 1);
   min-width: 0;
   min-height: 0;
+  background: var(--logo-frame);
+  box-shadow: 0 0 0 1px #777;
   overflow: hidden;
   overflow: clip;
 }
-.logo-image-stack > img { grid-area: 1 / 1; }
-.logo-image-stack > img:not(.logo-edge-fill) { position: relative; z-index: 1; }
-.logo-image-stack > .logo-edge-fill {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+.logo-frame-landscape {
+  width: calc(100% - 2px);
+  height: auto;
+}
+.logo-frame-portrait {
+  width: auto;
+  height: calc(100% - 2px);
+}
+.logo-image-stack > img {
   display: block;
   width: 100%;
   height: 100%;
-  max-width: none;
-  max-height: none;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 .logo-placeholder {
@@ -354,6 +352,17 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .party-grid.row-view .party-card-copy { text-align: left; }
 .party-grid.row-view .party-meta, .party-grid.row-view .context-filter-list, .party-grid.row-view .label-list, .party-grid.row-view .seat-line { justify-content: flex-start; }
 .party-grid.row-view .open-record { width: 96px; align-self: start; }
+.directory-load-more {
+  display: grid;
+  place-items: center;
+  min-height: 52px;
+  padding-top: 12px;
+}
+.directory-load-more button {
+  min-height: 34px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
 .empty-state { display: grid; gap: 6px; padding: 60px 20px; background: var(--panel-light); border: 1px solid var(--line); text-align: center; }
 .notes-panel { margin-top: 12px; }
 .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -384,21 +393,17 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   padding: 0;
   overflow: hidden;
   overflow: clip;
-  background: var(--logo-frame);
-  border: 1px solid #777;
 }
 .record-logo-wrap img {
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
   object-fit: contain;
   object-position: center;
   overflow: hidden;
   clip-path: inset(0);
 }
-.record-logo-wrap span { display: grid; place-items: center; width: 100%; height: 100%; color: var(--ink); font-size: 28px; font-weight: 800; }
+.record-logo-wrap span { color: var(--ink); font-size: 28px; font-weight: 800; }
 .record-heading h1 { margin: 7px 0 0; font-size: clamp(28px, 5vw, 46px); line-height: 1; letter-spacing: -0.04em; white-space: pre-line; }
 .record-heading p { margin: 7px 0 0; color: var(--muted); font-size: 16px; white-space: pre-line; }
 .record-heading .literal-party-name { margin-top: 4px; font-size: 13px; font-style: italic; }
@@ -446,9 +451,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
-.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; background: var(--logo-frame); border: 1px solid #777; color: var(--ink); }
-.former-logo-grid img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
-.former-logo-grid figure > div > span { display: grid; place-items: center; width: 100%; height: 100%; }
+.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; color: var(--ink); }
+.former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
 .former-logo-grid figcaption { padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
 .sources-panel ol { margin: 0; padding: 8px 8px 8px 32px; background: var(--panel-light); border: 1px solid var(--line); }
 .sources-panel li { padding: 4px; overflow-wrap: anywhere; }

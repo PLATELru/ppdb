@@ -59,14 +59,30 @@ test("renders commented labels and optional prose without hash markers", async (
   assert.match(bdpHtml, /Centre-left to left-wing bloc\./);
 });
 
-test("keeps foreground logos contained while a separate layer fills near-square gaps", async () => {
+test("sizes each visible logo frame to the source aspect ratio without a cropped duplicate", async () => {
   const [component, styles] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(component, /className="logo-edge-fill"/);
-  assert.match(styles, /\.logo-image-stack > \.logo-edge-fill[\s\S]*?object-fit: cover;/);
-  assert.match(styles, /\.party-logo \{[\s\S]*?object-fit: contain;/);
-  assert.doesNotMatch(styles, /calc\(100% \+ 4px\)/);
+  assert.match(component, /--logo-aspect/);
+  assert.match(component, /logo-frame-\$\{frame\?\.orientation/);
+  assert.doesNotMatch(component, /logo-edge-fill/);
+  assert.match(styles, /\.logo-frame-landscape[\s\S]*?width: calc\(100% - 2px\)/);
+  assert.match(styles, /\.logo-frame-portrait[\s\S]*?height: calc\(100% - 2px\)/);
+  assert.match(styles, /\.logo-image-stack > img[\s\S]*?object-fit: contain;/);
+  assert.doesNotMatch(styles, /object-fit: cover/);
+});
+
+test("renders the index in batches of 100 and observes the scroll sentinel", async () => {
+  const component = await readFile(
+    new URL("../app/components/PartyDirectory.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(component, /const INDEX_PAGE_SIZE = 100/);
+  assert.match(component, /visible\.slice\(0, renderLimit\)/);
+  assert.match(component, /new IntersectionObserver/);
+  assert.match(component, /current\.limit : INDEX_PAGE_SIZE\) \+ INDEX_PAGE_SIZE/);
+  assert.match(component, /ref=\{loadMoreRef\}/);
 });

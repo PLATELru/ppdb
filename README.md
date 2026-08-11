@@ -9,6 +9,8 @@ Everything below is AI-written.
 3. Add or edit one party per row. `COUNTRY`, `ID` and `NAME` are required; every other field may be left empty.
 4. Commit the workbook. The GitHub Pages workflow validates it, converts it to `data/parties.json` and deploys the updated site.
 
+`data/parties.json` is a generated build artifact, not a second database. Do not edit it when adding or correcting records: every production build recreates it from `PPDB database.xlsx` before the site is compiled.
+
 The ID is the stable key used in URLs and internal links. For example, `atOVP` becomes `/party/atOVP/`. Inside `DESCRIPTION`, write `[[atOVP|Austrian People's Party]]` to link to that record. Missing target IDs are rendered as ordinary text rather than broken links.
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
