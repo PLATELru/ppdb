@@ -232,22 +232,19 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-width: 0;
 }
 .party-logo-wrap {
-  display: grid;
-  place-items: start center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: auto;
   margin: 0;
   padding: 0;
   color: var(--ink);
   text-decoration: none;
-  overflow: hidden;
-  overflow: clip;
+  overflow: visible;
 }
 .party-logo-wrap .logo-frame-landscape {
   margin-top: var(--logo-top-offset, 0px);
-}
-.party-logo-wrap .logo-frame-portrait {
-  height: calc(var(--card-logo-size) - 2px);
 }
 .party-logo {
   display: block;
@@ -262,8 +259,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   position: relative;
   display: grid;
   place-items: center;
-  max-width: calc(100% - 2px);
-  max-height: calc(100% - 2px);
+  max-width: calc(var(--card-logo-size, 92px) - 2px);
+  max-height: calc(var(--card-logo-size, 92px) - 2px);
   aspect-ratio: var(--logo-aspect, 1 / 1);
   min-width: 0;
   min-height: 0;
@@ -278,7 +275,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 }
 .logo-frame-portrait {
   width: auto;
-  height: calc(100% - 2px);
+  height: calc(var(--card-logo-size, 92px) - 2px);
 }
 .logo-image-stack > img {
   display: block;
