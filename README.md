@@ -13,6 +13,10 @@ The ID is the stable key used in URLs and internal links. For example, `atOVP` b
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
 
+In `LABELS`, put one label on each line. If a line contains `#`, the label is omitted from Index cards and the Label filter; its record-page tag keeps the text after `#` as a comment but omits the hash itself. In `TYPE`, put one or more values on separate lines. A blank `TYPE` is imported as `Party`.
+
+`RELATIONS`, `DESCRIPTION`, `Ideology` and `LEADERSHIP` are optional prose fields. Spreadsheet line breaks, bold text and italics are preserved. Empty optional sections are not rendered.
+
 Country-level chamber sizes live on the `Legislatures` sheet. PPDB combines those totals with each party's `LOWER_HOUSE`, `UPPER_HOUSE` and `MEP` values, so a record can display a share such as `57 / 183` without duplicating the total in every party row.
 
 ## Store a logo in the repository

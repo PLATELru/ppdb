@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { dateSortKey, type Party } from "../../lib/parties";
+import { dateSortKey, formatLifeSpan, type Party } from "../../lib/parties";
 import { LogoImage } from "./LogoImage";
 import { RichText } from "./WikiText";
 
@@ -38,6 +38,11 @@ function getUrlCountry() {
   return new URLSearchParams(window.location.search).get("country") ?? "all";
 }
 
+function getUrlType() {
+  if (typeof window === "undefined") return "all";
+  return new URLSearchParams(window.location.search).get("type") ?? "all";
+}
+
 function getUrlStatus() {
   if (typeof window === "undefined") return "all";
   return new URLSearchParams(window.location.search).get("status") ?? "all";
@@ -53,7 +58,7 @@ function subscribeToUrlFilters(onChange: () => void) {
   };
 }
 
-function updateUrlFilters(filters: { label?: string; country?: string; status?: string }) {
+function updateUrlFilters(filters: { label?: string; country?: string; type?: string; status?: string }) {
   const url = new URL(window.location.href);
   Object.entries(filters).forEach(([name, value]) => {
     if (value && value !== "all") url.searchParams.set(name, value);
@@ -70,7 +75,16 @@ export function PartyDirectory({ countries, parties }: Props) {
   const [view, setView] = useState<"cards" | "rows">("cards");
   const activeLabel = useSyncExternalStore(subscribeToUrlFilters, getUrlLabel, () => "");
   const country = useSyncExternalStore(subscribeToUrlFilters, getUrlCountry, () => "all");
+  const type = useSyncExternalStore(subscribeToUrlFilters, getUrlType, () => "all");
   const status = useSyncExternalStore(subscribeToUrlFilters, getUrlStatus, () => "all");
+
+  const types = useMemo(
+    () =>
+      Array.from(new Set(parties.flatMap((party) => party.types))).sort((a, b) =>
+        a.localeCompare(b, "en"),
+      ),
+    [parties],
+  );
 
   const statuses = useMemo(
     () =>
@@ -82,9 +96,13 @@ export function PartyDirectory({ countries, parties }: Props) {
 
   const classificationLabels = useMemo(
     () =>
-      Array.from(new Set(parties.flatMap((party) => party.labels))).sort((a, b) =>
-        a.localeCompare(b, "en"),
-      ),
+      Array.from(
+        new Set(
+          parties.flatMap((party) =>
+            party.labelDetails.filter((label) => label.indexVisible).map((label) => label.name),
+          ),
+        ),
+      ).sort((a, b) => a.localeCompare(b, "en")),
     [parties],
   );
 
@@ -97,6 +115,12 @@ export function PartyDirectory({ countries, parties }: Props) {
   function chooseCountry(value: string) {
     setQuery("");
     updateUrlFilters({ country: value });
+    document.getElementById("party-index-heading")?.scrollIntoView({ block: "start" });
+  }
+
+  function chooseType(value: string) {
+    setQuery("");
+    updateUrlFilters({ type: value });
     document.getElementById("party-index-heading")?.scrollIntoView({ block: "start" });
   }
 
@@ -116,9 +140,11 @@ export function PartyDirectory({ countries, parties }: Props) {
           party.literalName,
           party.acronym,
           party.country,
+          ...party.types,
           party.status,
           party.formerNames,
           ...party.labels,
+          ...party.labelDetails.map((label) => label.display),
         ]
           .filter(Boolean)
           .join(" ")
@@ -126,8 +152,10 @@ export function PartyDirectory({ countries, parties }: Props) {
         return (
           (!needle || searchable.includes(needle)) &&
           (country === "all" || party.country === country) &&
+          (type === "all" || party.types.includes(type)) &&
           (status === "all" || party.status === status) &&
-          (!activeLabel || party.labels.includes(activeLabel))
+          (!activeLabel ||
+            party.labelDetails.some((label) => label.indexVisible && label.name === activeLabel))
         );
       })
       .sort((a, b) => {
@@ -137,6 +165,13 @@ export function PartyDirectory({ countries, parties }: Props) {
         if (sort === "newest") {
           return dateSortKey(b.established).localeCompare(dateSortKey(a.established));
         }
+        if (sort === "oldest") {
+          const aDate = dateSortKey(a.established);
+          const bDate = dateSortKey(b.established);
+          if (!aDate) return bDate ? 1 : a.name.localeCompare(b.name, "en");
+          if (!bDate) return -1;
+          return aDate.localeCompare(bDate) || a.name.localeCompare(b.name, "en");
+        }
         if (sort === "status") {
           return `${a.status ?? ""}\u0000${a.name}`.localeCompare(
             `${b.status ?? ""}\u0000${b.name}`,
@@ -144,14 +179,16 @@ export function PartyDirectory({ countries, parties }: Props) {
           );
         }
         if (sort === "label") {
-          return `${a.labels[0] ?? ""}\u0000${a.name}`.localeCompare(
-            `${b.labels[0] ?? ""}\u0000${b.name}`,
+          const aLabel = a.labelDetails.find((label) => label.indexVisible)?.name ?? "";
+          const bLabel = b.labelDetails.find((label) => label.indexVisible)?.name ?? "";
+          return `${aLabel}\u0000${a.name}`.localeCompare(
+            `${bLabel}\u0000${b.name}`,
             "en",
           );
         }
         return a.name.localeCompare(b.name, "en");
       });
-  }, [activeLabel, country, parties, query, sort, status]);
+  }, [activeLabel, country, parties, query, sort, status, type]);
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -220,7 +257,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           <span className="sr-only">Search parties</span>
           <input
             type="search"
-            placeholder="Search name, acronym, country, status or label"
+            placeholder="Search name, acronym, country, type, status or label"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -235,6 +272,22 @@ export function PartyDirectory({ countries, parties }: Props) {
           >
             <option value="all">All countries</option>
             {countries.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Type</span>
+          <select
+            value={type}
+            onChange={(event) => {
+              updateUrlFilters({ type: event.target.value });
+            }}
+          >
+            <option value="all">All types</option>
+            {types.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
@@ -274,6 +327,7 @@ export function PartyDirectory({ countries, parties }: Props) {
             <option value="status">Status A–Z</option>
             <option value="label">First label A–Z</option>
             <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
           </select>
         </label>
         <div className="view-switch" aria-label="Display style">
@@ -338,6 +392,11 @@ export function PartyDirectory({ countries, parties }: Props) {
                     <button type="button" onClick={() => chooseCountry(party.country)}>
                       <RichText text={party.country} runs={party.formatting.country} />
                     </button>
+                    {party.types.map((item, typeIndex) => (
+                      <button type="button" key={item} onClick={() => chooseType(item)}>
+                        <RichText text={item} runs={party.formatting.types[typeIndex]} />
+                      </button>
+                    ))}
                     {party.status ? (
                       <button type="button" onClick={() => chooseStatus(party.status)}>
                         <RichText text={party.status} runs={party.formatting.status} />
@@ -345,29 +404,35 @@ export function PartyDirectory({ countries, parties }: Props) {
                     ) : null}
                   </div>
                   <div className="label-list">
-                    {party.labels.map((label, labelIndex) => (
-                      <button type="button" key={label} onClick={() => chooseLabel(label)}>
-                        <RichText text={label} runs={party.formatting.labels[labelIndex]} />
+                    {party.labelDetails.filter((label) => label.indexVisible).map((label) => (
+                      <button type="button" key={label.name} onClick={() => chooseLabel(label.name)}>
+                        <RichText text={label.display} runs={label.runs} />
                       </button>
                     ))}
                   </div>
                   <div className="seat-line">
-                    <SeatValue
-                      label={party.seats.legislatureName}
-                      value={party.seats.legislature}
-                      total={party.seats.legislatureTotal}
-                    />
-                    <SeatValue
-                      label={party.seats.lowerHouseName}
-                      value={party.seats.lowerHouse}
-                      total={party.seats.lowerHouseTotal}
-                    />
-                    <SeatValue
-                      label={party.seats.upperHouseName}
-                      value={party.seats.upperHouse}
-                      total={party.seats.upperHouseTotal}
-                    />
-                    <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
+                    {party.status === "Dissolved" && formatLifeSpan(party.established, party.dissolved) ? (
+                      <span><b>{formatLifeSpan(party.established, party.dissolved)}</b></span>
+                    ) : (
+                      <>
+                        <SeatValue
+                          label={party.seats.legislatureName}
+                          value={party.seats.legislature}
+                          total={party.seats.legislatureTotal}
+                        />
+                        <SeatValue
+                          label={party.seats.lowerHouseName}
+                          value={party.seats.lowerHouse}
+                          total={party.seats.lowerHouseTotal}
+                        />
+                        <SeatValue
+                          label={party.seats.upperHouseName}
+                          value={party.seats.upperHouse}
+                          total={party.seats.upperHouseTotal}
+                        />
+                        <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

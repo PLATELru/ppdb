@@ -89,6 +89,40 @@ function mergeRuns(runs) {
   return result.filter((run) => run.text);
 }
 
+function splitRunsByLines(runs) {
+  const lines = [[]];
+  for (const run of runs) {
+    const parts = run.text.split(/(\r\n|\n|\r)/);
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^(?:\r\n|\n|\r)$/.test(part)) {
+        lines.push([]);
+      } else {
+        lines.at(-1).push({ ...run, text: part });
+      }
+    }
+  }
+  return lines.map(mergeRuns).filter((line) => line.length);
+}
+
+function sliceRuns(runs, start, end) {
+  const result = [];
+  let cursor = 0;
+  for (const run of runs) {
+    const runEnd = cursor + run.text.length;
+    const sliceStart = Math.max(start, cursor);
+    const sliceEnd = Math.min(end, runEnd);
+    if (sliceStart < sliceEnd) {
+      result.push({
+        ...run,
+        text: run.text.slice(sliceStart - cursor, sliceEnd - cursor),
+      });
+    }
+    cursor = runEnd;
+  }
+  return mergeRuns(result);
+}
+
 function formattedRuns(cell, styleId = 0) {
   const plainText = text(cell?.v);
   if (!plainText) return [];
@@ -125,8 +159,66 @@ function cellAt(targetSheet, rowNumber, columnIndex) {
 }
 
 function runsAt(rowNumber, key) {
+  if (index[key] == null) return [];
   const address = XLSX.utils.encode_cell({ r: rowNumber - 1, c: index[key] });
   return formattedRuns(cellAt(sheet, rowNumber, index[key]), partyStyleIds.get(address) ?? 0);
+}
+
+function lineItemsAt(rowNumber, key, fallback = []) {
+  const runs = runsAt(rowNumber, key);
+  const lines = splitRunsByLines(runs).map((lineRuns) => ({
+    text: lineRuns.map((run) => run.text).join(""),
+    runs: lineRuns,
+  }));
+  if (lines.length) return lines;
+  return fallback.map((item) => ({
+    text: item,
+    runs: [{ text: item, bold: false, italic: false }],
+  }));
+}
+
+function labelItemsAt(rowNumber) {
+  return lineItemsAt(rowNumber, "LABELS").flatMap((item) => {
+    const hashIndex = item.text.indexOf("#");
+    const labelEnd = hashIndex < 0 ? item.text.length : hashIndex;
+    const labelStart = item.text.slice(0, labelEnd).search(/\S/);
+    if (labelStart < 0) return [];
+    const label = item.text.slice(labelStart, labelEnd).trimEnd();
+    if (!label) return [];
+    const labelRuns = sliceRuns(item.runs, labelStart, labelStart + label.length);
+
+    if (hashIndex < 0) {
+      return [{
+        name: label,
+        display: label,
+        comment: null,
+        indexVisible: true,
+        runs: labelRuns,
+      }];
+    }
+
+    const rawComment = item.text.slice(hashIndex + 1);
+    const commentOffset = rawComment.search(/\S/);
+    const comment = commentOffset < 0 ? "" : rawComment.slice(commentOffset).trimEnd();
+    const commentRuns = comment
+      ? sliceRuns(
+          item.runs,
+          hashIndex + 1 + commentOffset,
+          hashIndex + 1 + commentOffset + comment.length,
+        )
+      : [];
+    const spacer = comment
+      ? [{ text: " ", bold: false, italic: false }]
+      : [];
+
+    return [{
+      name: label,
+      display: comment ? `${label} ${comment}` : label,
+      comment: comment || null,
+      indexVisible: false,
+      runs: mergeRuns([...labelRuns, ...spacer, ...commentRuns]),
+    }];
+  });
 }
 
 function dateValue(cell) {
@@ -222,9 +314,8 @@ const parties = rows
       }
     }
 
-    const labelRuns = [1, 2, 3, 4, 5]
-      .map((i) => ({ text: text(valueAt(row, `LABEL${i}`)), runs: runsAt(rowNumber, `LABEL${i}`) }))
-      .filter((item) => item.text);
+    const labelItems = labelItemsAt(rowNumber);
+    const typeItems = lineItemsAt(rowNumber, "TYPE", ["Party"]);
 
     return {
       country,
@@ -250,9 +341,13 @@ const parties = rows
       color: text(valueAt(row, "COLORCODE")) ?? "#666666",
       established: dateValue(cellAt(sheet, rowNumber, index.ESTABLISHMENT)),
       dissolved: dateValue(cellAt(sheet, rowNumber, index.DISSOLUTION)),
-      labels: labelRuns.map((item) => item.text),
+      labels: labelItems.map((item) => item.name),
+      labelDetails: labelItems,
+      types: typeItems.map((item) => item.text),
       status: text(valueAt(row, "STATUS")),
+      relations: text(valueAt(row, "RELATIONS")),
       description: text(valueAt(row, "DESCRIPTION")),
+      ideology: text(valueAt(row, "Ideology")) ?? text(valueAt(row, "IDEOLOGY")),
       leadership: text(valueAt(row, "LEADERSHIP")),
       formerLogos,
       formerNames: text(valueAt(row, "FORMER_NAMES")),
@@ -265,9 +360,12 @@ const parties = rows
         nativeName: runsAt(rowNumber, "NATIVE_NAME"),
         literalName: runsAt(rowNumber, "LITERAL_NAME"),
         acronym: runsAt(rowNumber, "ACRONYM"),
-        labels: labelRuns.map((item) => item.runs),
+        labels: labelItems.map((item) => item.runs),
+        types: typeItems.map((item) => item.runs),
         status: runsAt(rowNumber, "STATUS"),
+        relations: runsAt(rowNumber, "RELATIONS"),
         description: runsAt(rowNumber, "DESCRIPTION"),
+        ideology: runsAt(rowNumber, index.Ideology == null ? "IDEOLOGY" : "Ideology"),
         leadership: runsAt(rowNumber, "LEADERSHIP"),
         formerNames: runsAt(rowNumber, "FORMER_NAMES"),
       },
@@ -293,7 +391,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 3,
+      schemaVersion: 4,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,

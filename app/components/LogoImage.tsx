@@ -20,6 +20,7 @@ export function LogoImage({
   src,
 }: Props) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [useRepositoryFallback, setUseRepositoryFallback] = useState(false);
   const isRemoteOrEmbedded = src
     ? /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src)
     : false;
@@ -29,12 +30,20 @@ export function LogoImage({
     : isRemoteOrEmbedded
       ? src
       : `${basePath}${src.startsWith("/") ? src : `/${src}`}`;
+  const repositoryFallback = src?.startsWith("/media/logos/")
+    ? `https://raw.githubusercontent.com/PLATELru/ppdb/main/public${src}`
+    : null;
+  const activeSrc = useRepositoryFallback && repositoryFallback
+    ? repositoryFallback
+    : resolvedSrc;
 
   const captureImage = useCallback((image: HTMLImageElement | null) => {
-    if (image?.complete && image.naturalWidth === 0) setFailedSrc(resolvedSrc);
-  }, [resolvedSrc]);
+    if (!image?.complete || image.naturalWidth !== 0) return;
+    if (!useRepositoryFallback && repositoryFallback) setUseRepositoryFallback(true);
+    else setFailedSrc(activeSrc);
+  }, [activeSrc, repositoryFallback, useRepositoryFallback]);
 
-  if (!src || failedSrc === resolvedSrc) {
+  if (!src || failedSrc === activeSrc) {
     return <span className={fallbackClassName}>{fallback}</span>;
   }
 
@@ -44,10 +53,13 @@ export function LogoImage({
     <img
       ref={captureImage}
       className={className}
-      src={resolvedSrc}
+      src={activeSrc}
       alt={alt}
       loading={loading}
-      onError={() => setFailedSrc(resolvedSrc)}
+      onError={() => {
+        if (!useRepositoryFallback && repositoryFallback) setUseRepositoryFallback(true);
+        else setFailedSrc(activeSrc);
+      }}
     />
   );
 }

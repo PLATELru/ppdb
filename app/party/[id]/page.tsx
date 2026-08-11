@@ -68,6 +68,11 @@ export default async function PartyPage({ params }: PageProps) {
               <Link href={`/?country=${encodeURIComponent(party.country)}`}>
                 <RichText text={party.country} runs={party.formatting.country} />
               </Link>
+              {party.types.map((item, typeIndex) => (
+                <Link key={item} href={`/?type=${encodeURIComponent(item)}`}>
+                  <RichText text={item} runs={party.formatting.types[typeIndex]} />
+                </Link>
+              ))}
               {party.status ? (
                 <Link href={`/?status=${encodeURIComponent(party.status)}`}>
                   <RichText text={party.status} runs={party.formatting.status} />
@@ -86,11 +91,17 @@ export default async function PartyPage({ params }: PageProps) {
               </p>
             ) : null}
             <div className="record-tags">
-              {party.labels.map((label, labelIndex) => (
-                <Link key={label} href={`/?label=${encodeURIComponent(label)}`}>
-                  <RichText text={label} runs={party.formatting.labels[labelIndex]} />
-                </Link>
-              ))}
+              {party.labelDetails.map((label) =>
+                label.indexVisible ? (
+                  <Link key={label.display} href={`/?label=${encodeURIComponent(label.name)}`}>
+                    <RichText text={label.display} runs={label.runs} />
+                  </Link>
+                ) : (
+                  <span key={label.display}>
+                    <RichText text={label.display} runs={label.runs} />
+                  </span>
+                ),
+              )}
             </div>
           </div>
         </section>
@@ -161,6 +172,15 @@ export default async function PartyPage({ params }: PageProps) {
                 ) : null}
               </div>
             ) : null}
+
+            {party.relations ? (
+              <section className="relations-panel">
+                <h2>Relations</h2>
+                <div className="relations-copy">
+                  <WikiText text={party.relations} runs={party.formatting.relations} />
+                </div>
+              </section>
+            ) : null}
           </aside>
 
           <div className="record-main">
@@ -174,6 +194,15 @@ export default async function PartyPage({ params }: PageProps) {
                 <p className="missing-copy">No descriptive text has been added to this record yet.</p>
               )}
             </section>
+
+            {party.ideology ? (
+              <section className="panel prose-panel">
+                <div className="section-label">Ideology</div>
+                <div className="record-prose">
+                  <WikiText text={party.ideology} runs={party.formatting.ideology} />
+                </div>
+              </section>
+            ) : null}
 
             {party.leadership ? (
               <section className="panel prose-panel">

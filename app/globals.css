@@ -183,7 +183,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .directory-summary strong { font-size: 16px; }
 .toolbar {
   display: grid;
-  grid-template-columns: minmax(245px, 1fr) repeat(4, auto) auto;
+  grid-template-columns: minmax(220px, 1fr) repeat(5, auto) auto;
   gap: 8px;
   align-items: end;
   margin-bottom: 12px;
@@ -270,7 +270,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .party-meta span + span::before { content: "·"; margin-right: 5px; }
 .context-filter-list { margin-top: 8px; }
 .label-list { margin-top: 7px; }
-.context-filter-list button, .label-list button, .record-context a, .record-tags a {
+.context-filter-list button, .label-list button, .record-context a, .record-tags a, .record-tags span {
   padding: 3px 6px;
   cursor: pointer;
   text-decoration: none;
@@ -282,12 +282,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   font-family: "Courier New", Courier, monospace;
   font-size: 10px;
 }
-.label-list button, .record-tags a {
+.label-list button, .record-tags a, .record-tags span {
   color: var(--ink);
   background: color-mix(in srgb, var(--party-color, var(--navy)) 18%, var(--panel-light));
   border: 1px solid color-mix(in srgb, var(--party-color, var(--navy)) 55%, var(--line));
   font-size: 10px;
 }
+.record-tags span { cursor: default; }
 .context-filter-list button:hover, .label-list button:hover, .record-context a:hover, .record-tags a:hover {
   background: var(--panel-hover);
   color: var(--ink);
@@ -386,6 +387,19 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .seat-table { margin-top: 10px; border: 1px solid var(--line); background: var(--panel-light); }
 .seat-table h2 { margin: 0; padding: 7px 8px; color: #fff; background: var(--navy); font-family: "Courier New", Courier, monospace; font-size: 11px; text-transform: uppercase; }
 .seat-table > div { display: flex; justify-content: space-between; padding: 8px; border-top: 1px solid var(--line); }
+.relations-panel { margin-top: 10px; border: 1px solid var(--line); background: var(--panel-light); }
+.relations-panel h2 {
+  margin: 0;
+  padding: 7px 8px;
+  color: #fff;
+  background: var(--navy);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.relations-copy { padding: 9px; white-space: pre-line; font-family: Georgia, "Times New Roman", serif; font-size: 13px; line-height: 1.5; }
+.relations-copy p { margin: 0 0 0.8em; }
+.relations-copy p:last-child { margin-bottom: 0; }
 .record-main { display: grid; gap: 12px; min-width: 0; }
 .prose-panel, .archive-panel, .sources-panel { padding: 10px; }
 .record-prose { padding: 8px 12px; white-space: pre-line; background: var(--panel-light); border: 1px solid var(--line); font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.7; }

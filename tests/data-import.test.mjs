@@ -4,9 +4,9 @@ import database from "../data/parties.json" with { type: "json" };
 
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
-test("imports the ten current party records", () => {
-  assert.equal(database.count, 10);
-  assert.equal(byId.size, 10);
+test("imports every current party record", () => {
+  assert.equal(database.count, 68);
+  assert.equal(byId.size, 68);
 });
 
 test("preserves legislature names and partial-date precision", () => {
@@ -39,10 +39,30 @@ test("imports literal names, leadership and spreadsheet emphasis", () => {
   );
 });
 
+test("imports multiline labels, comments and record types", () => {
+  const fpo = byId.get("atFPO");
+  const formerLabel = fpo?.labelDetails.find((label) => label.name === "National liberalism");
+  assert.equal(formerLabel?.display, "National liberalism (former)");
+  assert.equal(formerLabel?.comment, "(former)");
+  assert.equal(formerLabel?.indexVisible, false);
+  assert.deepEqual(byId.get("atOVP")?.types, ["Party"]);
+  assert.deepEqual(byId.get("peJP")?.types, ["Party", "Coalition"]);
+});
+
+test("imports optional ideology and relations sections", () => {
+  const dissolved = byId.get("peBDP");
+  assert.equal(dissolved?.established, "2022-04-12");
+  assert.equal(dissolved?.dissolved, "2026-07-26");
+  assert.equal(dissolved?.ideology, "Centre-left to left-wing bloc.");
+  assert.match(dissolved?.relations ?? "", /\[\[peJP\|Together for Peru\]\]/);
+  assert.equal(byId.get("peJP")?.ideology, null);
+  assert.equal(byId.get("peJP")?.relations, null);
+});
+
 test("accepts the three-letter international ID prefix and its cross-reference", () => {
   const international = byId.get("intUCPCPSU");
   assert.equal(international?.country, "International");
-  assert.equal(international?.status, "International");
+  assert.equal(international?.status, "Active");
   assert.match(byId.get("suCPSU")?.description ?? "", /\[\[intUCPCPSU\|/);
 });
 

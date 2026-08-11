@@ -38,3 +38,10 @@ export function dateSortKey(value: string | null) {
   if (/^\d{4}-\d{2}$/.test(value)) return `${value}-01`;
   return value;
 }
+
+export function formatLifeSpan(established: string | null, dissolved: string | null) {
+  const startYear = established?.match(/^\d{4}/)?.[0] ?? null;
+  const endYear = dissolved?.match(/^\d{4}/)?.[0] ?? null;
+  if (!startYear || !endYear) return null;
+  return `${startYear} – ${endYear}`;
+}
