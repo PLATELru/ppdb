@@ -23,6 +23,7 @@ export function LogoImage({
   const [frame, setFrame] = useState<{
     aspectRatio: string;
     orientation: "landscape" | "portrait";
+    topOffset: string;
   } | null>(null);
   const [useRepositoryFallback, setUseRepositoryFallback] = useState(false);
   const isRemoteOrEmbedded = src
@@ -49,9 +50,15 @@ export function LogoImage({
       return;
     }
 
+    const isLandscape = image.naturalWidth >= image.naturalHeight;
+    const verticalOffset = isLandscape
+      ? (1 - image.naturalHeight / image.naturalWidth) / 2
+      : 0;
+
     setFrame({
       aspectRatio: `${image.naturalWidth} / ${image.naturalHeight}`,
-      orientation: image.naturalWidth >= image.naturalHeight ? "landscape" : "portrait",
+      orientation: isLandscape ? "landscape" : "portrait",
+      topOffset: `calc(${verticalOffset * 100}% - ${verticalOffset * 2}px)`,
     });
   }, [activeSrc, repositoryFallback, useRepositoryFallback]);
 
@@ -64,7 +71,10 @@ export function LogoImage({
   }
 
   const frameStyle = frame
-    ? ({ "--logo-aspect": frame.aspectRatio } as CSSProperties)
+    ? ({
+        "--logo-aspect": frame.aspectRatio,
+        "--logo-top-offset": frame.topOffset,
+      } as CSSProperties)
     : undefined;
 
   return (

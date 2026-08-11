@@ -212,30 +212,42 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   box-shadow: inset 6px 0 0 var(--party-color);
 }
 .card-link {
+  --card-logo-size: 92px;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  grid-template-areas:
-    "logo copy"
-    "open copy";
-  grid-template-rows: 92px auto;
-  gap: 7px 12px;
+  grid-template-columns: var(--card-logo-size) minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
   min-height: 0;
   padding: 14px 12px 10px 18px;
   color: var(--ink);
   text-decoration: none;
 }
+.party-card-media {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  align-items: stretch;
+  gap: 7px;
+  width: var(--card-logo-size);
+  min-width: 0;
+}
 .party-logo-wrap {
   display: grid;
-  grid-area: logo;
-  place-items: center;
-  width: 92px;
-  height: 92px;
+  place-items: start center;
+  width: 100%;
+  height: auto;
   margin: 0;
   padding: 0;
   color: var(--ink);
   text-decoration: none;
   overflow: hidden;
   overflow: clip;
+}
+.party-logo-wrap .logo-frame-landscape {
+  margin-top: var(--logo-top-offset, 0px);
+}
+.party-logo-wrap .logo-frame-portrait {
+  height: calc(var(--card-logo-size) - 2px);
 }
 .party-logo {
   display: block;
@@ -284,7 +296,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   color: #fff;
   font-weight: 800;
 }
-.party-card-copy { grid-area: copy; min-width: 0; text-align: left; }
+.party-card-copy { grid-column: 2; min-width: 0; text-align: left; }
 .party-card h2 { margin: 0; font-size: 15px; line-height: 1.2; white-space: pre-line; }
 .party-card h2 a { color: var(--ink); text-decoration: none; }
 .party-card h2 a:hover { text-decoration: underline; }
@@ -322,9 +334,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .seat-line { margin-top: 12px; font-family: "Courier New", Courier, monospace; font-size: 10px; }
 .seat-line span { padding-right: 5px; }
 .open-record {
-  grid-area: open;
-  align-self: start;
-  width: 92px;
+  align-self: stretch;
+  width: 100%;
   padding: 5px 4px;
   color: var(--ink);
   background: var(--button-face);
@@ -339,19 +350,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .party-grid.row-view { grid-template-columns: 1fr; grid-auto-flow: row; grid-auto-rows: auto; }
 .party-grid.row-view .party-card { min-height: 138px; grid-row-end: auto !important; }
 .party-grid.row-view .card-link {
+  --card-logo-size: 96px;
   min-height: 134px;
-  grid-template-columns: 96px minmax(0, 1fr);
-  grid-template-areas:
-    "logo copy"
-    "open copy";
-  grid-template-rows: 96px auto;
-  align-items: start;
   padding: 12px 16px 12px 20px;
 }
-.party-grid.row-view .party-logo-wrap { width: 96px; height: 96px; }
 .party-grid.row-view .party-card-copy { text-align: left; }
 .party-grid.row-view .party-meta, .party-grid.row-view .context-filter-list, .party-grid.row-view .label-list, .party-grid.row-view .seat-line { justify-content: flex-start; }
-.party-grid.row-view .open-record { width: 96px; align-self: start; }
+.party-grid.row-view .open-record { align-self: stretch; }
 .directory-load-more {
   display: grid;
   place-items: center;

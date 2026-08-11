@@ -391,16 +391,18 @@ export function PartyDirectory({ countries, parties }: Props) {
               style={{ "--party-color": party.color } as React.CSSProperties}
             >
               <div className="card-link">
-                <Link className="party-logo-wrap" href={`/party/${party.id}`} aria-label={`View ${party.name}`}>
-                  <LogoImage
-                    src={party.logo}
-                    alt=""
-                    className="party-logo"
-                    fallback={party.acronym ?? party.name.slice(0, 2)}
-                    fallbackClassName="logo-placeholder"
-                  />
-                </Link>
-                <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>
+                <div className="party-card-media">
+                  <Link className="party-logo-wrap" href={`/party/${party.id}`} aria-label={`View ${party.name}`}>
+                    <LogoImage
+                      src={party.logo}
+                      alt=""
+                      className="party-logo"
+                      fallback={party.acronym ?? party.name.slice(0, 2)}
+                      fallbackClassName="logo-placeholder"
+                    />
+                  </Link>
+                  <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>
+                </div>
                 <div className="party-card-copy">
                   <h2>
                     <Link href={`/party/${party.id}`}>
