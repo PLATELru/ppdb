@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const developmentPreviewMeta =
@@ -41,4 +42,16 @@ test("renders commented labels and optional prose without hash markers", async (
   const bdpHtml = await fetchHtml("/party/peBDP");
   assert.match(bdpHtml, />Relations</);
   assert.match(bdpHtml, /Centre-left to left-wing bloc\./);
+});
+
+test("keeps foreground logos contained while a separate layer fills near-square gaps", async () => {
+  const [component, styles] = await Promise.all([
+    readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(component, /className="logo-edge-fill"/);
+  assert.match(styles, /\.logo-image-stack > \.logo-edge-fill[\s\S]*?object-fit: cover;/);
+  assert.match(styles, /\.party-logo \{[\s\S]*?object-fit: contain;/);
+  assert.doesNotMatch(styles, /calc\(100% \+ 4px\)/);
 });
