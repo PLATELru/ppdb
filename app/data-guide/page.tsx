@@ -21,9 +21,9 @@ const fields = [
     "Use an external URL or a local path such as /media/logos/atFPO.png, plus a party colour such as #005EA8.",
   ],
   [
-    "ESTABLISHMENT / DISSOLUTION",
+    "ESTABLISHMENT / REGISTERED / DELEGALISED / DISSOLUTION",
     "Date",
-    "Full dates, month-year values and year-only values are supported; the displayed precision is preserved.",
+    "Optional milestone dates. Full dates, month-year values and year-only values are supported; the displayed precision is preserved.",
   ],
   [
     "LABELS",

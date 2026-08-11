@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "source": "data/PPDB database.xlsx",
   "count": 68,
   "parties": [
@@ -26,6 +26,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Volkspartei_Logo_2022.svg",
       "color": "#63c3d1",
       "established": "1945-04-17",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Christian democracy",
@@ -214,6 +216,8 @@
       "logo": "/media/logos/atFPO.svg",
       "color": "#005EA8",
       "established": "1955-11-03",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "National conservatism",
@@ -430,6 +434,8 @@
       "logo": "/media/logos/beNVA.svg",
       "color": "#fcbd1b",
       "established": "2001-10-13",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Nationalism",
@@ -660,6 +666,8 @@
       "logo": "/media/logos/beVU.png",
       "color": "#FCB908",
       "established": "1954-12-15",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2001-10-13",
       "labels": [
         "Nationalism",
@@ -859,6 +867,8 @@
       "logo": "/media/logos/beVB.svg",
       "color": "#ffe500",
       "established": "2004-11-14",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Nationalism",
@@ -1079,6 +1089,8 @@
       "logo": "/media/logos/beVBlok.png",
       "color": "#F98F1F",
       "established": "1978",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2004-11-09",
       "labels": [
         "Nationalism",
@@ -1314,6 +1326,8 @@
       "logo": "/media/logos/coDP.png",
       "color": "#131441",
       "established": "2024-08-05",
+      "registered": "2026-08-03",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Ultraconservatism",
@@ -1571,6 +1585,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/5/50/Naše_Česko.svg",
       "color": "#0054CF",
       "established": "2025-12-03",
+      "registered": "2026-03-12",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Liberal conservatism",
@@ -1776,6 +1792,8 @@
       "logo": "/media/logos/intUCPCPSU.svg",
       "color": "#DD0302",
       "established": "1993-03-26",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Communism",
@@ -1954,7 +1972,7 @@
       "country": "Kazakhstan",
       "id": "kzAdilet",
       "name": "Ädilet",
-      "nativeName": "Әділет\nÄdılet",
+      "nativeName": "Әділет",
       "literalName": "Justice",
       "acronym": null,
       "seats": {
@@ -1973,6 +1991,8 @@
       "logo": "/media/logos/kzAdilet.svg",
       "color": "#502197",
       "established": "2026-05-07",
+      "registered": "2026-01-06",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Technocracy",
@@ -2066,14 +2086,9 @@
         ],
         "nativeName": [
           {
-            "text": "Әділет\n",
+            "text": "Әділет",
             "bold": false,
             "italic": false
-          },
-          {
-            "text": "Ädılet",
-            "bold": false,
-            "italic": true
           }
         ],
         "literalName": [
@@ -2177,6 +2192,8 @@
       "logo": "/media/logos/kzAmanat.svg",
       "color": "#3ab4ad",
       "established": "2022-03-01",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2026-06-12",
       "labels": [
         "Nationalism",
@@ -2376,6 +2393,8 @@
       "logo": "/media/logos/kzAqJol.svg",
       "color": "#0b408a",
       "established": "2002-01-29",
+      "registered": "2002-04-03",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Liberal conservatism",
@@ -2606,6 +2625,8 @@
       "logo": "/media/logos/kzAuyl.svg",
       "color": "#085c4b",
       "established": "2000-01-30",
+      "registered": "2000-03-29",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Agrarianism",
@@ -2864,6 +2885,8 @@
       "logo": "/media/logos/kzBaytaq.svg",
       "color": "#446f3c",
       "established": "2022-09-24",
+      "registered": "2022-11-28",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Green politics",
@@ -3066,6 +3089,8 @@
       "logo": "/media/logos/kzQKHP.png",
       "color": "#E31E24",
       "established": "2004-04-13",
+      "registered": "2004-06-21",
+      "delegalised": null,
       "dissolved": "2020-11-11",
       "labels": [
         "Communism",
@@ -3254,6 +3279,8 @@
       "logo": "/media/logos/kzJSDP.svg",
       "color": "#0045af",
       "established": "2006-09-10",
+      "registered": "2007-01-25",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social democracy",
@@ -3442,6 +3469,8 @@
       "logo": "/media/logos/kzQHP.svg",
       "color": "#dc0f2d",
       "established": "2020-11-11",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social democracy",
@@ -3675,6 +3704,8 @@
       "logo": "/media/logos/kzRe.svg",
       "color": "#61b3e3",
       "established": "2022-12-03",
+      "registered": "2023-01-18",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social market economy",
@@ -3905,6 +3936,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/LDDP-logo.svg/330px-LDDP-logo.svg.png",
       "color": "#E75480",
       "established": "1989-12-19",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2001-05-01",
       "labels": [
         "Social democracy",
@@ -4086,6 +4119,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/en/b/b3/Homeland_Union_–_Lithuanian_Christian_Democrats.svg",
       "color": "#00a59b",
       "established": "1993-05-01",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Christian democracy",
@@ -4314,6 +4349,8 @@
       "logo": "/media/logos/ltSajudis.png",
       "color": "#3A923A",
       "established": "1988-10-23",
+      "registered": "1989-03-16",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Lithuanian nationalism",
@@ -4512,6 +4549,8 @@
       "logo": "/media/logos/peAN.png",
       "color": "#F60005",
       "established": "2023-05-10",
+      "registered": "2024-07-24",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social democracy",
@@ -4726,6 +4765,8 @@
       "logo": "/media/logos/peOBRAS.png",
       "color": "#006100",
       "established": "1989-07-08",
+      "registered": "2024-07-15",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Nationalism",
@@ -4983,6 +5024,8 @@
       "logo": "/media/logos/pePBG.svg",
       "color": "#fad60a",
       "established": "2020-01-29",
+      "registered": "2024-08-02",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social liberalism",
@@ -5208,6 +5251,8 @@
       "logo": "/media/logos/peBDP.png",
       "color": "#01a29d",
       "established": "2022-04-12",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2026-07-26",
       "labels": [
         "Democratic socialism",
@@ -5471,6 +5516,8 @@
       "logo": "/media/logos/peFP.svg",
       "color": "#e9511b",
       "established": "2010-03-09",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Fujimorism",
@@ -5729,6 +5776,8 @@
       "logo": "/media/logos/peRP.svg",
       "color": "#07769F",
       "established": "2020-10-07",
+      "registered": "2020-12-11",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Ultraconservatism",
@@ -5822,7 +5871,8 @@
       "website": "https://renovacionpopular.com.pe/",
       "lastEdited": "2026-08",
       "sources": [
-        "https://es.wikipedia.org/wiki/Renovación_Popular"
+        "https://es.wikipedia.org/wiki/Renovación_Popular",
+        "https://gestion.pe/peru/politica/elecciones-2021-jne-aprobo-cambio-de-denominacion-y-simbolo-de-renovacion-popular-ex-solidaridad-nacional-nndc-noticia/"
       ],
       "formatting": {
         "country": [
@@ -5954,6 +6004,8 @@
       "logo": "/media/logos/peJP.svg",
       "color": "#33B702",
       "established": "2017-05-22",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Progressivism",
@@ -6224,6 +6276,8 @@
       "logo": "/media/logos/ruSR.svg",
       "color": "#FFC003",
       "established": "2006-10-28",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Democratic socialism",
@@ -6568,6 +6622,8 @@
       "logo": "/media/logos/ruGRANI.svg",
       "color": "#32489d",
       "established": "2013-03-02",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2025-09-30",
       "labels": [
         "Liberal conservatism",
@@ -6826,6 +6882,8 @@
       "logo": "/media/logos/ruGP.svg",
       "color": "#420F77",
       "established": "2012-06-04",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Liberal conservatism",
@@ -7033,6 +7091,8 @@
       "logo": "/media/logos/ruGS.png",
       "color": "#00A650",
       "established": "2002-09-20",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2025-01-15",
       "labels": [
         "Liberalism",
@@ -7352,7 +7412,9 @@
       "logo": "/media/logos/ruKPRSFSR.svg",
       "color": "#cc0000",
       "established": "1990-06-19",
-      "dissolved": "1991-11-06",
+      "registered": null,
+      "delegalised": "1991-11-06",
+      "dissolved": "1993-02-14",
       "labels": [
         "Communism",
         "Marxism–Leninism",
@@ -7580,6 +7642,8 @@
       "logo": "/media/logos/ruKPRF.svg",
       "color": "#c40a00",
       "established": "1993-02-14",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Communism",
@@ -7803,6 +7867,8 @@
       "logo": "/media/logos/ruKPKR.png",
       "color": "#D81921",
       "established": "2012-04-22",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Communism",
@@ -8032,6 +8098,8 @@
       "logo": "/media/logos/ruKaPRF.png",
       "color": "#3660A6",
       "established": "2012-11-24",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Single-issue",
@@ -8276,6 +8344,8 @@
       "logo": "/media/logos/ruDPR.svg",
       "color": "#3b56a5",
       "established": "1990-05-26",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Conservatism",
@@ -8490,6 +8560,8 @@
       "logo": "/media/logos/ruDZNS.png",
       "color": "#FE0000",
       "established": "2019-01-29",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Socialism",
@@ -8718,6 +8790,8 @@
       "logo": "/media/logos/ruZP.svg",
       "color": "#6518a8",
       "established": "2020-02-01",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2021-02-22",
       "labels": [
         "Nationalism",
@@ -8941,6 +9015,8 @@
       "logo": "/media/logos/ruZA.svg",
       "color": "#019834",
       "established": "2020-03-10",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2026-04-26",
       "labels": [
         "Green politics",
@@ -9158,6 +9234,8 @@
       "logo": "/media/logos/ruLF.svg",
       "color": "#de2321",
       "established": "2008-10-18",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Communism",
@@ -9381,6 +9459,8 @@
       "logo": "/media/logos/ruLDPR.png",
       "color": "#4488cc",
       "established": "1992-04-18",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Right-wing populism",
@@ -9631,6 +9711,8 @@
       "logo": "/media/logos/ruDPA.png",
       "color": "#7C273A",
       "established": "1997-07-08",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Militarism",
@@ -9885,6 +9967,8 @@
       "logo": "/media/logos/ruNL.svg",
       "color": "#0ad1c9",
       "established": "2020-03-01",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Liberalism",
@@ -10113,6 +10197,8 @@
       "logo": "/media/logos/ruPARZAS.png",
       "color": "#864386",
       "established": "2012-05-21",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social conservatism",
@@ -10325,6 +10411,8 @@
       "logo": "/media/logos/ruPD2010.svg",
       "color": "#ffc11a",
       "established": "2010-10-14",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2024-11-27",
       "labels": [
         "Economic nationalism",
@@ -10562,6 +10650,8 @@
       "logo": "/media/logos/ruPPD.svg",
       "color": "#08457e",
       "established": "2020-03-05",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "E-democracy",
@@ -10732,6 +10822,8 @@
       "logo": "/media/logos/ruROSTold.svg",
       "color": "#0056b9",
       "established": "2016-03-26",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2024-04-19",
       "labels": [
         "Liberal conservatism",
@@ -10939,6 +11031,8 @@
       "logo": "/media/logos/ruPPPP.png",
       "color": "#44BFC3",
       "established": "2012-04-09",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social liberalism",
@@ -11140,6 +11234,8 @@
       "logo": "/media/logos/ruPVR.svg",
       "color": "#57BDF9",
       "established": "2002-09-07",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Democratic socialism",
@@ -11363,6 +11459,8 @@
       "logo": "/media/logos/ruPSZ.png",
       "color": "#E62F3A",
       "established": "2012-05-05",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2026-06-03",
       "labels": [
         "Social democracy",
@@ -11565,6 +11663,8 @@
       "logo": "/media/logos/ruPR.png",
       "color": "#FFC20E",
       "established": "2005-04-20",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2021-02-22",
       "labels": [
         "Democratic socialism",
@@ -11761,6 +11861,8 @@
       "logo": "/media/logos/ruRodina2012.svg",
       "color": "#E61B23",
       "established": "2012-09-29",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Ultranationalism",
@@ -12002,6 +12104,8 @@
       "logo": "/media/logos/ruROS.png",
       "color": "#FFB508",
       "established": "1991-10-26",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2025-07-21",
       "labels": [
         "Nationalism",
@@ -12258,6 +12362,8 @@
       "logo": "/media/logos/ruREPZ.svg",
       "color": "#438e58",
       "established": "1994-11-19",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Green politics",
@@ -12465,6 +12571,8 @@
       "logo": "/media/logos/ruRPSS.svg",
       "color": "#AC0907",
       "established": "2012-04-08",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Socialism",
@@ -12716,6 +12824,8 @@
       "logo": "/media/logos/ruRPPSS.svg",
       "color": "#c31624",
       "established": "2012-04-07",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Pensioners' interests",
@@ -12954,6 +13064,8 @@
       "logo": "/media/logos/ruER.svg",
       "color": "#2e4ea4",
       "established": "2001-12-01",
+      "registered": "2003-01-31",
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Conservatism",
@@ -13192,6 +13304,8 @@
       "logo": "/media/logos/ruRV.svg",
       "color": "#fe0000",
       "established": "2024-09",
+      "registered": null,
+      "delegalised": null,
       "dissolved": "2025-05-22",
       "labels": [
         "Communism",
@@ -13375,6 +13489,8 @@
       "logo": "/media/logos/ruYabloko.svg",
       "color": "#00a23d",
       "established": "1993-10-16",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social liberalism",
@@ -13644,6 +13760,8 @@
       "logo": "/media/logos/stBasta.png",
       "color": "#06ecec",
       "established": "2022-06-07",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Liberalism",
@@ -13850,6 +13968,8 @@
       "logo": "/media/logos/stPCD.png",
       "color": "#358acb",
       "established": "1990-11-04",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social market economy",
@@ -14049,6 +14169,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/65/Independent_Democratic_Action.svg",
       "color": "#FDF003",
       "established": "1994",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Christian democracy",
@@ -14221,6 +14343,8 @@
       "logo": "/media/logos/stMLSTP.png",
       "color": "#19943A",
       "established": "1960-09",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Social democracy",
@@ -14543,6 +14667,8 @@
       "logo": "/media/logos/stMCIPS.png",
       "color": "#bb1616",
       "established": "2018-05-11",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Democratic socialism",
@@ -14737,6 +14863,8 @@
       "logo": "/media/logos/stPUN.png",
       "color": "#2d9cd8",
       "established": "2021-06",
+      "registered": null,
+      "delegalised": null,
       "dissolved": null,
       "labels": [
         "Agrarianism",
@@ -14894,6 +15022,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/f/fe/КПСС.svg",
       "color": "#c90000",
       "established": "1952-10-14",
+      "registered": null,
+      "delegalised": "1991-11-06",
       "dissolved": "1991-11-06",
       "labels": [
         "Communism",
@@ -15168,6 +15298,8 @@
       "logo": "/media/logos/suLDPSU.svg",
       "color": "#7494db",
       "established": "1989-12-13",
+      "registered": "1991-04-12",
+      "delegalised": null,
       "dissolved": "1992-04-18",
       "labels": [
         "Liberal conservatism",

@@ -18,6 +18,13 @@ test("preserves legislature names and partial-date precision", () => {
   assert.equal(party?.formerLogos[1]?.until, "2004");
 });
 
+test("imports optional registration and delegalisation dates", () => {
+  assert.equal(byId.get("kzAdilet")?.registered, "2026-01-06");
+  assert.equal(byId.get("ruKPRSFSR")?.delegalised, "1991-11-06");
+  assert.equal(byId.get("atOVP")?.registered, null);
+  assert.equal(byId.get("atOVP")?.delegalised, null);
+});
+
 test("imports literal names, leadership and spreadsheet emphasis", () => {
   assert.equal(byId.get("ltSajudis")?.literalName, "Reform Movement of Lithuania");
   assert.match(byId.get("ltSajudis")?.leadership ?? "", /Vytautas Landsbergis/);

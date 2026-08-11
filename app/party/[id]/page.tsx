@@ -35,6 +35,8 @@ export default async function PartyPage({ params }: PageProps) {
   if (!party) notFound();
 
   const established = formatDate(party.established);
+  const registered = formatDate(party.registered);
+  const delegalised = formatDate(party.delegalised);
   const dissolved = formatDate(party.dissolved);
   const lastEdited = formatDate(party.lastEdited);
   const hasSeats = [
@@ -116,6 +118,8 @@ export default async function PartyPage({ params }: PageProps) {
                 </InfoRow>
               ) : null}
               {established ? <InfoRow label="Established">{established}</InfoRow> : null}
+              {registered ? <InfoRow label="Registered">{registered}</InfoRow> : null}
+              {delegalised ? <InfoRow label="Delegalised">{delegalised}</InfoRow> : null}
               {dissolved ? <InfoRow label="Dissolved">{dissolved}</InfoRow> : null}
               {party.formerNames ? (
                 <InfoRow label="Former names">

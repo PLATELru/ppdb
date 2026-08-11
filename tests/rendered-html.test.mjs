@@ -27,11 +27,26 @@ test("renders development preview metadata", async () => {
   assert.match(await fetchHtml(), developmentPreviewMeta);
 });
 
-test("renders the type filter, oldest sort and dissolved lifespan", async () => {
+test("renders the type filter, oldest sort and lifespan for any record with dissolution", async () => {
   const html = await fetchHtml();
   assert.match(html, />Type</);
   assert.match(html, /Oldest first/);
   assert.match(html, /2022 – 2026/);
+  assert.match(html, /1990 – 1993/);
+});
+
+test("renders optional registration and delegalisation dates only on party pages", async () => {
+  const indexHtml = await fetchHtml();
+  assert.doesNotMatch(indexHtml, />Registered</);
+  assert.doesNotMatch(indexHtml, />Delegalised</);
+
+  const registeredHtml = await fetchHtml("/party/kzAdilet");
+  assert.match(registeredHtml, />Registered</);
+  assert.match(registeredHtml, /6 January 2026/);
+
+  const delegalisedHtml = await fetchHtml("/party/ruKPRSFSR");
+  assert.match(delegalisedHtml, />Delegalised</);
+  assert.match(delegalisedHtml, /6 November 1991/);
 });
 
 test("renders commented labels and optional prose without hash markers", async () => {

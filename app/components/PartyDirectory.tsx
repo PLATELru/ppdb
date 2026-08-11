@@ -411,7 +411,7 @@ export function PartyDirectory({ countries, parties }: Props) {
                     ))}
                   </div>
                   <div className="seat-line">
-                    {party.status === "Dissolved" && formatLifeSpan(party.established, party.dissolved) ? (
+                    {party.dissolved && formatLifeSpan(party.established, party.dissolved) ? (
                       <span><b>{formatLifeSpan(party.established, party.dissolved)}</b></span>
                     ) : (
                       <>

@@ -340,6 +340,8 @@ const parties = rows
       logo: text(valueAt(row, "LOGO")),
       color: text(valueAt(row, "COLORCODE")) ?? "#666666",
       established: dateValue(cellAt(sheet, rowNumber, index.ESTABLISHMENT)),
+      registered: dateValue(cellAt(sheet, rowNumber, index.REGISTERED)),
+      delegalised: dateValue(cellAt(sheet, rowNumber, index.DELEGALISED)),
       dissolved: dateValue(cellAt(sheet, rowNumber, index.DISSOLUTION)),
       labels: labelItems.map((item) => item.name),
       labelDetails: labelItems,
@@ -391,7 +393,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 4,
+      schemaVersion: 5,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,
