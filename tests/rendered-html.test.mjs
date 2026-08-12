@@ -27,12 +27,27 @@ test("renders development preview metadata", async () => {
   assert.match(await fetchHtml(), developmentPreviewMeta);
 });
 
-test("renders the type filter, oldest sort and lifespan for any record with dissolution", async () => {
+test("renders the type filter, seat sort and lifespan for any record with dissolution", async () => {
   const html = await fetchHtml();
   assert.match(html, />Type</);
+  assert.match(html, /Parliamentary seats/);
   assert.match(html, /Oldest first/);
   assert.match(html, /2022 – 2026/);
   assert.match(html, /1990 – 1993/);
+});
+
+test("uses seat sorting by default and credits humans for the entries", async () => {
+  const [html, component] = await Promise.all([
+    fetchHtml(),
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(component, /comparePartiesBySeats/);
+  assert.match(component, /useState\("seats"\)/);
+  assert.match(
+    html,
+    /The website structure was vibecoded using ChatGPT\. All entries were added by humans\./,
+  );
 });
 
 test("renders optional registration and delegalisation dates only on party pages", async () => {

@@ -44,7 +44,8 @@ export default function Home() {
         <span>PPDB — Political Parties Database</span>
         <span>
           PPDB is not a reliable source. Any data from PPDB is provided for reference <strong>should
-          not</strong> be used for serious purposes. Vibecoded by real humans.
+          not</strong> be used for serious purposes. The website structure was vibecoded using
+          ChatGPT. All entries were added by humans.
         </span>
       </footer>
     </main>

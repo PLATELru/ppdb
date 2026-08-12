@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { dateSortKey, formatLifeSpan, type Party } from "../../lib/parties";
+import { comparePartiesBySeats } from "../../lib/party-sort";
 import { LogoImage } from "./LogoImage";
 import { RichText } from "./WikiText";
 
@@ -74,7 +75,7 @@ export function PartyDirectory({ countries, parties }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("name");
+  const [sort, setSort] = useState("seats");
   const [view, setView] = useState<"cards" | "rows">("cards");
   const activeLabel = useSyncExternalStore(subscribeToUrlFilters, getUrlLabel, () => "");
   const country = useSyncExternalStore(subscribeToUrlFilters, getUrlCountry, () => "all");
@@ -165,6 +166,9 @@ export function PartyDirectory({ countries, parties }: Props) {
         );
       })
       .sort((a, b) => {
+        if (sort === "seats") {
+          return comparePartiesBySeats(a, b);
+        }
         if (sort === "country") {
           return `${a.country}\u0000${a.name}`.localeCompare(`${b.country}\u0000${b.name}`, "en");
         }
@@ -355,6 +359,7 @@ export function PartyDirectory({ countries, parties }: Props) {
         <label>
           <span>Sort</span>
           <select value={sort} onChange={(event) => setSort(event.target.value)}>
+            <option value="seats">Parliamentary seats</option>
             <option value="name">Name A–Z</option>
             <option value="country">Country A–Z</option>
             <option value="status">Status A–Z</option>
