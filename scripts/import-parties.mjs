@@ -354,6 +354,16 @@ const parties = rows
       formerLogos,
       formerNames: text(valueAt(row, "FORMER_NAMES")),
       website: text(valueAt(row, "WEBSITE")),
+      archivedWebsite: text(valueAt(row, "ARCHIVED_WEBSITE")),
+      socials: {
+        facebook: text(valueAt(row, "FACEBOOK")),
+        youtube: text(valueAt(row, "YOUTUBE")),
+        x: text(valueAt(row, "XTWITTER")),
+        instagram: text(valueAt(row, "INSTAGRAM")),
+        tiktok: text(valueAt(row, "TIKTOK")),
+        telegram: text(valueAt(row, "TELEGRAM")),
+        vk: text(valueAt(row, "VK")),
+      },
       lastEdited: dateValue(cellAt(sheet, rowNumber, index.LAST_EDITED)),
       sources: splitSources(valueAt(row, "SOURCES")),
       formatting: {
@@ -393,7 +403,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 5,
+      schemaVersion: 6,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,

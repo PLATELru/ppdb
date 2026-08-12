@@ -45,6 +45,17 @@ export default async function PartyPage({ params }: PageProps) {
     party.seats.upperHouse,
     party.seats.mep,
   ].some((value) => value != null);
+  const externalLinks = [
+    { label: "Website", href: party.website, text: "Official website" },
+    { label: "Archived website", href: party.archivedWebsite, text: "Archived website" },
+    { label: "Facebook", href: party.socials.facebook, text: "Facebook" },
+    { label: "YouTube", href: party.socials.youtube, text: "YouTube" },
+    { label: "X", href: party.socials.x, text: "X" },
+    { label: "Instagram", href: party.socials.instagram, text: "Instagram" },
+    { label: "TikTok", href: party.socials.tiktok, text: "TikTok" },
+    { label: "Telegram", href: party.socials.telegram, text: "Telegram" },
+    { label: "VK", href: party.socials.vk, text: "VK" },
+  ];
 
   return (
     <main className="site-shell">
@@ -126,13 +137,15 @@ export default async function PartyPage({ params }: PageProps) {
                   <RichText text={party.formerNames} runs={party.formatting.formerNames} />
                 </InfoRow>
               ) : null}
-              {party.website ? (
-                <InfoRow label="Website">
-                  <a href={party.website} target="_blank" rel="noreferrer">
-                    Official website ↗
-                  </a>
-                </InfoRow>
-              ) : null}
+              {externalLinks.map(({ label, href, text }) =>
+                href ? (
+                  <InfoRow key={label} label={label}>
+                    <a href={href} target="_blank" rel="noreferrer">
+                      {text} ↗
+                    </a>
+                  </InfoRow>
+                ) : null,
+              )}
             </dl>
 
             {hasSeats ? (

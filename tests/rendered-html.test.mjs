@@ -27,13 +27,15 @@ test("renders development preview metadata", async () => {
   assert.match(await fetchHtml(), developmentPreviewMeta);
 });
 
-test("renders the type filter, seat sort and lifespan for any record with dissolution", async () => {
-  const html = await fetchHtml();
+test("renders the type filter and seat sort while retaining lifespan support", async () => {
+  const [html, component] = await Promise.all([
+    fetchHtml(),
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+  ]);
   assert.match(html, />Type</);
   assert.match(html, /Parliamentary seats/);
   assert.match(html, /Oldest first/);
-  assert.match(html, /2022 – 2026/);
-  assert.match(html, /1990 – 1993/);
+  assert.match(component, /formatLifeSpan\(party\.established, party\.dissolved\)/);
 });
 
 test("uses seat sorting by default and credits humans for the entries", async () => {
@@ -62,6 +64,24 @@ test("renders optional registration and delegalisation dates only on party pages
   const delegalisedHtml = await fetchHtml("/party/ruKPRSFSR");
   assert.match(delegalisedHtml, />Delegalised</);
   assert.match(delegalisedHtml, /6 November 1991/);
+});
+
+test("renders archived websites and social-media links in Party details", async () => {
+  const [uskorenieHtml, gerbHtml, ppHtml, unitedRussiaHtml] = await Promise.all([
+    fetchHtml("/party/bgUskorenie"),
+    fetchHtml("/party/bgGERB"),
+    fetchHtml("/party/bgPP"),
+    fetchHtml("/party/ruER"),
+  ]);
+
+  assert.match(uskorenieHtml, />Archived website</);
+  assert.match(uskorenieHtml, /href="https:\/\/www\.facebook\.com\/klubuskorenie"/);
+  assert.match(gerbHtml, /href="https:\/\/www\.youtube\.com\/@gerb-official"/);
+  assert.match(gerbHtml, /href="https:\/\/x\.com\/PPGERB"/);
+  assert.match(ppHtml, /href="https:\/\/www\.instagram\.com\/prodalzhavamepromyanata\/"/);
+  assert.match(ppHtml, /href="https:\/\/www\.tiktok\.com\/@promenibg"/);
+  assert.match(unitedRussiaHtml, /href="https:\/\/t\.me\/er_molnia"/);
+  assert.match(unitedRussiaHtml, /href="https:\/\/vk\.ru\/er_ru"/);
 });
 
 test("renders commented labels and optional prose without hash markers", async () => {

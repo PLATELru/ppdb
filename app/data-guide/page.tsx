@@ -42,7 +42,12 @@ const fields = [
   ["LEADERSHIP", "Long text", "Plain-text leadership notes shown after the optional Ideology section."],
   ["FORMER_LOGO1–5", "URL + date", "Earlier logos and their final dates of use."],
   ["FORMER_NAMES", "Long text", "Earlier official or widely used party names."],
-  ["WEBSITE", "URL", "Official website or an archived version."],
+  ["WEBSITE / ARCHIVED_WEBSITE", "URLs", "Current official website and, separately, its archived version."],
+  [
+    "FACEBOOK / YOUTUBE / XTWITTER / INSTAGRAM / TIKTOK / TELEGRAM / VK",
+    "URLs",
+    "Official social-media pages displayed as separate links in Party details.",
+  ],
   ["LAST_EDITED", "Date", "Optional maintenance date shown at the bottom of the record."],
   ["SOURCES", "URLs", "Put one source URL on each line."],
 ];

@@ -19,6 +19,8 @@ In `LABELS`, put one label on each line. If a line contains `#`, the label is om
 
 `RELATIONS`, `DESCRIPTION`, `Ideology` and `LEADERSHIP` are optional prose fields. Spreadsheet line breaks, bold text and italics are preserved. Empty optional sections are not rendered.
 
+`WEBSITE` stores the current official site, while `ARCHIVED_WEBSITE` stores an archived copy. Official Facebook, YouTube, X, Instagram, TikTok, Telegram and VK URLs are shown as separate links in Party details.
+
 Country-level chamber sizes live on the `Legislatures` sheet. PPDB combines those totals with each party's `LOWER_HOUSE`, `UPPER_HOUSE` and `MEP` values, so a record can display a share such as `57 / 183` without duplicating the total in every party row.
 
 ## Store a logo in the repository

@@ -5,8 +5,25 @@ import database from "../data/parties.json" with { type: "json" };
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
 test("imports every current party record", () => {
-  assert.equal(database.count, 68);
-  assert.equal(byId.size, 68);
+  assert.equal(database.count, database.parties.length);
+  assert.equal(byId.size, database.count);
+  assert.ok(byId.has("bgUskorenie"));
+});
+
+test("imports archived websites and social-media links", () => {
+  const uskorenie = byId.get("bgUskorenie");
+  assert.equal(uskorenie?.name, "Uskorenie");
+  assert.equal(
+    uskorenie?.archivedWebsite,
+    "https://web.archive.org/web/20250330190525/https://uskorenie.bg/",
+  );
+  assert.equal(uskorenie?.socials.facebook, "https://www.facebook.com/klubuskorenie");
+  assert.equal(byId.get("bgGERB")?.socials.youtube, "https://www.youtube.com/@gerb-official");
+  assert.equal(byId.get("bgGERB")?.socials.x, "https://x.com/PPGERB");
+  assert.equal(byId.get("bgPP")?.socials.instagram, "https://www.instagram.com/prodalzhavamepromyanata/");
+  assert.equal(byId.get("bgPP")?.socials.tiktok, "https://www.tiktok.com/@promenibg");
+  assert.equal(byId.get("ruER")?.socials.telegram, "https://t.me/er_molnia");
+  assert.equal(byId.get("ruER")?.socials.vk, "https://vk.ru/er_ru");
 });
 
 test("preserves legislature names and partial-date precision", () => {
@@ -63,7 +80,9 @@ test("imports optional ideology and relations sections", () => {
   assert.equal(dissolved?.ideology, "Centre-left to left-wing bloc.");
   assert.match(dissolved?.relations ?? "", /\[\[peJP\|Together for Peru\]\]/);
   assert.equal(byId.get("peJP")?.ideology, null);
-  assert.equal(byId.get("peJP")?.relations, null);
+  assert.match(byId.get("peJP")?.relations ?? "", /\[\[peANTAURO\|ANTAURO\]\]/);
+  assert.equal(byId.get("atOVP")?.ideology, null);
+  assert.equal(byId.get("atOVP")?.relations, null);
 });
 
 test("accepts the three-letter international ID prefix and its cross-reference", () => {
