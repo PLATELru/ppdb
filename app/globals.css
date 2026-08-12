@@ -17,6 +17,7 @@
   --panel-hover: #ffffff;
   --button-face: #d8d8d8;
   --button-hover: #ececec;
+  --missing-link: #ba0000;
 }
 
 :root[data-theme="dark"] {
@@ -35,6 +36,7 @@
   --panel-hover: #373a45;
   --button-face: #343741;
   --button-hover: #444853;
+  --missing-link: #ff7777;
 }
 
 * { box-sizing: border-box; }
@@ -422,7 +424,11 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .info-row dd { min-width: 0; overflow-wrap: anywhere; white-space: pre-line; background: var(--panel-light); }
 .seat-table { margin-top: 10px; border: 1px solid var(--line); background: var(--panel-light); }
 .seat-table h2 { margin: 0; padding: 7px 8px; color: #fff; background: var(--navy); font-family: "Courier New", Courier, monospace; font-size: 11px; text-transform: uppercase; }
-.seat-table > div { display: flex; justify-content: space-between; padding: 8px; border-top: 1px solid var(--line); }
+.seat-row { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 10px; align-items: start; padding: 8px; border-top: 1px solid var(--line); }
+.seat-result { display: grid; gap: 3px; width: 100px; }
+.seat-result strong { font-size: 12px; }
+.seat-bar { display: block; width: 100px; height: 12px; overflow: hidden; background: color-mix(in srgb, var(--panel-light) 82%, #fff); border: 1px solid #999; }
+.seat-bar-fill { display: block; width: var(--seat-share); height: 100%; background: var(--seat-color); border-right: 1px solid color-mix(in srgb, var(--seat-color) 65%, #000); }
 .relations-panel { margin-top: 10px; border: 1px solid var(--line); background: var(--panel-light); }
 .relations-panel h2 {
   margin: 0;
@@ -442,6 +448,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .record-prose p { margin: 0 0 1em; }
 .record-prose p:last-child { margin-bottom: 0; }
 .party-inline-link { display: inline-flex; align-items: baseline; gap: 0.24em; white-space: nowrap; }
+.missing-party-link, .missing-party-link:visited { color: var(--missing-link); text-decoration-style: dotted; }
 .party-link-swatch {
   display: inline-block;
   width: 0.82em;

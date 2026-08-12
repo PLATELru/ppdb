@@ -11,7 +11,7 @@ Everything below is AI-written.
 
 `data/parties.json` is a generated build artifact, not a second database. Do not edit it when adding or correcting records: every production build recreates it from `PPDB database.xlsx` before the site is compiled.
 
-The ID is the stable key used in URLs and internal links. For example, `atOVP` becomes `/party/atOVP/`. Inside `DESCRIPTION`, write `[[atOVP|Austrian People's Party]]` to link to that record. Missing target IDs are rendered as ordinary text rather than broken links.
+The ID is the stable key used in URLs and internal links. For example, `atOVP` becomes `/party/atOVP/`. Inside a prose field, write `[[atOVP|Austrian People's Party]]` to set the visible text explicitly, or `[[atOVP]]` to use the target party's acronym (falling back to its name). Missing target IDs are rendered as red links.
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
 
@@ -21,7 +21,7 @@ In `LABELS`, put one label on each line. If a line contains `#`, the label is om
 
 `WEBSITE` stores the current official site, while `ARCHIVED_WEBSITE` stores an archived copy. Official Facebook, YouTube, X, Instagram, TikTok, Telegram and VK URLs are shown as separate links in Party details.
 
-Country-level chamber sizes live on the `Legislatures` sheet. PPDB combines those totals with each party's `LOWER_HOUSE`, `UPPER_HOUSE` and `MEP` values, so a record can display a share such as `57 / 183` without duplicating the total in every party row.
+Country-level chamber sizes live on the `Legislatures` sheet. PPDB combines those totals with each party's `LOWER_HOUSE`, `UPPER_HOUSE` and `MEP` values, so a record can display a share such as `57 / 183` and a proportional seat bar without duplicating the total in every party row.
 
 ## Store a logo in the repository
 

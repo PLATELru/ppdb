@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import { getParty, type RichTextRun } from "../../lib/parties";
+import { partyLinkLabel } from "../../lib/wiki-links";
 
 function InlineWikiText({ text }: { text: string }) {
   const pattern = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
@@ -10,8 +11,10 @@ function InlineWikiText({ text }: { text: string }) {
 
   while ((match = pattern.exec(text)) !== null) {
     if (match.index > cursor) parts.push(text.slice(cursor, match.index));
-    const [, id, label] = match;
+    const [, rawId, label] = match;
+    const id = rawId.trim();
     const linkedParty = getParty(id);
+    const displayLabel = partyLinkLabel(linkedParty, id, label);
     parts.push(
       linkedParty ? (
         <span className="party-inline-link" key={`${id}-${match.index}`}>
@@ -20,10 +23,17 @@ function InlineWikiText({ text }: { text: string }) {
             style={{ "--party-link-color": linkedParty.color } as CSSProperties}
             aria-hidden="true"
           />
-          <Link href={`/party/${id}`}>{label ?? id}</Link>
+          <Link href={`/party/${linkedParty.id}`}>{displayLabel}</Link>
         </span>
       ) : (
-        label ?? id
+        <Link
+          className="missing-party-link"
+          href={`/party/${encodeURIComponent(id)}`}
+          key={`${id}-${match.index}`}
+          title={`No PPDB record for ${id}`}
+        >
+          {displayLabel}
+        </Link>
       ),
     );
     cursor = pattern.lastIndex;

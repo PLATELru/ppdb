@@ -94,6 +94,21 @@ test("renders commented labels and optional prose without hash markers", async (
   assert.match(bdpHtml, /Centre-left to left-wing bloc\./);
 });
 
+test("renders missing party references as red links", async () => {
+  const html = await fetchHtml("/party/atFPO");
+  assert.match(html, /class="missing-party-link"/);
+  assert.match(html, /href="\/party\/atVdU"/);
+  assert.match(html, />Federation of Independents<\/a>/);
+});
+
+test("renders proportional seat bars when legislature totals are known", async () => {
+  const html = await fetchHtml("/party/ruER");
+  assert.match(html, /role="progressbar"/);
+  assert.match(html, /aria-label="State Duma: 315 of 450 seats"/);
+  assert.match(html, /--seat-share:70%/);
+  assert.match(html, /aria-label="Federation Council: 136 of 178 seats"/);
+});
+
 test("sizes each visible logo frame to the source aspect ratio without a cropped duplicate", async () => {
   const [component, styles] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),

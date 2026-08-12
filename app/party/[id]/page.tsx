@@ -29,6 +29,50 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
   );
 }
 
+function SeatRow({
+  color,
+  label,
+  total,
+  value,
+}: {
+  color: string;
+  label: string;
+  total: number | null;
+  value: number | null;
+}) {
+  if (value == null) return null;
+  const share = total != null && total > 0
+    ? Math.min(100, Math.max(0, (value / total) * 100))
+    : null;
+
+  return (
+    <div className="seat-row">
+      <span>{label}</span>
+      <div className="seat-result">
+        <strong>{value}{total != null ? ` / ${total}` : ""}</strong>
+        {share != null && total != null ? (
+          <span
+            className="seat-bar"
+            role="progressbar"
+            aria-label={`${label}: ${value} of ${total} seats`}
+            aria-valuemax={total}
+            aria-valuemin={0}
+            aria-valuenow={Math.min(total, Math.max(0, value))}
+          >
+            <span
+              className="seat-bar-fill"
+              style={{
+                "--seat-color": color,
+                "--seat-share": `${share}%`,
+              } as React.CSSProperties}
+            />
+          </span>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export default async function PartyPage({ params }: PageProps) {
   const { id } = await params;
   const party = getParty(id);
@@ -151,42 +195,30 @@ export default async function PartyPage({ params }: PageProps) {
             {hasSeats ? (
               <div className="seat-table">
                 <h2>Representation</h2>
-                {party.seats.legislature != null ? (
-                  <div>
-                    <span>{party.seats.legislatureName}</span>
-                    <strong>
-                      {party.seats.legislature}
-                      {party.seats.legislatureTotal != null ? ` / ${party.seats.legislatureTotal}` : ""}
-                    </strong>
-                  </div>
-                ) : null}
-                {party.seats.lowerHouse != null ? (
-                  <div>
-                    <span>{party.seats.lowerHouseName}</span>
-                    <strong>
-                      {party.seats.lowerHouse}
-                      {party.seats.lowerHouseTotal != null ? ` / ${party.seats.lowerHouseTotal}` : ""}
-                    </strong>
-                  </div>
-                ) : null}
-                {party.seats.upperHouse != null ? (
-                  <div>
-                    <span>{party.seats.upperHouseName}</span>
-                    <strong>
-                      {party.seats.upperHouse}
-                      {party.seats.upperHouseTotal != null ? ` / ${party.seats.upperHouseTotal}` : ""}
-                    </strong>
-                  </div>
-                ) : null}
-                {party.seats.mep != null ? (
-                  <div>
-                    <span>MEPs</span>
-                    <strong>
-                      {party.seats.mep}
-                      {party.seats.mepTotal != null ? ` / ${party.seats.mepTotal}` : ""}
-                    </strong>
-                  </div>
-                ) : null}
+                <SeatRow
+                  color={party.color}
+                  label={party.seats.legislatureName}
+                  value={party.seats.legislature}
+                  total={party.seats.legislatureTotal}
+                />
+                <SeatRow
+                  color={party.color}
+                  label={party.seats.lowerHouseName}
+                  value={party.seats.lowerHouse}
+                  total={party.seats.lowerHouseTotal}
+                />
+                <SeatRow
+                  color={party.color}
+                  label={party.seats.upperHouseName}
+                  value={party.seats.upperHouse}
+                  total={party.seats.upperHouseTotal}
+                />
+                <SeatRow
+                  color={party.color}
+                  label="MEPs"
+                  value={party.seats.mep}
+                  total={party.seats.mepTotal}
+                />
               </div>
             ) : null}
 

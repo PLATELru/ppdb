@@ -112,9 +112,13 @@ export default function DataGuidePage() {
           <section className="panel">
             <div className="section-label">Internal links</div>
             <div className="guide-copy">
-              <p>Use the compact wiki-like syntax below inside DESCRIPTION:</p>
-              <pre>[[atOVP|Austrian People&apos;s Party]]</pre>
-              <p>The first value is the target ID. If that ID is absent, PPDB shows ordinary text instead of a broken link.</p>
+              <p>Use either form of the compact wiki-like syntax inside prose fields:</p>
+              <pre>{`[[atOVP]]
+[[atOVP|Austrian People's Party]]`}</pre>
+              <p>
+                Without custom text, PPDB displays the target party&apos;s acronym, or its name when no
+                acronym exists. References to IDs without a record are shown as red links.
+              </p>
             </div>
           </section>
           <section className="panel">
