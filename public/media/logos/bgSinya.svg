@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 69.111015 95.466815"
+   version="1.1"
+   id="svg47"
+   sodipodi:docname="bgSinya.svg"
+   width="69.111015"
+   height="95.466812"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview49"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="1.7743431"
+     inkscape:cx="138.64286"
+     inkscape:cy="98.06446"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg47" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">      .cls-1 {        fill: #009f54;      }      .cls-2 {        fill: #10b6eb;      }      .cls-3 {        fill: #004a79;      }      .cls-4 {        fill: #e72e4d;      }      .cls-5 {        fill: #fff;      }      .cls-6 {        fill: #00b7ed;      }    </style>
+  </defs>
+  <g
+     id="g40"
+     transform="translate(-0.52)">
+    <g
+       id="g34">
+      <rect
+         class="cls-5"
+         x="7.2800002"
+         y="6.7600002"
+         width="29.24"
+         height="29.24"
+         transform="rotate(-45,21.904572,21.376829)"
+         id="rect30" />
+      <path
+         class="cls-2"
+         d="M 21.9,1.41 41.87,21.38 21.9,41.35 1.93,21.38 21.9,1.41 M 21.9,0 0.52,21.38 21.9,42.76 43.28,21.38 Z"
+         id="path32" />
+    </g>
+    <rect
+       class="cls-4"
+       x="6.7800002"
+       y="58.970001"
+       width="30.24"
+       height="30.24"
+       transform="rotate(-45,21.89523,74.080699)"
+       id="rect36" />
+    <rect
+       class="cls-1"
+       x="33.130001"
+       y="32.610001"
+       width="30.24"
+       height="30.24"
+       transform="rotate(-45,48.251836,47.733435)"
+       id="rect38" />
+  </g>
+</svg>
