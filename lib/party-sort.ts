@@ -1,12 +1,22 @@
-export const SEAT_SORT_FIELDS = ["legislature", "lowerHouse", "upperHouse", "mep"] as const;
+export const SEAT_SORT_GROUPS = [
+  ["legislature", "lowerHouse"],
+  ["upperHouse"],
+  ["mep"],
+] as const;
 
-type SeatSortField = (typeof SEAT_SORT_FIELDS)[number];
+type SeatSortField = (typeof SEAT_SORT_GROUPS)[number][number];
 
 export type SeatSortableParty = {
   dissolved: string | null;
   name: string;
   seats: Record<SeatSortField, number | null>;
 };
+
+function seatSortValues(party: SeatSortableParty) {
+  return SEAT_SORT_GROUPS.map((fields) =>
+    Math.max(...fields.map((field) => party.seats[field] ?? 0)),
+  );
+}
 
 export function comparePartiesBySeats(a: SeatSortableParty, b: SeatSortableParty) {
   const aDissolved = Boolean(a.dissolved);
@@ -15,8 +25,10 @@ export function comparePartiesBySeats(a: SeatSortableParty, b: SeatSortableParty
   if (aDissolved !== bDissolved) return aDissolved ? 1 : -1;
   if (aDissolved) return a.name.localeCompare(b.name, "en");
 
-  const aPriority = SEAT_SORT_FIELDS.findIndex((field) => (a.seats[field] ?? 0) > 0);
-  const bPriority = SEAT_SORT_FIELDS.findIndex((field) => (b.seats[field] ?? 0) > 0);
+  const aSeats = seatSortValues(a);
+  const bSeats = seatSortValues(b);
+  const aPriority = aSeats.findIndex((value) => value > 0);
+  const bPriority = bSeats.findIndex((value) => value > 0);
 
   if (aPriority !== bPriority) {
     if (aPriority < 0) return 1;
@@ -25,9 +37,8 @@ export function comparePartiesBySeats(a: SeatSortableParty, b: SeatSortableParty
   }
   if (aPriority < 0) return a.name.localeCompare(b.name, "en");
 
-  for (let index = aPriority; index < SEAT_SORT_FIELDS.length; index += 1) {
-    const field = SEAT_SORT_FIELDS[index];
-    const seatDifference = (b.seats[field] ?? 0) - (a.seats[field] ?? 0);
+  for (let index = aPriority; index < SEAT_SORT_GROUPS.length; index += 1) {
+    const seatDifference = bSeats[index] - aSeats[index];
     if (seatDifference) return seatDifference;
   }
 

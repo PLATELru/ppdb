@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { comparePartiesBySeats, SEAT_SORT_FIELDS } from "../lib/party-sort.ts";
+import { comparePartiesBySeats, SEAT_SORT_GROUPS } from "../lib/party-sort.ts";
 
 function party(name, seats = {}, dissolved = null) {
   return {
@@ -28,12 +28,16 @@ test("sorts represented, active and dissolved parties in the requested order", (
     party("Unicameral large", { legislature: 200 }),
   ];
 
-  assert.deepEqual(SEAT_SORT_FIELDS, ["legislature", "lowerHouse", "upperHouse", "mep"]);
+  assert.deepEqual(SEAT_SORT_GROUPS, [
+    ["legislature", "lowerHouse"],
+    ["upperHouse"],
+    ["mep"],
+  ]);
   assert.deepEqual(parties.sort(comparePartiesBySeats).map(({ name }) => name), [
     "Unicameral large",
-    "Unicameral small",
     "Lower house large",
     "Lower house small",
+    "Unicameral small",
     "Upper house",
     "MEPs",
     "Active without seats",
@@ -41,7 +45,19 @@ test("sorts represented, active and dissolved parties in the requested order", (
   ]);
 });
 
-test("uses later seat columns and then names to break ties", () => {
+test("compares unicameral and lower-house seats in the same primary group", () => {
+  const parties = [
+    party("PAICV", { legislature: 29 }),
+    party("United Russia", { lowerHouse: 315, upperHouse: 136 }),
+  ];
+
+  assert.deepEqual(parties.sort(comparePartiesBySeats).map(({ name }) => name), [
+    "United Russia",
+    "PAICV",
+  ]);
+});
+
+test("uses later seat groups and then names to break ties", () => {
   const parties = [
     party("Zulu", { lowerHouse: 10, upperHouse: 2 }),
     party("Alpha", { lowerHouse: 10, upperHouse: 2 }),
