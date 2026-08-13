@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Gravit.io -->
+
+<svg
+   style="isolation:isolate"
+   viewBox="0 0 218.87801 80.522007"
+   width="218.87801"
+   height="80.522003"
+   version="1.1"
+   id="svg130"
+   sodipodi:docname="bgKODold.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs134" />
+  <sodipodi:namedview
+     id="namedview132"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.95666667"
+     inkscape:cx="241.46341"
+     inkscape:cy="-60.627178"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg130" />
+  <path
+     d="m 103.48,59.907 c -10.611,0 -19.282,-8.952 -19.367,-19.995 -0.085,-11.043 8.448,-19.995 19.059,-19.995 10.611,0 19.282,8.952 19.367,19.995 0.085,11.043 -8.448,19.995 -19.059,19.995 z m 0.215,-59.708 c -22.181,0 -40.162,17.981 -40.162,40.161 10e-4,22.181 17.982,40.162 40.162,40.162 22.18,0 40.161,-17.981 40.161,-40.162 0,-22.18 -17.981,-40.161 -40.161,-40.161 z"
+     fill="#000000"
+     id="path70" />
+  <path
+     d="M 73.055,1.166 H 46.588 L 21.556,39.372 47.921,79.554 H 74.388 L 46.803,39.292 Z"
+     fill="#000000"
+     id="path72" />
+  <path
+     d="M 198.458,59.195 H 169.695 V 34.801 c 0,-7.93 6.451,-14.381 14.382,-14.381 7.93,0 14.381,6.451 14.381,14.381 z M 184.077,0 c -19.19,0 -34.801,15.612 -34.801,34.801 v 24.394 h 20.419 v 20.359 h 49.183 V 34.801 C 218.878,15.612 203.266,0 184.077,0 Z"
+     fill="#000000"
+     id="path74" />
+  <path
+     d="M 21.612,1.166 H 0 v 58.03 h 21.612 z"
+     fill="#000000"
+     id="path76" />
+  <path
+     d="m 169.691,79.554 -20.414,-0.003 0.002,-20.359 20.415,0.003 z"
+     fill="#e3000f"
+     id="path78" />
+  <path
+     d="M 113.896,50.561 H 93.494 V 30.16 h 20.402 z"
+     fill="#47a22d"
+     id="path80" />
+</svg>
