@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="30"
+   height="30"
+   viewBox="0 0 30 30"
+   fill="none"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="czOK.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="24.833333"
+     inkscape:cx="15.020134"
+     inkscape:cy="14.979866"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8" />
+  <path
+     d="M 15,30 C 23.2843,30 30,23.2843 30,15 30,6.71573 23.2843,0 15,0 6.71573,0 0,6.71573 0,15 0,23.2843 6.71573,30 15,30 Z"
+     fill="#0c6c79"
+     id="path2" />
+  <path
+     d="m 5.28174,15 c 0,-2.8169 2.1831,-5 4.99996,-5 2.8169,0 5,2.1831 5,5 0,2.8169 -2.2535,5 -5,5 -2.74644,0 -4.99996,-2.1831 -4.99996,-5 z m 8.09856,0 c 0,-1.831 -1.338,-3.169 -3.0986,-3.169 -1.76053,0 -3.09855,1.338 -3.09855,3.169 0,1.831 1.33802,3.169 3.09855,3.169 1.7606,0 3.0986,-1.338 3.0986,-3.169 z"
+     fill="#cdf3f0"
+     id="path4" />
+  <path
+     d="m 22.5352,19.7888 -3.4507,-4.5071 v 4.5071 h -1.9014 v -9.6479 h 1.9014 v 4.2253 l 3.3099,-4.2253 h 2.1831 l -3.5916,4.6479 3.7324,4.9295 h -2.1831 z"
+     fill="#cdf3f0"
+     id="path6" />
+</svg>
