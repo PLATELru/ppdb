@@ -271,11 +271,15 @@ export default async function PartyPage({ params }: PageProps) {
                       <div>
                         <LogoImage
                           src={item.url}
-                          alt={`Former ${party.name} logo`}
+                          alt={item.comment ? `${party.name} logo — ${item.comment}` : `Former ${party.name} logo`}
                           fallback={party.acronym ?? party.name.slice(0, 2)}
                         />
                       </div>
-                      <figcaption>{item.until ? `Used until ${formatDate(item.until)}` : "Earlier logo"}</figcaption>
+                      <figcaption>
+                        {item.comment ? <span className="former-logo-comment">{item.comment}</span> : null}
+                        {item.until ? <span>Used until {formatDate(item.until)}</span> : null}
+                        {!item.comment && !item.until ? <span>Earlier logo</span> : null}
+                      </figcaption>
                     </figure>
                   ))}
                 </div>

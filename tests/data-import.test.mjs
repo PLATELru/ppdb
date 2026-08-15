@@ -5,6 +5,7 @@ import database from "../data/parties.json" with { type: "json" };
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
 test("imports every current party record", () => {
+  assert.equal(database.schemaVersion, 7);
   assert.equal(database.count, database.parties.length);
   assert.equal(byId.size, database.count);
   assert.ok(byId.has("bgUskorenie"));
@@ -33,6 +34,8 @@ test("preserves legislature names and partial-date precision", () => {
   assert.equal(party?.seats.legislatureTotal, 141);
   assert.equal(party?.formerLogos[0]?.until, "2020-05");
   assert.equal(party?.formerLogos[1]?.until, "2004");
+  assert.equal(party?.formerLogos[0]?.comment, null);
+  assert.equal(party?.formerLogos[1]?.comment, null);
 });
 
 test("imports optional registration and delegalisation dates", () => {

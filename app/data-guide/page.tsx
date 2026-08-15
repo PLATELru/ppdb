@@ -40,7 +40,11 @@ const fields = [
   ["DESCRIPTION", "Long text", "Main record text. Blank lines create paragraphs."],
   ["Ideology", "Long text", "Optional prose section displayed between Overview and Leadership."],
   ["LEADERSHIP", "Long text", "Plain-text leadership notes shown after the optional Ideology section."],
-  ["FORMER_LOGO1–5", "URL + date", "Earlier logos and their final dates of use."],
+  [
+    "FORMER_LOGO",
+    "Multiline text",
+    "Put one earlier logo on each line as logo|comment|until. Keep the middle field empty when there is no comment: logo||until.",
+  ],
   ["FORMER_NAMES", "Long text", "Earlier official or widely used party names."],
   ["WEBSITE / ARCHIVED_WEBSITE", "URLs", "Current official website and, separately, its archived version."],
   [
@@ -118,6 +122,18 @@ export default function DataGuidePage() {
               <p>
                 Without custom text, PPDB displays the target party&apos;s acronym, or its name when no
                 acronym exists. References to IDs without a record are shown as red links.
+              </p>
+            </div>
+          </section>
+          <section className="panel">
+            <div className="section-label">Former logos</div>
+            <div className="guide-copy">
+              <p>Put one logo on each line of <code>FORMER_LOGO</code>:</p>
+              <pre>{`/media/logos/Logo1.svg|Used under the former party name|2020-05
+/media/logos/Logo2.svg||2004`}</pre>
+              <p>
+                The comment is optional, but both separators are required. The final field accepts
+                a full date, month and year, a year alone, or may be left empty.
               </p>
             </div>
           </section>

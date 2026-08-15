@@ -463,7 +463,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; color: var(--ink); }
 .former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
-.former-logo-grid figcaption { padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
+.former-logo-grid figcaption { display: grid; gap: 3px; padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
+.former-logo-comment { color: var(--ink); font-weight: 700; }
 .sources-panel ol { margin: 0; padding: 8px 8px 8px 32px; background: var(--panel-light); border: 1px solid var(--line); }
 .sources-panel li { padding: 4px; overflow-wrap: anywhere; }
 .maintenance-line { display: flex; justify-content: space-between; gap: 15px; margin-top: 8px; padding: 8px; color: var(--muted); font-family: "Courier New", Courier, monospace; font-size: 10px; background: var(--panel-light); border: 1px solid var(--line); }

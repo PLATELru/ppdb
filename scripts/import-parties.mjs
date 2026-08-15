@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import XLSX from "xlsx";
+import { parseFormerLogos } from "../lib/former-logos.mjs";
 
 const root = process.cwd();
 const inputPath = path.join(root, "data", "PPDB database.xlsx");
@@ -23,6 +24,8 @@ const rows = XLSX.utils.sheet_to_json(sheet, {
 const headers = (rows[1] ?? []).map((value) => String(value ?? "").trim());
 const index = Object.fromEntries(headers.map((header, column) => [header, column]));
 const valueAt = (row, key) => row[index[key]] ?? null;
+
+const hasMultilineFormerLogo = index.FORMER_LOGO != null;
 
 function text(value) {
   const result = value == null ? "" : String(value).trim();
@@ -131,7 +134,10 @@ function formattedRuns(cell, styleId = 0) {
   const baseBold = Boolean(baseFont.bold);
   const baseItalic = Boolean(baseFont.italic);
   const xml = typeof cell.r === "string" ? cell.r : "";
-  const xmlRuns = [...xml.matchAll(/<r>([\s\S]*?)<\/r>/g)];
+  const namespace = "(?:[A-Za-z_][\\w.-]*:)?";
+  const xmlRuns = [
+    ...xml.matchAll(new RegExp(`<${namespace}r>([\\s\\S]*?)<\\/${namespace}r>`, "g")),
+  ];
 
   if (!xmlRuns.length) {
     return [{ text: plainText, bold: baseBold, italic: baseItalic }];
@@ -140,14 +146,16 @@ function formattedRuns(cell, styleId = 0) {
   return mergeRuns(
     xmlRuns.map((match) => {
       const runXml = match[1];
-      const properties = /<rPr>([\s\S]*?)<\/rPr>/.exec(runXml)?.[1] ?? "";
-      const runText = [...runXml.matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)]
+      const properties = new RegExp(`<${namespace}rPr>([\\s\\S]*?)<\\/${namespace}rPr>`).exec(runXml)?.[1] ?? "";
+      const runText = [
+        ...runXml.matchAll(new RegExp(`<${namespace}t(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${namespace}t>`, "g")),
+      ]
         .map((item) => decodeXml(item[1]))
         .join("");
       return {
         text: runText,
-        bold: baseBold || /<b(?:\s[^>]*)?\s*\/>/.test(properties),
-        italic: baseItalic || /<i(?:\s[^>]*)?\s*\/>/.test(properties),
+        bold: baseBold || new RegExp(`<${namespace}b(?:\\s[^>]*)?\\s*\\/>`).test(properties),
+        italic: baseItalic || new RegExp(`<${namespace}i(?:\\s[^>]*)?\\s*\\/>`).test(properties),
       };
     }),
   );
@@ -303,23 +311,33 @@ const parties = rows
   .map(({ row, rowNumber }) => {
     const country = text(valueAt(row, "COUNTRY"));
     const legislature = legislatureData.get(country) ?? {};
-    const formerLogos = [];
-    for (let i = 1; i <= 5; i += 1) {
-      const url = text(valueAt(row, `FORMER_LOGO${i}`));
-      if (url) {
-        formerLogos.push({
-          url,
-          until: dateValue(cellAt(sheet, rowNumber, index[`FORMER_LOGO${i}_UNTIL`])),
-        });
-      }
-    }
+    const id = text(valueAt(row, "ID"));
+    const formerLogos = hasMultilineFormerLogo
+      ? parseFormerLogos(
+          valueAt(row, "FORMER_LOGO"),
+          `FORMER_LOGO at spreadsheet row ${rowNumber}${id ? ` (${id})` : ""}`,
+        )
+      : Array.from({ length: 5 }, (_, offset) => offset + 1)
+          .map((number) => {
+            const url = text(valueAt(row, `FORMER_LOGO${number}`));
+            return url
+              ? {
+                  url,
+                  comment: null,
+                  until: dateValue(
+                    cellAt(sheet, rowNumber, index[`FORMER_LOGO${number}_UNTIL`]),
+                  ),
+                }
+              : null;
+          })
+          .filter(Boolean);
 
     const labelItems = labelItemsAt(rowNumber);
     const typeItems = lineItemsAt(rowNumber, "TYPE", ["Party"]);
 
     return {
       country,
-      id: text(valueAt(row, "ID")),
+      id,
       name: text(valueAt(row, "NAME")),
       nativeName: text(valueAt(row, "NATIVE_NAME")),
       literalName: text(valueAt(row, "LITERAL_NAME")),
@@ -403,7 +421,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 6,
+      schemaVersion: 7,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,
