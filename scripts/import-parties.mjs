@@ -229,6 +229,32 @@ function labelItemsAt(rowNumber) {
   });
 }
 
+function allianceItemsAt(rowNumber) {
+  return lineItemsAt(rowNumber, "ALLIANCES").flatMap((item, lineIndex) => {
+    const hashIndex = item.text.indexOf("#");
+    const linkText = item.text.slice(0, hashIndex < 0 ? item.text.length : hashIndex).trim();
+    if (!linkText) return [];
+
+    const link = /^\[\[([^|\]]+)(?:\|([^\]]+))?\]\]$/.exec(linkText);
+    if (!link) {
+      throw new Error(
+        `ALLIANCES at spreadsheet row ${rowNumber}, line ${lineIndex + 1}: expected [[ID]] or [[ID|name]].`,
+      );
+    }
+
+    const targetId = link[1].trim();
+    const name = link[2]?.trim() || null;
+    const comment = hashIndex < 0 ? null : item.text.slice(hashIndex + 1).trim() || null;
+
+    return [{
+      id: targetId,
+      name,
+      comment,
+      indexVisible: hashIndex < 0,
+    }];
+  });
+}
+
 function dateValue(cell) {
   if (!cell || cell.v == null || cell.v === "") return null;
 
@@ -333,6 +359,7 @@ const parties = rows
           .filter(Boolean);
 
     const labelItems = labelItemsAt(rowNumber);
+    const allianceItems = allianceItemsAt(rowNumber);
     const typeItems = lineItemsAt(rowNumber, "TYPE", ["Party"]);
 
     return {
@@ -363,6 +390,7 @@ const parties = rows
       dissolved: dateValue(cellAt(sheet, rowNumber, index.DISSOLUTION)),
       labels: labelItems.map((item) => item.name),
       labelDetails: labelItems,
+      alliances: allianceItems,
       types: typeItems.map((item) => item.text),
       status: text(valueAt(row, "STATUS")),
       relations: text(valueAt(row, "RELATIONS")),
@@ -408,6 +436,24 @@ const parties = rows
     ),
   );
 
+const partyById = new Map(parties.map((party) => [party.id.toLowerCase(), party]));
+for (const party of parties) {
+  party.alliances = party.alliances.map((alliance) => {
+    const target = partyById.get(alliance.id.toLowerCase());
+    const name = alliance.name ?? target?.acronym ?? target?.name ?? alliance.id;
+    const display = alliance.comment ? `${name} ${alliance.comment}` : name;
+    return {
+      id: alliance.id,
+      name,
+      display,
+      comment: alliance.comment,
+      indexVisible: alliance.indexVisible,
+      color: target?.color ?? "#666666",
+      runs: [{ text: display, bold: false, italic: false }],
+    };
+  });
+}
+
 const ids = new Set();
 for (const party of parties) {
   if (!party.id || !party.name || !party.country) {
@@ -421,7 +467,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 7,
+      schemaVersion: 8,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       parties,

@@ -94,6 +94,45 @@ test("renders commented labels and optional prose without hash markers", async (
   assert.match(bdpHtml, /Centre-left to left-wing bloc\./);
 });
 
+test("links breadcrumb countries to their selected Index view", async () => {
+  const html = await fetchHtml("/party/ruKPRF");
+  assert.match(html, /href="\/\?country=Russia#party-index-heading">Russia<\/a>/);
+});
+
+test("renders alliance badges with target colours and record-only comments", async () => {
+  const [indexHtml, recordHtml, styles] = await Promise.all([
+    fetchHtml(),
+    fetchHtml("/party/ruKPRF"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+  const partyNamePosition = indexHtml.indexOf("Communist Party of the Russian Federation");
+  assert.notEqual(partyNamePosition, -1);
+  const cardExcerpt = indexHtml.slice(Math.max(0, partyNamePosition - 3000), partyNamePosition + 3000);
+  assert.match(cardExcerpt, /href="\/party\/intUCPCPSU"/);
+  assert.match(cardExcerpt, />UCP–CPSU<\/a>/);
+  assert.doesNotMatch(cardExcerpt, /CPSU \(until 1991\)/);
+  assert.match(recordHtml, />International alliances</);
+  assert.match(recordHtml, /href="\/party\/intUCPCPSU"/);
+  assert.match(recordHtml, /href="\/party\/suCPSU"/);
+  assert.match(recordHtml, /CPSU \(until 1991\)/);
+  assert.match(recordHtml, /--alliance-color:#DD0302/);
+  assert.match(styles, /var\(--alliance-color/);
+});
+
+test("stores Index controls, pagination and scroll position in browser history", async () => {
+  const component = await readFile(
+    new URL("../app/components/PartyDirectory.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(component, /ppdbIndexState/);
+  assert.match(component, /window\.sessionStorage\.setItem/);
+  assert.match(component, /query,\s*sort,\s*view,\s*limit: renderLimit,\s*scrollY: window\.scrollY/s);
+  assert.match(component, /pendingScrollRef/);
+  assert.match(component, /window\.scrollTo/);
+  assert.match(component, /url\.hash = `party-\$\{partyId\}`/);
+  assert.match(component, /id=\{`party-\$\{party\.id\}`\}/);
+});
+
 test("renders missing party references as red links", async () => {
   const html = await fetchHtml("/party/atFPO");
   assert.match(html, /class="missing-party-link"/);

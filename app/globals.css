@@ -331,6 +331,23 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   background: var(--panel-hover);
   color: var(--ink);
 }
+.alliance-list { display: flex; flex-wrap: wrap; gap: 5px; }
+.alliance-badge {
+  padding: 3px 6px;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--alliance-color, #666) 18%, var(--panel-light));
+  border: 1px solid color-mix(in srgb, var(--alliance-color, #666) 62%, var(--line));
+  font-size: 10px;
+  line-height: 1.25;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.alliance-badge:hover {
+  background: color-mix(in srgb, var(--alliance-color, #666) 28%, var(--panel-light));
+  color: var(--ink);
+}
+.card-alliance-list { display: grid; gap: 4px; width: 100%; }
+.card-alliance-list .alliance-badge { padding: 3px 4px; text-align: center; font-size: 9px; }
 .seat-line { margin-top: 12px; font-family: "Courier New", Courier, monospace; font-size: 10px; }
 .seat-line span { padding-right: 5px; }
 .open-record {
@@ -414,6 +431,15 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .record-heading .literal-party-name { margin-top: 4px; font-size: 13px; font-style: italic; }
 .record-context { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .record-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 15px; }
+.record-alliances { display: grid; gap: 5px; margin-top: 11px; }
+.record-alliance-title {
+  color: var(--muted);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.record-alliance-list { gap: 6px; }
 .record-layout { display: grid; grid-template-columns: minmax(260px, 0.32fr) minmax(0, 0.68fr); gap: 12px; align-items: start; }
 .infobox { padding: 8px; }
 .infobox dl { margin: 0; border: 1px solid var(--line); }

@@ -100,13 +100,15 @@ export default async function PartyPage({ params }: PageProps) {
     { label: "Telegram", href: party.socials.telegram, text: "Telegram" },
     { label: "VK", href: party.socials.vk, text: "VK" },
   ];
+  const countryIndexHref = `/?country=${encodeURIComponent(party.country)}#party-index-heading`;
 
   return (
     <main className="site-shell">
       <SiteHeader />
       <div className="page-body record-page">
         <div className="breadcrumbs">
-          <Link href="/">Index</Link> <span>›</span> <span>{party.country}</span> <span>›</span>{" "}
+          <Link href="/">Index</Link> <span>›</span>{" "}
+          <Link href={countryIndexHref}>{party.country}</Link> <span>›</span>{" "}
           <strong>{party.acronym ?? party.name}</strong>
         </div>
 
@@ -122,7 +124,7 @@ export default async function PartyPage({ params }: PageProps) {
           <div>
             <span className="eyebrow">Party record / {party.id}</span>
             <div className="record-context">
-              <Link href={`/?country=${encodeURIComponent(party.country)}`}>
+              <Link href={countryIndexHref}>
                 <RichText text={party.country} runs={party.formatting.country} />
               </Link>
               {party.types.map((item, typeIndex) => (
@@ -160,6 +162,23 @@ export default async function PartyPage({ params }: PageProps) {
                 ),
               )}
             </div>
+            {party.alliances.length ? (
+              <div className="record-alliances">
+                <span className="record-alliance-title">International alliances</span>
+                <div className="alliance-list record-alliance-list">
+                  {party.alliances.map((alliance) => (
+                    <Link
+                      className="alliance-badge"
+                      href={`/party/${alliance.id}`}
+                      key={`${alliance.id}-${alliance.display}`}
+                      style={{ "--alliance-color": alliance.color } as React.CSSProperties}
+                    >
+                      <RichText text={alliance.display} runs={alliance.runs} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </section>
 

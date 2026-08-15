@@ -52,6 +52,11 @@ const fields = [
     "URLs",
     "Official social-media pages displayed as separate links in Party details.",
   ],
+  [
+    "ALLIANCES",
+    "Multiline wiki links",
+    "Put one international alliance on each line. The linked record supplies the badge colour. A line containing # is hidden from the Index but remains on the party page with the text after # shown as a comment.",
+  ],
   ["LAST_EDITED", "Date", "Optional maintenance date shown at the bottom of the record."],
   ["SOURCES", "URLs", "Put one source URL on each line."],
 ];
@@ -134,6 +139,19 @@ export default function DataGuidePage() {
               <p>
                 The comment is optional, but both separators are required. The final field accepts
                 a full date, month and year, a year alone, or may be left empty.
+              </p>
+            </div>
+          </section>
+          <section className="panel">
+            <div className="section-label">International alliances</div>
+            <div className="guide-copy">
+              <p>Put one wiki-style record link on each line of <code>ALLIANCES</code>:</p>
+              <pre>{`[[intUCPCPSU|UCP–CPSU]]
+[[suCPSU|CPSU]] # (until 1991)`}</pre>
+              <p>
+                The first alliance appears on the Index and party page. A line containing
+                <code> # </code> is shown only on the party page, where the comment follows the
+                alliance name without the hash character.
               </p>
             </div>
           </section>

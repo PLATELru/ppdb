@@ -19,6 +19,8 @@ In `LABELS`, put one label on each line. If a line contains `#`, the label is om
 
 In `FORMER_LOGO`, put one earlier logo on each line using `logo|comment|until`. The logo may be a local path or external URL. Leave the middle field empty when there is no comment, for example `/media/logos/Logo1.svg||2020-05`. Keep both separators even when the comment or final date is blank. Full dates, month-year values and year-only values are supported.
 
+In `ALLIANCES`, put one international alliance on each line as `[[ID]]` or `[[ID|name]]`. The linked record's `COLORCODE` colours the alliance badge. If a line contains `#`, it is omitted from the Index but remains visible on the party page with the text after `#` shown as a comment, for example `[[suCPSU|CPSU]] # (until 1991)`.
+
 `RELATIONS`, `DESCRIPTION`, `Ideology` and `LEADERSHIP` are optional prose fields. Spreadsheet line breaks, bold text and italics are preserved. Empty optional sections are not rendered.
 
 `WEBSITE` stores the current official site, while `ARCHIVED_WEBSITE` stores an archived copy. Official Facebook, YouTube, X, Instagram, TikTok, Telegram and VK URLs are shown as separate links in Party details.
