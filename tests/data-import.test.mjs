@@ -5,10 +5,26 @@ import database from "../data/parties.json" with { type: "json" };
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
 test("imports every current party record", () => {
-  assert.equal(database.schemaVersion, 8);
+  assert.equal(database.schemaVersion, 9);
   assert.equal(database.count, database.parties.length);
   assert.equal(byId.size, database.count);
   assert.ok(byId.has("bgUskorenie"));
+});
+
+test("imports and resolves redirect IDs with their historical colours", () => {
+  const redirects = new Map(database.redirects.map((redirect) => [redirect.id, redirect]));
+  assert.deepEqual(redirects.get("euELDR"), {
+    id: "euELDR",
+    targetId: "euALDE",
+    color: "#FBAD23",
+  });
+  assert.deepEqual(redirects.get("euMENF"), {
+    id: "euMENF",
+    targetId: "euPatriots",
+    color: "#004B93",
+  });
+  assert.equal(redirects.get("euECPM")?.targetId, "euECPP");
+  assert.equal(redirects.get("euECPM")?.color, byId.get("euECPP")?.color);
 });
 
 test("imports archived websites and social-media links", () => {
@@ -108,6 +124,9 @@ test("imports international alliances, their colours and Index visibility", () =
   );
   assert.equal(byId.get("ruKPRSFSR")?.alliances[0]?.id, "suCPSU");
   assert.equal(byId.get("ruKPRSFSR")?.alliances[0]?.indexVisible, true);
+  assert.equal(byId.get("mtAlpha")?.alliances[0]?.sourceId, "euELDR");
+  assert.equal(byId.get("mtAlpha")?.alliances[0]?.id, "euALDE");
+  assert.equal(byId.get("mtAlpha")?.alliances[0]?.color, "#FBAD23");
 });
 
 test("imports optional ideology and relations sections", () => {

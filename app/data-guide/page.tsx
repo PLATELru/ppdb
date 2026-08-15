@@ -121,12 +121,20 @@ export default function DataGuidePage() {
           <section className="panel">
             <div className="section-label">Internal links</div>
             <div className="guide-copy">
-              <p>Use either form of the compact wiki-like syntax inside prose fields:</p>
+              <p>Use one of these forms of the compact wiki-like syntax inside prose fields:</p>
               <pre>{`[[atOVP]]
-[[atOVP|Austrian People's Party]]`}</pre>
+[[atOVP|Austrian People's Party]]
+[[czCSSD|CSSD|#FF0000]]`}</pre>
               <p>
                 Without custom text, PPDB displays the target party&apos;s acronym, or its name when no
-                acronym exists. References to IDs without a record are shown as red links.
+                acronym exists. The optional third field overrides the colour square with a
+                six-digit hex colour. References to IDs without a record are shown as red links.
+              </p>
+              <p>
+                The <code>Redirects</code> sheet maps an old or alternative <code>ID</code> to
+                <code> Redirect to</code>. Such links open the target record but use
+                <code> ID colorcode</code> for their square. A blank redirect colour falls back to
+                the target record&apos;s colour.
               </p>
             </div>
           </section>

@@ -11,7 +11,9 @@ Everything below is AI-written.
 
 `data/parties.json` is a generated build artifact, not a second database. Do not edit it when adding or correcting records: every production build recreates it from `PPDB database.xlsx` before the site is compiled.
 
-The ID is the stable key used in URLs and internal links. For example, `atOVP` becomes `/party/atOVP/`. Inside a prose field, write `[[atOVP|Austrian People's Party]]` to set the visible text explicitly, or `[[atOVP]]` to use the target party's acronym (falling back to its name). Missing target IDs are rendered as red links.
+The ID is the stable key used in URLs and internal links. For example, `atOVP` becomes `/party/atOVP/`. Inside a prose field, write `[[atOVP|Austrian People's Party]]` to set the visible text explicitly, or `[[atOVP]]` to use the target party's acronym (falling back to its name). Add a third field to override the link swatch, for example `[[czCSSD|CSSD|#FF0000]]`. Missing target IDs are rendered as red links.
+
+The `Redirects` sheet maps former or alternative IDs to current records. Its columns are `ID`, optional `ID colorcode`, and `Redirect to`. Links using a redirect ID open the target record while retaining the redirect colour; when that colour is blank, PPDB uses the final target's colour. Redirect targets are validated during import, including chained redirects and cycles.
 
 Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
 

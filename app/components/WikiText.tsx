@@ -1,29 +1,39 @@
 import Link from "next/link";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
-import { getParty, type RichTextRun } from "../../lib/parties";
-import { partyLinkLabel } from "../../lib/wiki-links";
+import { resolvePartyLink, type RichTextRun } from "../../lib/parties";
+import {
+  parsePartyLinkMarkup,
+  partyLinkColor,
+  partyLinkLabel,
+} from "../../lib/wiki-links";
 
 function InlineWikiText({ text }: { text: string }) {
-  const pattern = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+  const pattern = /\[\[([^\]]+)\]\]/g;
   const parts: ReactNode[] = [];
   let cursor = 0;
   let match;
 
   while ((match = pattern.exec(text)) !== null) {
     if (match.index > cursor) parts.push(text.slice(cursor, match.index));
-    const [, rawId, label] = match;
-    const id = rawId.trim();
-    const linkedParty = getParty(id);
+    const markup = parsePartyLinkMarkup(match[1]);
+    if (!markup) {
+      parts.push(match[0]);
+      cursor = pattern.lastIndex;
+      continue;
+    }
+    const { id, label, color: explicitColor } = markup;
+    const { party: linkedParty, targetId, redirect } = resolvePartyLink(id);
     const displayLabel = partyLinkLabel(linkedParty, id, label);
+    const swatchColor = partyLinkColor(explicitColor, redirect?.color, linkedParty?.color);
     parts.push(
       linkedParty ? (
         <span className="party-inline-link" key={`${id}-${match.index}`}>
           <span
             className="party-link-swatch"
-            style={{ "--party-link-color": linkedParty.color } as CSSProperties}
+            style={{ "--party-link-color": swatchColor } as CSSProperties}
             aria-hidden="true"
           />
-          <Link href={`/party/${linkedParty.id}`}>{displayLabel}</Link>
+          <Link href={`/party/${targetId}`}>{displayLabel}</Link>
         </span>
       ) : (
         <Link

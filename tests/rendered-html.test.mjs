@@ -119,6 +119,17 @@ test("renders alliance badges with target colours and record-only comments", asy
   assert.match(styles, /var\(--alliance-color/);
 });
 
+test("resolves redirect links while keeping redirect colours", async () => {
+  const [relationsHtml, allianceHtml] = await Promise.all([
+    fetchHtml("/party/euESN"),
+    fetchHtml("/party/mtAlpha"),
+  ]);
+  assert.match(relationsHtml, /--party-link-color:#184388/);
+  assert.match(relationsHtml, /href="\/party\/euPatriots"[^>]*>Identity and Democracy Party<\/a>/);
+  assert.match(allianceHtml, /--alliance-color:#FBAD23/);
+  assert.match(allianceHtml, /href="\/party\/euALDE"[^>]*>ELDR<\/a>/);
+});
+
 test("stores Index controls, pagination and scroll position in browser history", async () => {
   const component = await readFile(
     new URL("../app/components/PartyDirectory.tsx", import.meta.url),

@@ -38,6 +38,15 @@ function number(value) {
   return Number.isFinite(result) ? result : null;
 }
 
+function redirectColor(value, context) {
+  const result = text(value);
+  if (!result) return null;
+  if (!/^#[0-9a-f]{6}$/i.test(result)) {
+    throw new Error(`${context}: expected a six-digit hex colour such as #FF0000.`);
+  }
+  return result;
+}
+
 function sheetStyleIds(workbookValue, targetSheetName) {
   const sheetIndex = workbookValue.SheetNames.indexOf(targetSheetName);
   if (sheetIndex < 0) return new Map();
@@ -323,6 +332,32 @@ const legislatureData = new Map(
   }),
 );
 
+const redirectsSheet = workbook.Sheets.Redirects;
+const redirectRows = redirectsSheet
+  ? XLSX.utils.sheet_to_json(redirectsSheet, { header: 1, raw: true, defval: null })
+  : [];
+const redirectHeaders = (redirectRows[0] ?? []).map((value) => String(value ?? "").trim());
+const redirectIndex = Object.fromEntries(
+  redirectHeaders.map((header, column) => [header, column]),
+);
+const rawRedirects = redirectRows.slice(1).flatMap((row, rowOffset) => {
+  const id = text(row[redirectIndex.ID]);
+  const targetId = text(row[redirectIndex["Redirect to"]]);
+  if (!id && !targetId) return [];
+  const rowNumber = rowOffset + 2;
+  if (!id || !targetId) {
+    throw new Error(`Redirects row ${rowNumber} must contain both ID and Redirect to.`);
+  }
+  return [{
+    id,
+    targetId,
+    color: redirectColor(
+      row[redirectIndex["ID colorcode"]],
+      `ID colorcode at Redirects row ${rowNumber} (${id})`,
+    ),
+  }];
+});
+
 function splitSources(value) {
   return String(value ?? "")
     .split(/\r?\n/)
@@ -437,18 +472,65 @@ const parties = rows
   );
 
 const partyById = new Map(parties.map((party) => [party.id.toLowerCase(), party]));
+const rawRedirectById = new Map();
+for (const redirect of rawRedirects) {
+  const key = redirect.id.toLowerCase();
+  if (partyById.has(key)) {
+    throw new Error(`Redirect ID conflicts with a party ID: ${redirect.id}`);
+  }
+  if (rawRedirectById.has(key)) {
+    throw new Error(`Duplicate redirect ID: ${redirect.id}`);
+  }
+  rawRedirectById.set(key, redirect);
+}
+
+const resolvedRedirectById = new Map();
+function resolveRedirect(id, stack = []) {
+  const key = id.toLowerCase();
+  const cached = resolvedRedirectById.get(key);
+  if (cached) return cached;
+  const redirect = rawRedirectById.get(key);
+  if (!redirect) return null;
+  if (stack.includes(key)) {
+    const cycle = [...stack, key]
+      .map((item) => rawRedirectById.get(item)?.id ?? item)
+      .join(" → ");
+    throw new Error(`Redirect cycle: ${cycle}`);
+  }
+
+  const directParty = partyById.get(redirect.targetId.toLowerCase());
+  const nestedRedirect = directParty
+    ? null
+    : resolveRedirect(redirect.targetId, [...stack, key]);
+  if (!directParty && !nestedRedirect) {
+    throw new Error(`Redirect ${redirect.id} points to missing ID: ${redirect.targetId}`);
+  }
+  const targetParty = directParty ?? partyById.get(nestedRedirect.targetId.toLowerCase());
+  const resolved = {
+    id: redirect.id,
+    targetId: targetParty.id,
+    color: redirect.color ?? nestedRedirect?.color ?? targetParty.color ?? "#666666",
+  };
+  resolvedRedirectById.set(key, resolved);
+  return resolved;
+}
+
+const redirects = rawRedirects.map((redirect) => resolveRedirect(redirect.id));
 for (const party of parties) {
   party.alliances = party.alliances.map((alliance) => {
-    const target = partyById.get(alliance.id.toLowerCase());
+    const redirect = resolvedRedirectById.get(alliance.id.toLowerCase());
+    const targetId = redirect?.targetId ?? alliance.id;
+    const target = partyById.get(targetId.toLowerCase());
     const name = alliance.name ?? target?.acronym ?? target?.name ?? alliance.id;
     const display = alliance.comment ? `${name} ${alliance.comment}` : name;
     return {
-      id: alliance.id,
+      id: target?.id ?? targetId,
+      sourceId: alliance.id,
       name,
       display,
       comment: alliance.comment,
       indexVisible: alliance.indexVisible,
-      color: target?.color ?? "#666666",
+      color: redirect?.color ?? target?.color ?? "#666666",
       runs: [{ text: display, bold: false, italic: false }],
     };
   });
@@ -467,9 +549,10 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 8,
+      schemaVersion: 9,
       source: "data/PPDB database.xlsx",
       count: parties.length,
+      redirects,
       parties,
     },
     null,
