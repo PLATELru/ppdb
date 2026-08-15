@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { dateSortKey, formatLifeSpan, type Party } from "../../lib/parties";
 import { comparePartiesBySeats } from "../../lib/party-sort";
 import { LogoImage } from "./LogoImage";
@@ -13,6 +21,97 @@ type Props = {
 };
 
 const INDEX_PAGE_SIZE = 100;
+const INDEX_ENTRY_ID_KEY = "ppdbIndexEntryId";
+const INDEX_STATE_KEY = "ppdbIndexState";
+const INDEX_SESSION_PREFIX = "ppdb:index-state:";
+const INDEX_URL_SESSION_PREFIX = "ppdb:index-state:url:";
+const INDEX_SORTS = new Set(["seats", "name", "country", "status", "label", "newest", "oldest"]);
+
+type IndexHistoryState = {
+  query: string;
+  sort: string;
+  view: "cards" | "rows";
+  limit: number;
+  scrollY: number;
+};
+
+function getIndexEntryId() {
+  const historyState = window.history.state ?? {};
+  const existing = historyState[INDEX_ENTRY_ID_KEY];
+  if (typeof existing === "string" && existing) return existing;
+  const entryId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
+  window.history.replaceState(
+    { ...historyState, [INDEX_ENTRY_ID_KEY]: entryId },
+    "",
+    window.location.href,
+  );
+  return entryId;
+}
+
+function normalizeIndexHistoryState(value: unknown): IndexHistoryState | null {
+  if (!value || typeof value !== "object") return null;
+  const state = value as Partial<IndexHistoryState>;
+  if (
+    typeof state.query !== "string" ||
+    typeof state.sort !== "string" ||
+    !INDEX_SORTS.has(state.sort) ||
+    (state.view !== "cards" && state.view !== "rows") ||
+    !Number.isFinite(state.limit) ||
+    !Number.isFinite(state.scrollY)
+  ) return null;
+
+  return {
+    query: state.query,
+    sort: state.sort,
+    view: state.view,
+    limit: Math.max(INDEX_PAGE_SIZE, Math.floor(state.limit ?? INDEX_PAGE_SIZE)),
+    scrollY: Math.max(0, state.scrollY ?? 0),
+  };
+}
+
+function readIndexHistoryState() {
+  if (window.location.hash === "#party-index-heading") return null;
+  const historyState = window.history.state ?? {};
+  const direct = normalizeIndexHistoryState(historyState[INDEX_STATE_KEY]);
+  if (direct) return direct;
+
+  const entryId = historyState[INDEX_ENTRY_ID_KEY];
+  try {
+    const entryState = typeof entryId === "string" && entryId
+      ? normalizeIndexHistoryState(
+          JSON.parse(window.sessionStorage.getItem(`${INDEX_SESSION_PREFIX}${entryId}`) ?? "null"),
+        )
+      : null;
+    if (entryState) return entryState;
+    return normalizeIndexHistoryState(
+      JSON.parse(
+        window.sessionStorage.getItem(
+          `${INDEX_URL_SESSION_PREFIX}${window.location.pathname}${window.location.search}`,
+        ) ?? "null",
+      ),
+    );
+  } catch {
+    return null;
+  }
+}
+
+function writeIndexHistoryState(state: IndexHistoryState) {
+  const entryId = getIndexEntryId();
+  window.history.replaceState(
+    { ...(window.history.state ?? {}), [INDEX_STATE_KEY]: state },
+    "",
+    window.location.href,
+  );
+  try {
+    window.sessionStorage.setItem(`${INDEX_SESSION_PREFIX}${entryId}`, JSON.stringify(state));
+    window.sessionStorage.setItem(
+      `${INDEX_URL_SESSION_PREFIX}${window.location.pathname}${window.location.search}`,
+      JSON.stringify(state),
+    );
+  } catch {
+    // History state remains the primary restoration mechanism when storage is unavailable.
+  }
+}
 
 function SeatValue({
   label,
@@ -67,16 +166,18 @@ function updateUrlFilters(filters: { label?: string; country?: string; type?: st
     if (value && value !== "all") url.searchParams.set(name, value);
     else url.searchParams.delete(name);
   });
-  window.history.replaceState({}, "", url);
+  window.history.replaceState({ ...(window.history.state ?? {}) }, "", url);
   window.dispatchEvent(new Event("ppdb-filter-change"));
 }
 
 export function PartyDirectory({ countries, parties }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const pendingScrollRef = useRef<number | null>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("seats");
   const [view, setView] = useState<"cards" | "rows">("cards");
+  const [historyReady, setHistoryReady] = useState(false);
   const activeLabel = useSyncExternalStore(subscribeToUrlFilters, getUrlLabel, () => "");
   const country = useSyncExternalStore(subscribeToUrlFilters, getUrlCountry, () => "all");
   const type = useSyncExternalStore(subscribeToUrlFilters, getUrlType, () => "all");
@@ -84,6 +185,73 @@ export function PartyDirectory({ countries, parties }: Props) {
   const paginationKey = JSON.stringify([activeLabel, country, query, sort, status, type]);
   const [pagination, setPagination] = useState({ key: paginationKey, limit: INDEX_PAGE_SIZE });
   const renderLimit = pagination.key === paginationKey ? pagination.limit : INDEX_PAGE_SIZE;
+
+  useLayoutEffect(() => {
+    const restored = readIndexHistoryState();
+    let cancelled = false;
+    window.queueMicrotask(() => {
+      if (cancelled) return;
+      if (restored) {
+        setQuery(restored.query);
+        setSort(restored.sort);
+        setView(restored.view);
+        pendingScrollRef.current = restored.scrollY;
+        setPagination({
+          key: JSON.stringify([
+            getUrlLabel(),
+            getUrlCountry(),
+            restored.query,
+            restored.sort,
+            getUrlStatus(),
+            getUrlType(),
+          ]),
+          limit: restored.limit,
+        });
+      }
+      setHistoryReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const rememberIndexState = useCallback(() => {
+    if (!historyReady || pendingScrollRef.current != null) return;
+    writeIndexHistoryState({
+      query,
+      sort,
+      view,
+      limit: renderLimit,
+      scrollY: window.scrollY,
+    });
+  }, [historyReady, query, renderLimit, sort, view]);
+
+  const rememberPartyPosition = useCallback((partyId: string) => {
+    const url = new URL(window.location.href);
+    url.hash = `party-${partyId}`;
+    window.history.replaceState({ ...(window.history.state ?? {}) }, "", url);
+    rememberIndexState();
+  }, [rememberIndexState]);
+
+  useEffect(() => {
+    rememberIndexState();
+  }, [rememberIndexState]);
+
+  useEffect(() => {
+    if (!historyReady) return;
+    let animationFrame = 0;
+    const saveScroll = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(rememberIndexState);
+    };
+    window.addEventListener("scroll", saveScroll, { passive: true });
+    window.addEventListener("pagehide", rememberIndexState);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", saveScroll);
+      window.removeEventListener("pagehide", rememberIndexState);
+    };
+  }, [historyReady, rememberIndexState]);
 
   const types = useMemo(
     () =>
@@ -152,6 +320,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           party.formerNames,
           ...party.labels,
           ...party.labelDetails.map((label) => label.display),
+          ...party.alliances.map((alliance) => alliance.display),
         ]
           .filter(Boolean)
           .join(" ")
@@ -276,6 +445,36 @@ export function PartyDirectory({ countries, parties }: Props) {
     };
   }, [renderedParties, view]);
 
+  useEffect(() => {
+    if (!historyReady || pendingScrollRef.current == null) return;
+    const targetScrollY = pendingScrollRef.current;
+    let attempts = 0;
+    let animationFrame = 0;
+    const restoreScroll = () => {
+      const anchorId = decodeURIComponent(window.location.hash.slice(1));
+      const anchor = anchorId ? document.getElementById(anchorId) : null;
+      const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const anchorScrollY = anchor
+        ? window.scrollY + anchor.getBoundingClientRect().top - window.innerHeight / 3
+        : 0;
+      const desiredScrollY = targetScrollY > 0 ? targetScrollY : anchorScrollY;
+      window.scrollTo({
+        top: Math.min(Math.max(0, desiredScrollY), maxScrollY),
+        behavior: "auto",
+      });
+      attempts += 1;
+      if (attempts < 12 && (!anchor || window.scrollY < desiredScrollY - 2)) {
+        animationFrame = window.requestAnimationFrame(restoreScroll);
+      } else {
+        pendingScrollRef.current = null;
+      }
+    };
+    animationFrame = window.requestAnimationFrame(() => {
+      animationFrame = window.requestAnimationFrame(restoreScroll);
+    });
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [historyReady, renderedParties.length, view]);
+
   return (
     <section className="panel directory-panel" aria-labelledby="party-index-heading">
       <div className="section-label" id="party-index-heading">
@@ -294,7 +493,7 @@ export function PartyDirectory({ countries, parties }: Props) {
           <span className="sr-only">Search parties</span>
           <input
             type="search"
-            placeholder="Search name, acronym, country, type, status or label"
+            placeholder="Search name, acronym, country, type, status, label or alliance"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -392,12 +591,18 @@ export function PartyDirectory({ countries, parties }: Props) {
           {renderedParties.map((party) => (
             <article
               className="party-card"
+              id={`party-${party.id}`}
               key={party.id}
               style={{ "--party-color": party.color } as React.CSSProperties}
             >
               <div className="card-link">
                 <div className="party-card-media">
-                  <Link className="party-logo-wrap" href={`/party/${party.id}`} aria-label={`View ${party.name}`}>
+                  <Link
+                    className="party-logo-wrap"
+                    href={`/party/${party.id}`}
+                    aria-label={`View ${party.name}`}
+                    onClick={() => rememberPartyPosition(party.id)}
+                  >
                     <LogoImage
                       src={party.logo}
                       alt=""
@@ -406,11 +611,35 @@ export function PartyDirectory({ countries, parties }: Props) {
                       fallbackClassName="logo-placeholder"
                     />
                   </Link>
-                  <Link className="open-record" href={`/party/${party.id}`}>Open record →</Link>
+                  <Link
+                    className="open-record"
+                    href={`/party/${party.id}`}
+                    onClick={() => rememberPartyPosition(party.id)}
+                  >
+                    Open record →
+                  </Link>
+                  {party.alliances.some((alliance) => alliance.indexVisible) ? (
+                    <div className="alliance-list card-alliance-list" aria-label="International alliances">
+                      {party.alliances.filter((alliance) => alliance.indexVisible).map((alliance) => (
+                        <Link
+                          className="alliance-badge"
+                          href={`/party/${alliance.id}`}
+                          key={`${alliance.id}-${alliance.display}`}
+                          onClick={() => rememberPartyPosition(party.id)}
+                          style={{ "--alliance-color": alliance.color } as React.CSSProperties}
+                        >
+                          <RichText text={alliance.display} runs={alliance.runs} />
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
                 <div className="party-card-copy">
                   <h2>
-                    <Link href={`/party/${party.id}`}>
+                    <Link
+                      href={`/party/${party.id}`}
+                      onClick={() => rememberPartyPosition(party.id)}
+                    >
                       <RichText text={party.name} runs={party.formatting.name} />
                     </Link>
                   </h2>

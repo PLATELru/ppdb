@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IndexHistoryRestorer } from "./components/IndexHistoryRestorer";
 import "./globals.css";
 
 const assetPrefix = process.env.GITHUB_PAGES === "true" ? "/ppdb" : "";
@@ -23,7 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <IndexHistoryRestorer />
+        {children}
+      </body>
     </html>
   );
 }

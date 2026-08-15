@@ -5,7 +5,7 @@ import database from "../data/parties.json" with { type: "json" };
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
 test("imports every current party record", () => {
-  assert.equal(database.schemaVersion, 7);
+  assert.equal(database.schemaVersion, 8);
   assert.equal(database.count, database.parties.length);
   assert.equal(byId.size, database.count);
   assert.ok(byId.has("bgUskorenie"));
@@ -74,6 +74,40 @@ test("imports multiline labels, comments and record types", () => {
   assert.equal(formerLabel?.indexVisible, false);
   assert.deepEqual(byId.get("atOVP")?.types, ["Party"]);
   assert.deepEqual(byId.get("peJP")?.types, ["Party", "Coalition"]);
+});
+
+test("imports international alliances, their colours and Index visibility", () => {
+  const kprf = byId.get("ruKPRF");
+  assert.deepEqual(
+    kprf?.alliances.map(({ id, name, display, comment, indexVisible, color }) => ({
+      id,
+      name,
+      display,
+      comment,
+      indexVisible,
+      color,
+    })),
+    [
+      {
+        id: "intUCPCPSU",
+        name: "UCP–CPSU",
+        display: "UCP–CPSU",
+        comment: null,
+        indexVisible: true,
+        color: "#DD0302",
+      },
+      {
+        id: "suCPSU",
+        name: "CPSU",
+        display: "CPSU (until 1991)",
+        comment: "(until 1991)",
+        indexVisible: false,
+        color: byId.get("suCPSU")?.color,
+      },
+    ],
+  );
+  assert.equal(byId.get("ruKPRSFSR")?.alliances[0]?.id, "suCPSU");
+  assert.equal(byId.get("ruKPRSFSR")?.alliances[0]?.indexVisible, true);
 });
 
 test("imports optional ideology and relations sections", () => {
