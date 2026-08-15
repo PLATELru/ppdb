@@ -109,6 +109,13 @@ test("renders proportional seat bars when legislature totals are known", async (
   assert.match(html, /aria-label="Federation Council: 136 of 178 seats"/);
 });
 
+test("renders former-logo dates from the multiline spreadsheet field", async () => {
+  const html = await fetchHtml("/party/ltTSLKD");
+  assert.match(html, />Former logos</);
+  assert.match(html, /Used until (?:<!-- -->)?May 2020/);
+  assert.match(html, /Used until (?:<!-- -->)?2004/);
+});
+
 test("sizes each visible logo frame to the source aspect ratio without a cropped duplicate", async () => {
   const [component, styles] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
