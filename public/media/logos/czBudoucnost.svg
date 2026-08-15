@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="37.383801"
+   height="30"
+   viewBox="0 0 37.383801 30"
+   fill="none"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="czBudoucnost.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="5.266055"
+     inkscape:cx="109"
+     inkscape:cy="15.001742"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M 35.3818,7.21942 C 34.7272,6.22134 33.1571,6.02829 32.0841,6.59831 c -1.079,0.57325 -1.7578,1.68534 -1.2329,2.73343 0.859,1.71386 1.341,3.63686 1.341,5.66856 0,7.1979 -6.0442,13.0331 -13.5003,13.0331 -7.4561,0 -13.49973,-5.8352 -13.50027,-13.0331 0,-7.19794 6.04417,-13.03318 13.50027,-13.03318 4.4935,0 7.888,2.15427 9.5926,3.85897 0.1124,0.11239 0.2678,0.18176 0.4394,0.18176 0.3432,0 0.6213,-0.27802 0.6213,-0.62111 0,-0.13982 -0.0463,-0.26834 -0.1243,-0.37213 C 27.3271,2.49037 23.0778,0 18.6919,0 9.77653,0 0,5.99172 0,16.1957 0,22.7123 5.56815,30 18.6919,30 27.6073,30 37.3838,24.0083 37.3838,13.8038 37.3833,11.593 36.7416,9.29303 35.3818,7.21942 Z"
+     fill="#920b4c"
+     id="path4" />
+</svg>
