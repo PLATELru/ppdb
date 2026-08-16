@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="316.22076"
+   viewBox="0 0 452.35999 452.34001"
+   width="316.22775"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="ptPPM.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="1.6658707"
+     inkscape:cx="100.24788"
+     inkscape:cy="157.27511"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <g
+     fill="#2a5392"
+     id="g8"
+     style="fill:#13499a;fill-opacity:1"
+     transform="translate(0,-0.0049915)">
+    <path
+       d="m 213.02,300.62 h -7.01 v 10.77 h 7.01 c 2.97,0 5.38,-2.41 5.38,-5.38 0,-2.97 -2.41,-5.38 -5.38,-5.38 z"
+       id="path2"
+       style="fill:#13499a;fill-opacity:1" />
+    <path
+       d="m 294.2,300.62 h -7.01 v 10.77 h 7.01 c 2.97,0 5.38,-2.41 5.38,-5.38 0,-2.97 -2.41,-5.38 -5.38,-5.38 z"
+       id="path4"
+       style="fill:#13499a;fill-opacity:1" />
+    <path
+       d="m 406.73,324.88 -18.88,22.05 -18.71,-22.02 v 39.1 h -27.51 v -85.62 h 22.81 l 23.5,29.14 23.5,-29.14 h 22.81 v 36.58 C 445.9,287.71 452.36,257.7 452.36,226.18 452.36,101.27 351.1,0 226.18,0 147.25,0 77.8,40.46 37.34,101.74 c 2.29,35.01 23.81,65.71 56.14,76.31 V 86.64 h 50.24 v 91.75 c 34.18,-10.25 57.07,-41.2 57.64,-78.16 h 48.38 c 2.62,62.66 -43.52,118.4 -106.02,129.39 V 364 H 93.48 V 228.74 C 57.05,221.12 26.45,198.74 7.56,168.11 2.65,186.64 0,206.09 0,226.17 c 0,124.91 101.26,226.18 226.18,226.18 73.76,0 139.26,-35.33 180.55,-89.97 v -37.53 z m -187.9,9.41 h -12.82 v 29.74 h -27.94 v -85.62 h 40.76 c 15.37,0 27.94,12.57 27.94,27.94 0,15.37 -12.57,27.94 -27.94,27.94 z m 81.17,0 h -12.82 v 29.74 H 259.24 V 278.41 H 300 c 15.37,0 27.94,12.57 27.94,27.94 0,15.37 -12.57,27.94 -27.94,27.94 z"
+       id="path6"
+       style="fill:#13499a;fill-opacity:1" />
+  </g>
+</svg>
