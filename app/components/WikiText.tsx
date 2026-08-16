@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
-import { resolvePartyLink, type RichTextRun } from "../../lib/parties";
+import { resolvePartyLink } from "../../lib/parties";
+import type { RichTextRun } from "../../lib/rich-text";
 import {
   parsePartyLinkMarkup,
   partyLinkColor,

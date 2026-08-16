@@ -10,14 +10,16 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { dateSortKey, formatLifeSpan, type Party } from "../../lib/parties";
+import { dateSortKey, formatLifeSpan } from "../../lib/party-dates";
+import type { PartyIndexEntry, PartyIndexPayload } from "../../lib/party-index";
 import { comparePartiesBySeats } from "../../lib/party-sort";
+import { FormattedText as RichText } from "./FormattedText";
 import { LogoImage } from "./LogoImage";
-import { RichText } from "./WikiText";
 
 type Props = {
   countries: string[];
-  parties: Party[];
+  initialParties: PartyIndexEntry[];
+  totalCount: number;
 };
 
 const INDEX_PAGE_SIZE = 100;
@@ -170,10 +172,15 @@ function updateUrlFilters(filters: { label?: string; country?: string; type?: st
   window.dispatchEvent(new Event("ppdb-filter-change"));
 }
 
-export function PartyDirectory({ countries, parties }: Props) {
+export function PartyDirectory({ countries, initialParties, totalCount }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef<number | null>(null);
+  const [parties, setParties] = useState(initialParties);
+  const [indexStatus, setIndexStatus] = useState<"loading" | "ready" | "error">(
+    initialParties.length >= totalCount ? "ready" : "loading",
+  );
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("seats");
   const [view, setView] = useState<"cards" | "rows">("cards");
@@ -185,6 +192,34 @@ export function PartyDirectory({ countries, parties }: Props) {
   const paginationKey = JSON.stringify([activeLabel, country, query, sort, status, type]);
   const [pagination, setPagination] = useState({ key: paginationKey, limit: INDEX_PAGE_SIZE });
   const renderLimit = pagination.key === paginationKey ? pagination.limit : INDEX_PAGE_SIZE;
+
+  useEffect(() => {
+    if (initialParties.length >= totalCount) return;
+
+    const controller = new AbortController();
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+    void fetch(`${basePath}/data/party-index.json`, {
+      cache: "force-cache",
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Index request failed with ${response.status}`);
+        return response.json() as Promise<PartyIndexPayload>;
+      })
+      .then((payload) => {
+        if (!Array.isArray(payload.parties) || payload.count !== totalCount) {
+          throw new Error("The index payload does not match the current database.");
+        }
+        setParties(payload.parties);
+        setIndexStatus("ready");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setIndexStatus("error");
+      });
+
+    return () => controller.abort();
+  }, [initialParties.length, loadAttempt, totalCount]);
 
   useLayoutEffect(() => {
     const restored = readIndexHistoryState();
@@ -318,7 +353,6 @@ export function PartyDirectory({ countries, parties }: Props) {
           ...party.types,
           party.status,
           party.formerNames,
-          ...party.labels,
           ...party.labelDetails.map((label) => label.display),
           ...party.alliances.map((alliance) => alliance.display),
         ]
@@ -396,15 +430,18 @@ export function PartyDirectory({ countries, parties }: Props) {
     return () => observer.disconnect();
   }, [hasMore, paginationKey, visible.length]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
     const cards = Array.from(grid.querySelectorAll<HTMLElement>(".party-card"));
+    grid.classList.remove("masonry-ready");
     if (view === "rows") {
       cards.forEach((card) => card.style.removeProperty("grid-row-end"));
       return;
     }
+
+    grid.classList.add("masonry-ready");
 
     let animationFrame = 0;
     const measureCards = () => {
@@ -436,11 +473,12 @@ export function PartyDirectory({ countries, parties }: Props) {
       const content = card.querySelector<HTMLElement>(".card-link");
       if (content) resizeObserver.observe(content);
     });
-    scheduleMeasure();
+    measureCards();
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
+      grid.classList.remove("masonry-ready");
       cards.forEach((card) => card.style.removeProperty("grid-row-end"));
     };
   }, [renderedParties, view]);
@@ -476,16 +514,34 @@ export function PartyDirectory({ countries, parties }: Props) {
   }, [historyReady, renderedParties.length, view]);
 
   return (
-    <section className="panel directory-panel" aria-labelledby="party-index-heading">
+    <section
+      className="panel directory-panel"
+      aria-busy={indexStatus === "loading"}
+      aria-labelledby="party-index-heading"
+    >
       <div className="section-label" id="party-index-heading">
         Index
       </div>
 
       <div className="directory-summary">
         <div>
-          <strong>{visible.length}</strong> of {parties.length} party records
+          <strong>{visible.length}</strong> of {totalCount} party records
         </div>
-        <div>{countries.length} countries represented</div>
+        <div className="index-load-status" role="status">
+          <span>{countries.length} countries represented</span>
+          {indexStatus === "loading" ? <span>Loading full index…</span> : null}
+          {indexStatus === "error" ? (
+            <button
+              type="button"
+              onClick={() => {
+                setIndexStatus("loading");
+                setLoadAttempt((value) => value + 1);
+              }}
+            >
+              Retry loading all entries
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <div className="toolbar">
@@ -600,6 +656,7 @@ export function PartyDirectory({ countries, parties }: Props) {
                   <Link
                     className="party-logo-wrap"
                     href={`/party/${party.id}`}
+                    prefetch={false}
                     aria-label={`View ${party.name}`}
                     onClick={() => rememberPartyPosition(party.id)}
                   >
@@ -609,11 +666,13 @@ export function PartyDirectory({ countries, parties }: Props) {
                       className="party-logo"
                       fallback={party.acronym ?? party.name.slice(0, 2)}
                       fallbackClassName="logo-placeholder"
+                      thumbnail
                     />
                   </Link>
                   <Link
                     className="open-record"
                     href={`/party/${party.id}`}
+                    prefetch={false}
                     onClick={() => rememberPartyPosition(party.id)}
                   >
                     Open record →
@@ -624,6 +683,7 @@ export function PartyDirectory({ countries, parties }: Props) {
                         <Link
                           className="alliance-badge"
                           href={`/party/${alliance.id}`}
+                          prefetch={false}
                           key={`${alliance.id}-${alliance.display}`}
                           onClick={() => rememberPartyPosition(party.id)}
                           style={{ "--alliance-color": alliance.color } as React.CSSProperties}
@@ -638,6 +698,7 @@ export function PartyDirectory({ countries, parties }: Props) {
                   <h2>
                     <Link
                       href={`/party/${party.id}`}
+                      prefetch={false}
                       onClick={() => rememberPartyPosition(party.id)}
                     >
                       <RichText text={party.name} runs={party.formatting.name} />

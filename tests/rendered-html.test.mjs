@@ -202,3 +202,55 @@ test("renders the index in batches of 100 and observes the scroll sentinel", asy
   assert.match(component, /current\.limit : INDEX_PAGE_SIZE\) \+ INDEX_PAGE_SIZE/);
   assert.match(component, /ref=\{loadMoreRef\}/);
 });
+
+test("ships only a compact first batch and loads the complete index after hydration", async () => {
+  const [html, component, page, rawIndex] = await Promise.all([
+    fetchHtml(),
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../public/data/party-index.json", import.meta.url), "utf8"),
+  ]);
+  const index = JSON.parse(rawIndex);
+
+  assert.equal((html.match(/class="party-card"/g) ?? []).length, 100);
+  assert.match(page, /\.slice\(0, INDEX_PAGE_SIZE\)/);
+  assert.match(component, /fetch\(`\$\{basePath\}\/data\/party-index\.json`/);
+  assert.doesNotMatch(component, /from ["']\.\.\/\.\.\/lib\/parties["']/);
+  assert.equal(index.count, index.parties.length);
+  assert.equal(Object.hasOwn(index.parties[0], "description"), false);
+  assert.equal(Object.hasOwn(index.parties[0], "sources"), false);
+});
+
+test("keeps cards separated before hydration and enables masonry in a layout effect", async () => {
+  const [component, styles] = await Promise.all([
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(styles, /\.party-grid \{[\s\S]*?grid-auto-flow: row;[\s\S]*?grid-auto-rows: auto;/);
+  assert.match(styles, /\.party-grid\.masonry-ready \{[\s\S]*?grid-auto-flow: dense;[\s\S]*?grid-auto-rows: 1px;/);
+  assert.match(component, /useLayoutEffect\(\(\) => \{[\s\S]*?classList\.add\("masonry-ready"\)/);
+});
+
+test("uses generated low-resolution thumbnails for Index logos", async () => {
+  const [component, generator] = await Promise.all([
+    readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../scripts/generate-logo-thumbnails.mjs", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(component, /\/media\/logo-thumbnails\//);
+  assert.match(component, /decoding="async"/);
+  assert.match(component, /fetchPriority=\{thumbnail \? "low" : undefined\}/);
+  assert.match(generator, /width: 192/);
+  assert.match(generator, /\.webp\(/);
+});
+
+test("renders primary navigation as native links that work before hydration", async () => {
+  const [html, header] = await Promise.all([
+    fetchHtml(),
+    readFile(new URL("../app/components/SiteHeader.tsx", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(html, /href="\/data-guide\/">Data guide<\/a>/);
+  assert.doesNotMatch(header, /from "next\/link"/);
+});

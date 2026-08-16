@@ -20,6 +20,14 @@
 import { PartyDirectory } from "./components/PartyDirectory";
 import { SiteHeader } from "./components/SiteHeader";
 import { countries, parties } from "../lib/parties";
+import { toPartyIndexEntry } from "../lib/party-index";
+import { comparePartiesBySeats } from "../lib/party-sort";
+
+const INDEX_PAGE_SIZE = 100;
+const initialParties = parties
+  .map(toPartyIndexEntry)
+  .sort(comparePartiesBySeats)
+  .slice(0, INDEX_PAGE_SIZE);
 
 export default function Home() {
   return (
@@ -38,7 +46,11 @@ export default function Home() {
           </p>
         </section>
 
-        <PartyDirectory countries={countries} parties={parties} />
+        <PartyDirectory
+          countries={countries}
+          initialParties={initialParties}
+          totalCount={parties.length}
+        />
       </div>
       <footer>
         <span>PPDB — Political Parties Database</span>

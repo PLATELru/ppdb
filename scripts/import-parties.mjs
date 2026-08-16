@@ -6,6 +6,7 @@ import { parseFormerLogos } from "../lib/former-logos.mjs";
 const root = process.cwd();
 const inputPath = path.join(root, "data", "PPDB database.xlsx");
 const outputPath = path.join(root, "data", "parties.json");
+const indexOutputPath = path.join(root, "public", "data", "party-index.json");
 
 const workbook = XLSX.readFile(inputPath, {
   bookFiles: true,
@@ -545,6 +546,45 @@ for (const party of parties) {
   ids.add(party.id);
 }
 
+const indexParties = parties.map((party) => ({
+  id: party.id,
+  country: party.country,
+  name: party.name,
+  nativeName: party.nativeName,
+  literalName: party.literalName,
+  acronym: party.acronym,
+  formerNames: party.formerNames,
+  types: party.types,
+  status: party.status,
+  labelDetails: party.labelDetails.map(({ name, display, runs, indexVisible }) => ({
+    name,
+    display,
+    runs,
+    indexVisible,
+  })),
+  alliances: party.alliances.map(({ id, display, runs, color, indexVisible }) => ({
+    id,
+    display,
+    runs,
+    color,
+    indexVisible,
+  })),
+  established: party.established,
+  dissolved: party.dissolved,
+  seats: party.seats,
+  color: party.color,
+  logo: party.logo,
+  formatting: {
+    country: party.formatting.country,
+    name: party.formatting.name,
+    nativeName: party.formatting.nativeName,
+    literalName: party.formatting.literalName,
+    acronym: party.formatting.acronym,
+    types: party.formatting.types,
+    status: party.formatting.status,
+  },
+}));
+
 fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
@@ -558,6 +598,11 @@ fs.writeFileSync(
     null,
     2,
   )}\n`,
+);
+fs.mkdirSync(path.dirname(indexOutputPath), { recursive: true });
+fs.writeFileSync(
+  indexOutputPath,
+  `${JSON.stringify({ schemaVersion: 1, count: indexParties.length, parties: indexParties })}\n`,
 );
 
 console.log(`Imported ${parties.length} parties from ${sheetName}.`);
