@@ -252,9 +252,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   text-decoration: none;
   overflow: visible;
 }
-.party-logo-wrap .logo-frame-landscape {
-  margin-top: var(--logo-top-offset, 0px);
-}
 .party-logo {
   display: block;
   width: 100%;
@@ -395,6 +392,29 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-height: 34px;
   padding: 6px 12px;
   cursor: pointer;
+}
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  z-index: 20;
+  min-width: 62px;
+  min-height: 36px;
+  padding: 7px 10px;
+  color: var(--ink);
+  background: var(--button-face);
+  border: 2px solid;
+  border-color: var(--shadow-light) var(--shadow-dark) var(--shadow-dark) var(--shadow-light);
+  box-shadow: 1px 1px 0 #000;
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  font-weight: 800;
+}
+.back-to-top:hover { background: var(--button-hover); }
+.back-to-top:active {
+  border-color: var(--shadow-dark) var(--shadow-light) var(--shadow-light) var(--shadow-dark);
+  box-shadow: none;
 }
 .empty-state { display: grid; gap: 6px; padding: 60px 20px; background: var(--panel-light); border: 1px solid var(--line); text-align: center; }
 .notes-panel { margin-top: 12px; }
@@ -547,6 +567,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   .search-field { grid-column: auto; }
   .view-switch { display: none; }
   .party-grid { grid-template-columns: 1fr; }
+  .back-to-top { right: 10px; bottom: 10px; }
   .notes-grid { grid-template-columns: 1fr; }
   .record-heading { grid-template-columns: 1fr; padding: 14px; }
   .record-logo-wrap { width: 126px; height: 126px; }

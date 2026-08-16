@@ -14,7 +14,7 @@ type Props = {
 
 function indexThumbnailPath(src: string) {
   const path = src.split(/[?#]/, 1)[0];
-  if (!/^\/media\/logos\/.+\.(?:gif|jpe?g|png|svg|webp)$/i.test(path)) return null;
+  if (!/^\/media\/logos\/.+\.png$/i.test(path)) return null;
   return `/media/logo-thumbnails/${path.slice("/media/logos/".length)}.webp`;
 }
 
@@ -38,7 +38,6 @@ export function LogoImage({
   const [frame, setFrame] = useState<{
     aspectRatio: string;
     orientation: "landscape" | "portrait";
-    topOffset: string;
   } | null>(null);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -66,14 +65,10 @@ export function LogoImage({
     if (!image?.complete || image.naturalWidth === 0 || !activeSrc) return;
 
     const isLandscape = image.naturalWidth >= image.naturalHeight;
-    const verticalOffset = isLandscape
-      ? (1 - image.naturalHeight / image.naturalWidth) / 2
-      : 0;
 
     setFrame({
       aspectRatio: `${image.naturalWidth} / ${image.naturalHeight}`,
       orientation: isLandscape ? "landscape" : "portrait",
-      topOffset: `calc(${verticalOffset * 100}% - ${verticalOffset * 2}px)`,
     });
     setLoadedSrc(activeSrc);
   }, [activeSrc]);
@@ -89,7 +84,6 @@ export function LogoImage({
   const frameStyle = frame
     ? ({
         "--logo-aspect": frame.aspectRatio,
-        "--logo-top-offset": frame.topOffset,
       } as CSSProperties)
     : undefined;
   const loaded = loadedSrc === activeSrc;

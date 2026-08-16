@@ -230,9 +230,11 @@ test("keeps cards separated before hydration and enables masonry in a layout eff
   assert.match(styles, /\.party-grid \{[\s\S]*?grid-auto-flow: row;[\s\S]*?grid-auto-rows: auto;/);
   assert.match(styles, /\.party-grid\.masonry-ready \{[\s\S]*?grid-auto-flow: dense;[\s\S]*?grid-auto-rows: 1px;/);
   assert.match(component, /useLayoutEffect\(\(\) => \{[\s\S]*?classList\.add\("masonry-ready"\)/);
+  assert.match(component, /const measurements = cards\.map/);
+  assert.match(component, /measurements\.forEach/);
 });
 
-test("uses generated low-resolution thumbnails for Index logos", async () => {
+test("uses generated low-resolution thumbnails only for locally stored PNG logos", async () => {
   const [component, generator] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
     readFile(new URL("../scripts/generate-logo-thumbnails.mjs", import.meta.url), "utf8"),
@@ -241,8 +243,24 @@ test("uses generated low-resolution thumbnails for Index logos", async () => {
   assert.match(component, /\/media\/logo-thumbnails\//);
   assert.match(component, /decoding="async"/);
   assert.match(component, /fetchPriority=\{thumbnail \? "low" : undefined\}/);
+  assert.match(component, /\/media\\\/logos\\\/.\+\\\.png\$\/i/);
+  assert.doesNotMatch(component, /jpe\?g\|png\|svg/);
+  assert.match(generator, /new Set\(\["\.png"\]\)/);
   assert.match(generator, /width: 192/);
   assert.match(generator, /\.webp\(/);
+});
+
+test("defers large filter updates and provides a fixed back-to-top control", async () => {
+  const [component, styles] = await Promise.all([
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(component, /useDeferredValue\(query\)/);
+  assert.match(component, /useDeferredValue\(activeLabel\)/);
+  assert.match(component, /aria-label="Back to top"/);
+  assert.match(component, /window\.scrollTo\(\{ top: 0/);
+  assert.match(styles, /\.back-to-top \{[\s\S]*?position: fixed;/);
 });
 
 test("renders primary navigation as native links that work before hydration", async () => {

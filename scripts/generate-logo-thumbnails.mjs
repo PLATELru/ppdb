@@ -6,7 +6,7 @@ import sharp from "sharp";
 const root = process.cwd();
 const inputRoot = path.join(root, "public", "media", "logos");
 const outputRoot = path.join(root, "public", "media", "logo-thumbnails");
-const supportedExtensions = new Set([".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"]);
+const supportedExtensions = new Set([".png"]);
 
 async function walk(directory) {
   const entries = await fs.readdir(directory, { withFileTypes: true });

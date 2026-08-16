@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   useCallback,
+  useDeferredValue,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -176,6 +177,7 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
   const gridRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef<number | null>(null);
+  const backToTopVisibleRef = useRef(false);
   const [parties, setParties] = useState(initialParties);
   const [indexStatus, setIndexStatus] = useState<"loading" | "ready" | "error">(
     initialParties.length >= totalCount ? "ready" : "loading",
@@ -185,11 +187,24 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
   const [sort, setSort] = useState("seats");
   const [view, setView] = useState<"cards" | "rows">("cards");
   const [historyReady, setHistoryReady] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const activeLabel = useSyncExternalStore(subscribeToUrlFilters, getUrlLabel, () => "");
   const country = useSyncExternalStore(subscribeToUrlFilters, getUrlCountry, () => "all");
   const type = useSyncExternalStore(subscribeToUrlFilters, getUrlType, () => "all");
   const status = useSyncExternalStore(subscribeToUrlFilters, getUrlStatus, () => "all");
-  const paginationKey = JSON.stringify([activeLabel, country, query, sort, status, type]);
+  const deferredQuery = useDeferredValue(query);
+  const deferredActiveLabel = useDeferredValue(activeLabel);
+  const deferredCountry = useDeferredValue(country);
+  const deferredType = useDeferredValue(type);
+  const deferredStatus = useDeferredValue(status);
+  const paginationKey = JSON.stringify([
+    deferredActiveLabel,
+    deferredCountry,
+    deferredQuery,
+    sort,
+    deferredStatus,
+    deferredType,
+  ]);
   const [pagination, setPagination] = useState({ key: paginationKey, limit: INDEX_PAGE_SIZE });
   const renderLimit = pagination.key === paginationKey ? pagination.limit : INDEX_PAGE_SIZE;
 
@@ -276,9 +291,15 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
     if (!historyReady) return;
     let animationFrame = 0;
     const saveScroll = () => {
+      const nextBackToTopVisible = window.scrollY > Math.max(500, window.innerHeight * 0.75);
+      if (backToTopVisibleRef.current !== nextBackToTopVisible) {
+        backToTopVisibleRef.current = nextBackToTopVisible;
+        setShowBackToTop(nextBackToTopVisible);
+      }
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(rememberIndexState);
     };
+    saveScroll();
     window.addEventListener("scroll", saveScroll, { passive: true });
     window.addEventListener("pagehide", rememberIndexState);
     return () => {
@@ -341,7 +362,7 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
   }
 
   const visible = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = deferredQuery.trim().toLowerCase();
     return parties
       .filter((party) => {
         const searchable = [
@@ -361,11 +382,13 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
           .toLowerCase();
         return (
           (!needle || searchable.includes(needle)) &&
-          (country === "all" || party.country === country) &&
-          (type === "all" || party.types.includes(type)) &&
-          (status === "all" || party.status === status) &&
-          (!activeLabel ||
-            party.labelDetails.some((label) => label.indexVisible && label.name === activeLabel))
+          (deferredCountry === "all" || party.country === deferredCountry) &&
+          (deferredType === "all" || party.types.includes(deferredType)) &&
+          (deferredStatus === "all" || party.status === deferredStatus) &&
+          (!deferredActiveLabel ||
+            party.labelDetails.some(
+              (label) => label.indexVisible && label.name === deferredActiveLabel,
+            ))
         );
       })
       .sort((a, b) => {
@@ -401,7 +424,15 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
         }
         return a.name.localeCompare(b.name, "en");
       });
-  }, [activeLabel, country, parties, query, sort, status, type]);
+  }, [
+    deferredActiveLabel,
+    deferredCountry,
+    deferredQuery,
+    deferredStatus,
+    deferredType,
+    parties,
+    sort,
+  ]);
 
   const renderedParties = useMemo(
     () => visible.slice(0, renderLimit),
@@ -450,15 +481,21 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
       const rowGap = Number.parseFloat(gridStyle.rowGap);
       if (!Number.isFinite(rowHeight) || !Number.isFinite(rowGap)) return;
 
-      cards.forEach((card) => {
+      const firstCardStyle = cards[0] ? window.getComputedStyle(cards[0]) : null;
+      const borderHeight = firstCardStyle
+        ? Number.parseFloat(firstCardStyle.borderTopWidth) +
+          Number.parseFloat(firstCardStyle.borderBottomWidth)
+        : 0;
+      const measurements = cards.map((card) => {
         const content = card.querySelector<HTMLElement>(".card-link");
-        if (!content) return;
-        const cardStyle = window.getComputedStyle(card);
-        const borderHeight =
-          Number.parseFloat(cardStyle.borderTopWidth) +
-          Number.parseFloat(cardStyle.borderBottomWidth);
+        if (!content) return null;
         const span = Math.ceil((content.scrollHeight + borderHeight + rowGap) / (rowHeight + rowGap));
-        const nextValue = `span ${span}`;
+        return { card, nextValue: `span ${span}` };
+      });
+
+      measurements.forEach((measurement) => {
+        if (!measurement) return;
+        const { card, nextValue } = measurement;
         if (card.style.gridRowEnd !== nextValue) card.style.gridRowEnd = nextValue;
       });
     };
@@ -796,6 +833,19 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
           <span>Try a broader search or reset one of the filters.</span>
         </div>
       )}
+      {showBackToTop ? (
+        <button
+          type="button"
+          className="back-to-top"
+          aria-label="Back to top"
+          onClick={() => {
+            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+          }}
+        >
+          ↑ Top
+        </button>
+      ) : null}
     </section>
   );
 }
