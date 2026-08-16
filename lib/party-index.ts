@@ -37,6 +37,37 @@ export type PartyIndexPayload = {
   schemaVersion: number;
 };
 
+export function getPartyIndexVersion(parties: readonly PartyIndexEntry[]) {
+  const content = JSON.stringify(parties);
+  let hash = 0x811c9dc5;
+
+  for (let index = 0; index < content.length; index += 1) {
+    hash ^= content.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+
+  return `${parties.length}-${(hash >>> 0).toString(36)}`;
+}
+
+export function getPartySearchText(party: PartyIndexEntry) {
+  return [
+    party.id,
+    party.name,
+    party.nativeName,
+    party.literalName,
+    party.acronym,
+    party.country,
+    ...party.types,
+    party.status,
+    party.formerNames,
+    ...party.labelDetails.map((label) => label.display),
+    ...party.alliances.map((alliance) => alliance.display),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
 export function toPartyIndexEntry(party: Party): PartyIndexEntry {
   return {
     id: party.id,

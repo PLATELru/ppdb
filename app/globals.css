@@ -258,30 +258,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   height: 100%;
   object-fit: contain;
   object-position: center;
-  overflow: hidden;
-  clip-path: inset(0);
 }
 .logo-image-stack {
   position: relative;
   display: grid;
   place-items: center;
-  max-width: calc(var(--logo-frame-size, 100%) - 2px);
-  max-height: calc(var(--logo-frame-size, 100%) - 2px);
+  box-sizing: content-box;
+  max-width: calc(var(--logo-frame-size, 100%) - 6px);
+  max-height: calc(var(--logo-frame-size, 100%) - 6px);
   aspect-ratio: var(--logo-aspect, 1 / 1);
   min-width: 0;
   min-height: 0;
+  padding: 2px;
   background: var(--logo-frame);
   box-shadow: 0 0 0 1px #777;
   overflow: hidden;
   overflow: clip;
 }
 .logo-frame-landscape {
-  width: calc(100% - 2px);
+  width: calc(100% - 6px);
   height: auto;
 }
 .logo-frame-portrait {
   width: auto;
-  height: calc(var(--logo-frame-size, 100%) - 2px);
+  height: calc(var(--logo-frame-size, 100%) - 6px);
 }
 .logo-image-stack > img {
   grid-area: 1 / 1;
@@ -440,7 +440,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 }
 .record-logo-wrap {
   display: grid;
-  place-items: center;
+  place-items: center start;
   width: 150px;
   height: 150px;
   padding: 0;

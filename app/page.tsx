@@ -20,12 +20,13 @@
 import { PartyDirectory } from "./components/PartyDirectory";
 import { SiteHeader } from "./components/SiteHeader";
 import { countries, parties } from "../lib/parties";
-import { toPartyIndexEntry } from "../lib/party-index";
+import { getPartyIndexVersion, toPartyIndexEntry } from "../lib/party-index";
 import { comparePartiesBySeats } from "../lib/party-sort";
 
 const INDEX_PAGE_SIZE = 100;
-const initialParties = parties
-  .map(toPartyIndexEntry)
+const indexParties = parties.map(toPartyIndexEntry);
+const indexVersion = getPartyIndexVersion(indexParties);
+const initialParties = [...indexParties]
   .sort(comparePartiesBySeats)
   .slice(0, INDEX_PAGE_SIZE);
 
@@ -49,6 +50,7 @@ export default function Home() {
         <PartyDirectory
           countries={countries}
           initialParties={initialParties}
+          indexVersion={indexVersion}
           totalCount={parties.length}
         />
       </div>

@@ -12,7 +12,11 @@ import {
   useSyncExternalStore,
 } from "react";
 import { dateSortKey, formatLifeSpan } from "../../lib/party-dates";
-import type { PartyIndexEntry, PartyIndexPayload } from "../../lib/party-index";
+import {
+  getPartySearchText,
+  type PartyIndexEntry,
+  type PartyIndexPayload,
+} from "../../lib/party-index";
 import { comparePartiesBySeats } from "../../lib/party-sort";
 import { FormattedText as RichText } from "./FormattedText";
 import { LogoImage } from "./LogoImage";
@@ -20,6 +24,7 @@ import { LogoImage } from "./LogoImage";
 type Props = {
   countries: string[];
   initialParties: PartyIndexEntry[];
+  indexVersion: string;
   totalCount: number;
 };
 
@@ -173,7 +178,7 @@ function updateUrlFilters(filters: { label?: string; country?: string; type?: st
   window.dispatchEvent(new Event("ppdb-filter-change"));
 }
 
-export function PartyDirectory({ countries, initialParties, totalCount }: Props) {
+export function PartyDirectory({ countries, initialParties, indexVersion, totalCount }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const pendingScrollRef = useRef<number | null>(null);
@@ -214,10 +219,13 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
     const controller = new AbortController();
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-    void fetch(`${basePath}/data/party-index.json`, {
-      cache: "force-cache",
-      signal: controller.signal,
-    })
+    void fetch(
+      `${basePath}/data/party-index.json?v=${encodeURIComponent(indexVersion)}`,
+      {
+        cache: "force-cache",
+        signal: controller.signal,
+      },
+    )
       .then(async (response) => {
         if (!response.ok) throw new Error(`Index request failed with ${response.status}`);
         return response.json() as Promise<PartyIndexPayload>;
@@ -234,7 +242,7 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
       });
 
     return () => controller.abort();
-  }, [initialParties.length, loadAttempt, totalCount]);
+  }, [indexVersion, initialParties.length, loadAttempt, totalCount]);
 
   useLayoutEffect(() => {
     const restored = readIndexHistoryState();
@@ -365,23 +373,8 @@ export function PartyDirectory({ countries, initialParties, totalCount }: Props)
     const needle = deferredQuery.trim().toLowerCase();
     return parties
       .filter((party) => {
-        const searchable = [
-          party.name,
-          party.nativeName,
-          party.literalName,
-          party.acronym,
-          party.country,
-          ...party.types,
-          party.status,
-          party.formerNames,
-          ...party.labelDetails.map((label) => label.display),
-          ...party.alliances.map((alliance) => alliance.display),
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase();
         return (
-          (!needle || searchable.includes(needle)) &&
+          (!needle || getPartySearchText(party).includes(needle)) &&
           (deferredCountry === "all" || party.country === deferredCountry) &&
           (deferredType === "all" || party.types.includes(deferredType)) &&
           (deferredStatus === "all" || party.status === deferredStatus) &&

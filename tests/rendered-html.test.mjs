@@ -175,19 +175,20 @@ test("sizes each visible logo frame to the source aspect ratio without a cropped
   assert.match(component, /--logo-aspect/);
   assert.match(component, /logo-frame-\$\{frame\?\.orientation/);
   assert.doesNotMatch(component, /logo-edge-fill/);
-  assert.match(styles, /\.logo-frame-landscape[\s\S]*?width: calc\(100% - 2px\)/);
+  assert.match(styles, /\.logo-frame-landscape[\s\S]*?width: calc\(100% - 6px\)/);
   assert.match(styles, /\.party-logo-wrap \{[\s\S]*?--logo-frame-size: var\(--card-logo-size, 92px\)/);
-  assert.match(styles, /\.logo-frame-portrait[\s\S]*?height: calc\(var\(--logo-frame-size, 100%\) - 2px\)/);
+  assert.match(styles, /\.logo-frame-portrait[\s\S]*?height: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
   assert.match(styles, /\.party-logo-wrap \{[\s\S]*?overflow: visible;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-height: calc\(var\(--logo-frame-size, 100%\) - 2px\)/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?box-sizing: content-box;[\s\S]*?padding: 2px;/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-height: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
   assert.match(styles, /\.logo-image-stack > img[\s\S]*?object-fit: contain;/);
   assert.doesNotMatch(styles, /object-fit: cover/);
 });
 
 test("keeps record-page logos at the record wrapper size", async () => {
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?width: 150px;[\s\S]*?height: 150px;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-width: calc\(var\(--logo-frame-size, 100%\) - 2px\)/);
+  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?place-items: center start;[\s\S]*?width: 150px;[\s\S]*?height: 150px;/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-width: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
 });
 
 test("renders the index in batches of 100 and observes the scroll sentinel", async () => {
@@ -214,9 +215,15 @@ test("ships only a compact first batch and loads the complete index after hydrat
 
   assert.equal((html.match(/class="party-card"/g) ?? []).length, 100);
   assert.match(page, /\.slice\(0, INDEX_PAGE_SIZE\)/);
-  assert.match(component, /fetch\(`\$\{basePath\}\/data\/party-index\.json`/);
+  assert.match(
+    component,
+    /party-index\.json\?v=\$\{encodeURIComponent\(indexVersion\)\}/,
+  );
+  assert.match(page, /getPartyIndexVersion\(indexParties\)/);
   assert.doesNotMatch(component, /from ["']\.\.\/\.\.\/lib\/parties["']/);
   assert.equal(index.count, index.parties.length);
+  assert.ok(index.parties.some((party) => party.id === "euINITIATIVE"));
+  assert.ok(index.parties.some((party) => party.id === "intSI"));
   assert.equal(Object.hasOwn(index.parties[0], "description"), false);
   assert.equal(Object.hasOwn(index.parties[0], "sources"), false);
 });
