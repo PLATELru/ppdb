@@ -166,29 +166,30 @@ test("renders former-logo dates from the multiline spreadsheet field", async () 
   assert.match(html, /Used until (?:<!-- -->)?2004/);
 });
 
-test("sizes each visible logo frame to the source aspect ratio without a cropped duplicate", async () => {
+test("keeps every visible logo frame square and removes internal CSS padding", async () => {
   const [component, styles] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(component, /--logo-aspect/);
-  assert.match(component, /logo-frame-\$\{frame\?\.orientation/);
+  assert.doesNotMatch(component, /--logo-aspect/);
+  assert.doesNotMatch(component, /naturalHeight/);
+  assert.doesNotMatch(component, /naturalWidth\s*[<>]=?\s*naturalHeight/);
+  assert.doesNotMatch(component, /logo-frame-(?:landscape|portrait)/);
   assert.doesNotMatch(component, /logo-edge-fill/);
-  assert.match(styles, /\.logo-frame-landscape[\s\S]*?width: calc\(100% - 6px\)/);
-  assert.match(styles, /\.party-logo-wrap \{[\s\S]*?--logo-frame-size: var\(--card-logo-size, 92px\)/);
-  assert.match(styles, /\.logo-frame-portrait[\s\S]*?height: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
+  assert.match(styles, /\.party-logo-wrap \{[\s\S]*?width: var\(--card-logo-size, 92px\);[\s\S]*?height: var\(--card-logo-size, 92px\);/);
   assert.match(styles, /\.party-logo-wrap \{[\s\S]*?overflow: visible;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?box-sizing: content-box;[\s\S]*?padding: 2px;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-height: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?aspect-ratio: 1;[\s\S]*?padding: 0;[\s\S]*?border: 1px solid #777;/);
+  assert.doesNotMatch(styles, /\.logo-frame-(?:landscape|portrait)/);
+  assert.doesNotMatch(styles, /\.logo-image-stack \{[\s\S]*?padding: 2px;/);
   assert.match(styles, /\.logo-image-stack > img[\s\S]*?object-fit: contain;/);
   assert.doesNotMatch(styles, /object-fit: cover/);
 });
 
 test("keeps record-page logos at the record wrapper size", async () => {
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?place-items: center start;[\s\S]*?width: 150px;[\s\S]*?height: 150px;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?max-width: calc\(var\(--logo-frame-size, 100%\) - 6px\)/);
+  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?place-items: stretch;[\s\S]*?width: 150px;[\s\S]*?height: 150px;[\s\S]*?overflow: visible;/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?aspect-ratio: 1;/);
 });
 
 test("renders the index in batches of 100 and observes the scroll sentinel", async () => {

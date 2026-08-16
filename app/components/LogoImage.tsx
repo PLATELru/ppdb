@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type Props = {
   alt: string;
@@ -35,10 +35,6 @@ export function LogoImage({
 }: Props) {
   const [sourceIndex, setSourceIndex] = useState(0);
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
-  const [frame, setFrame] = useState<{
-    aspectRatio: string;
-    orientation: "landscape" | "portrait";
-  } | null>(null);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   const sources = useMemo(() => {
@@ -61,31 +57,19 @@ export function LogoImage({
   }, [basePath, src, thumbnail]);
 
   const activeSrc = sources[sourceIndex] ?? null;
-  const captureImage = useCallback((image: HTMLImageElement | null) => {
+  const captureLoadedImage = useCallback((image: HTMLImageElement | null) => {
     if (!image?.complete || image.naturalWidth === 0 || !activeSrc) return;
-
-    const isLandscape = image.naturalWidth >= image.naturalHeight;
-
-    setFrame({
-      aspectRatio: `${image.naturalWidth} / ${image.naturalHeight}`,
-      orientation: isLandscape ? "landscape" : "portrait",
-    });
     setLoadedSrc(activeSrc);
   }, [activeSrc]);
 
   if (!src || !activeSrc) {
     return (
-      <span className="logo-image-stack logo-frame-landscape">
+      <span className="logo-image-stack">
         <span className={fallbackClassName}>{fallback}</span>
       </span>
     );
   }
 
-  const frameStyle = frame
-    ? ({
-        "--logo-aspect": frame.aspectRatio,
-      } as CSSProperties)
-    : undefined;
   const loaded = loadedSrc === activeSrc;
   const imageClassName = [className, loaded ? "logo-source-loaded" : "logo-source-loading"]
     .filter(Boolean)
@@ -95,25 +79,21 @@ export function LogoImage({
     .join(" ");
 
   return (
-    <span
-      className={`logo-image-stack logo-frame-${frame?.orientation ?? "landscape"}`}
-      style={frameStyle}
-    >
+    <span className="logo-image-stack">
       <span className={loadingFallbackClassName} aria-hidden="true">{fallback}</span>
       {/* Remote party logos are user-supplied spreadsheet data, so Next image allowlists are impractical here. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        ref={captureImage}
+        ref={captureLoadedImage}
         className={imageClassName}
         src={activeSrc}
         alt={alt}
         loading={loading}
         decoding="async"
         fetchPriority={thumbnail ? "low" : undefined}
-        onLoad={(event) => captureImage(event.currentTarget)}
+        onLoad={(event) => captureLoadedImage(event.currentTarget)}
         onError={() => {
           setLoadedSrc(null);
-          setFrame(null);
           setSourceIndex((current) => current + 1);
         }}
       />

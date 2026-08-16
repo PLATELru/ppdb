@@ -240,12 +240,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-width: 0;
 }
 .party-logo-wrap {
-  --logo-frame-size: var(--card-logo-size, 92px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: auto;
+  display: grid;
+  place-items: stretch;
+  width: var(--card-logo-size, 92px);
+  height: var(--card-logo-size, 92px);
   margin: 0;
   padding: 0;
   color: var(--ink);
@@ -263,25 +261,16 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   position: relative;
   display: grid;
   place-items: center;
-  box-sizing: content-box;
-  max-width: calc(var(--logo-frame-size, 100%) - 6px);
-  max-height: calc(var(--logo-frame-size, 100%) - 6px);
-  aspect-ratio: var(--logo-aspect, 1 / 1);
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
   min-width: 0;
   min-height: 0;
-  padding: 2px;
+  padding: 0;
   background: var(--logo-frame);
-  box-shadow: 0 0 0 1px #777;
+  border: 1px solid #777;
   overflow: hidden;
   overflow: clip;
-}
-.logo-frame-landscape {
-  width: calc(100% - 6px);
-  height: auto;
-}
-.logo-frame-portrait {
-  width: auto;
-  height: calc(var(--logo-frame-size, 100%) - 6px);
 }
 .logo-image-stack > img {
   grid-area: 1 / 1;
@@ -440,12 +429,11 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 }
 .record-logo-wrap {
   display: grid;
-  place-items: center start;
+  place-items: stretch;
   width: 150px;
   height: 150px;
   padding: 0;
-  overflow: hidden;
-  overflow: clip;
+  overflow: visible;
 }
 .record-logo-wrap img {
   display: block;
@@ -518,7 +506,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
-.former-logo-grid figure > div { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; color: var(--ink); }
+.former-logo-grid figure > div { display: grid; place-items: stretch; width: 100%; aspect-ratio: 1; padding: 0; overflow: visible; color: var(--ink); }
 .former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
 .former-logo-grid figcaption { display: grid; gap: 3px; padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
 .former-logo-comment { color: var(--ink); font-weight: 700; }
