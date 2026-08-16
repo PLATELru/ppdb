@@ -166,30 +166,31 @@ test("renders former-logo dates from the multiline spreadsheet field", async () 
   assert.match(html, /Used until (?:<!-- -->)?2004/);
 });
 
-test("keeps every visible logo frame square and removes internal CSS padding", async () => {
+test("sizes each logo frame to its source ratio and clips the image to that frame", async () => {
   const [component, styles] = await Promise.all([
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.doesNotMatch(component, /--logo-aspect/);
-  assert.doesNotMatch(component, /naturalHeight/);
-  assert.doesNotMatch(component, /naturalWidth\s*[<>]=?\s*naturalHeight/);
-  assert.doesNotMatch(component, /logo-frame-(?:landscape|portrait)/);
+  assert.match(component, /--logo-aspect/);
+  assert.match(component, /naturalWidth\s*>=\s*image\.naturalHeight/);
+  assert.match(component, /logo-frame-\$\{activeFrame\?\.orientation/);
   assert.doesNotMatch(component, /logo-edge-fill/);
-  assert.match(styles, /\.party-logo-wrap \{[\s\S]*?width: var\(--card-logo-size, 92px\);[\s\S]*?height: var\(--card-logo-size, 92px\);/);
+  assert.match(styles, /\.party-logo-wrap \{[\s\S]*?--logo-frame-size: calc\(var\(--card-logo-size, 92px\) - 2px\);[\s\S]*?align-items: center;[\s\S]*?height: auto;/);
   assert.match(styles, /\.party-logo-wrap \{[\s\S]*?overflow: visible;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?aspect-ratio: 1;[\s\S]*?padding: 0;[\s\S]*?border: 1px solid #777;/);
-  assert.doesNotMatch(styles, /\.logo-frame-(?:landscape|portrait)/);
+  assert.match(styles, /\.logo-image-stack \{[\s\S]*?aspect-ratio: var\(--logo-aspect, 1 \/ 1\);[\s\S]*?padding: 0;[\s\S]*?box-shadow: 0 0 0 1px #777;[\s\S]*?overflow: clip;/);
+  assert.match(styles, /\.logo-frame-landscape \{[\s\S]*?width: var\(--logo-frame-size, 100%\);[\s\S]*?height: auto;/);
+  assert.match(styles, /\.logo-frame-portrait \{[\s\S]*?width: auto;[\s\S]*?height: var\(--logo-frame-size, 100%\);/);
   assert.doesNotMatch(styles, /\.logo-image-stack \{[\s\S]*?padding: 2px;/);
-  assert.match(styles, /\.logo-image-stack > img[\s\S]*?object-fit: contain;/);
+  assert.doesNotMatch(styles, /\.logo-image-stack \{[^}]*border: 1px/);
+  assert.match(styles, /\.logo-image-stack > img[\s\S]*?position: absolute;[\s\S]*?inset: 0;[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?object-fit: contain;/);
   assert.doesNotMatch(styles, /object-fit: cover/);
 });
 
-test("keeps record-page logos at the record wrapper size", async () => {
+test("keeps adaptive record and former-logo frames inside their available squares", async () => {
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
-  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?place-items: stretch;[\s\S]*?width: 150px;[\s\S]*?height: 150px;[\s\S]*?overflow: visible;/);
-  assert.match(styles, /\.logo-image-stack \{[\s\S]*?width: 100%;[\s\S]*?height: 100%;[\s\S]*?aspect-ratio: 1;/);
+  assert.match(styles, /\.record-logo-wrap \{[\s\S]*?--logo-frame-size: calc\(150px - 2px\);[\s\S]*?place-items: center start;[\s\S]*?width: 150px;[\s\S]*?height: 150px;[\s\S]*?overflow: visible;/);
+  assert.match(styles, /\.former-logo-grid figure > div \{[\s\S]*?--logo-frame-size: calc\(100% - 2px\);[\s\S]*?align-items: center;[\s\S]*?justify-content: center;[\s\S]*?overflow: clip;/);
 });
 
 test("renders the index in batches of 100 and observes the scroll sentinel", async () => {

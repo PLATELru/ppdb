@@ -240,10 +240,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-width: 0;
 }
 .party-logo-wrap {
-  display: grid;
-  place-items: stretch;
-  width: var(--card-logo-size, 92px);
-  height: var(--card-logo-size, 92px);
+  --logo-frame-size: calc(var(--card-logo-size, 92px) - 2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
   margin: 0;
   padding: 0;
   color: var(--ink);
@@ -261,19 +263,29 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   position: relative;
   display: grid;
   place-items: center;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1;
+  box-sizing: content-box;
+  max-width: var(--logo-frame-size, 100%);
+  max-height: var(--logo-frame-size, 100%);
+  aspect-ratio: var(--logo-aspect, 1 / 1);
   min-width: 0;
   min-height: 0;
   padding: 0;
   background: var(--logo-frame);
-  border: 1px solid #777;
+  box-shadow: 0 0 0 1px #777;
   overflow: hidden;
   overflow: clip;
 }
+.logo-frame-landscape {
+  width: var(--logo-frame-size, 100%);
+  height: auto;
+}
+.logo-frame-portrait {
+  width: auto;
+  height: var(--logo-frame-size, 100%);
+}
 .logo-image-stack > img {
-  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -282,7 +294,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   object-position: center;
   opacity: 0;
 }
-.logo-image-stack > .logo-loading-fallback { grid-area: 1 / 1; }
+.logo-image-stack > .logo-loading-fallback { position: absolute; inset: 0; }
 .logo-image-stack > img.logo-source-loaded { opacity: 1; }
 .logo-placeholder {
   display: grid;
@@ -428,21 +440,13 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   box-shadow: inset 8px 0 0 var(--party-color);
 }
 .record-logo-wrap {
+  --logo-frame-size: calc(150px - 2px);
   display: grid;
-  place-items: stretch;
+  place-items: center start;
   width: 150px;
   height: 150px;
   padding: 0;
   overflow: visible;
-}
-.record-logo-wrap img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  overflow: hidden;
-  clip-path: inset(0);
 }
 .record-logo-wrap span { color: var(--ink); font-size: 28px; font-weight: 800; }
 .record-heading h1 { margin: 7px 0 0; font-size: clamp(28px, 5vw, 46px); line-height: 1; letter-spacing: -0.04em; white-space: pre-line; }
@@ -506,8 +510,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .missing-copy { margin: 0; padding: 18px; color: var(--muted); background: var(--panel-light); border: 1px solid var(--line); }
 .former-logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .former-logo-grid figure { margin: 0; padding: 7px; background: var(--panel-light); border: 1px solid var(--line); }
-.former-logo-grid figure > div { display: grid; place-items: stretch; width: 100%; aspect-ratio: 1; padding: 0; overflow: visible; color: var(--ink); }
-.former-logo-grid img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; overflow: hidden; clip-path: inset(0); }
+.former-logo-grid figure > div { --logo-frame-size: calc(100% - 2px); display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; overflow: clip; color: var(--ink); }
 .former-logo-grid figcaption { display: grid; gap: 3px; padding-top: 7px; color: var(--muted); font-size: 10px; text-align: center; }
 .former-logo-comment { color: var(--ink); font-weight: 700; }
 .sources-panel ol { margin: 0; padding: 8px 8px 8px 32px; background: var(--panel-light); border: 1px solid var(--line); }
@@ -558,7 +561,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   .back-to-top { right: 10px; bottom: 10px; }
   .notes-grid { grid-template-columns: 1fr; }
   .record-heading { grid-template-columns: 1fr; padding: 14px; }
-  .record-logo-wrap { width: 126px; height: 126px; }
+  .record-logo-wrap { --logo-frame-size: calc(126px - 2px); width: 126px; height: 126px; }
   .former-logo-grid { grid-template-columns: repeat(2, 1fr); }
   .maintenance-line, footer { flex-direction: column; }
   .field-row { grid-template-columns: 1fr; }
