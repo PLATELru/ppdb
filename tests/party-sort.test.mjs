@@ -45,6 +45,24 @@ test("sorts represented, active and dissolved parties in the requested order", (
   ]);
 });
 
+test("sorts dissolved parties from the most recent dissolution to the oldest", () => {
+  const parties = [
+    party("Oldest", {}, "1917-08-24"),
+    party("Zulu same date", {}, "2000-01-01"),
+    party("Most recent", {}, "2025-07-15"),
+    party("Alpha same date", {}, "2000-01-01"),
+    party("Middle", {}, "2012-04-06"),
+  ];
+
+  assert.deepEqual(parties.sort(comparePartiesBySeats).map(({ name }) => name), [
+    "Most recent",
+    "Middle",
+    "Alpha same date",
+    "Zulu same date",
+    "Oldest",
+  ]);
+});
+
 test("compares unicameral and lower-house seats in the same primary group", () => {
   const parties = [
     party("PAICV", { legislature: 29 }),

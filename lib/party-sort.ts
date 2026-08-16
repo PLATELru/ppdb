@@ -23,7 +23,14 @@ export function comparePartiesBySeats(a: SeatSortableParty, b: SeatSortableParty
   const bDissolved = Boolean(b.dissolved);
 
   if (aDissolved !== bDissolved) return aDissolved ? 1 : -1;
-  if (aDissolved) return a.name.localeCompare(b.name, "en");
+  if (aDissolved) {
+    const aDissolutionDate = a.dissolved ?? "";
+    const bDissolutionDate = b.dissolved ?? "";
+    if (aDissolutionDate !== bDissolutionDate) {
+      return aDissolutionDate < bDissolutionDate ? 1 : -1;
+    }
+    return a.name.localeCompare(b.name, "en");
+  }
 
   const aSeats = seatSortValues(a);
   const bSeats = seatSortValues(b);
