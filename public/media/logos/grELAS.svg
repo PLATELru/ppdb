@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="496 358 926.73999 260.39001"
+   version="1.1"
+   sodipodi:docname="grELAS.svg"
+   width="926.73999"
+   height="260.39001"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview73"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.87473985"
+     inkscape:cx="429.84208"
+     inkscape:cy="185.19792"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">
+      .cls-1 {
+        fill: #122f71;
+      }
+
+      .cls-2 {
+        fill: #a40044;
+      }
+    </style>
+  </defs>
+  <g
+     id="g68"
+     transform="translate(-0.63,-0.35)">
+    <polygon
+       class="cls-1"
+       points="496.63,358.36 496.63,618.74 648.26,618.74 666.33,564.17 560.88,564.17 560.88,505.8 634.22,505.8 634.22,462.67 560.88,462.67 560.88,412.92 666.48,412.92 666.48,358.36 "
+       id="polygon62" />
+    <polygon
+       class="cls-1"
+       points="1305.83,412.95 1412.56,412.92 1412.56,358.36 1219.98,358.36 1219.98,399.85 1306.25,489.5 1219.54,576 1233.72,618.74 1423.37,618.74 1423.37,564.17 1302.19,564.17 1366.79,487.95 "
+       id="polygon64" />
+    <polygon
+       class="cls-1"
+       points="676.98,618.73 742.04,618.73 804.71,406.04 867.42,618.73 932.44,618.73 846.01,358.36 763.41,358.36 "
+       id="polygon66" />
+  </g>
+  <path
+     class="cls-2"
+     d="m 1099.89,484.51 23.94,81.21 -95.95,-62.74 144.9,-50.87 25.6,-20.44 -52.92,9.2 -27.51,-82.87 h -82.6 l -35.64,107.38 -64.14,10.79 -6.86,10.73 52.9,33.02 -32.68,98.46 h 15.56 l 63.71,-50.86 -29.19,-37.18 140.34,88.03 h 0.02 c 0,0 65.02,0.01 65.02,0.01 l -49.15,-148.08 -55.34,14.2 z m -23.24,-78.82 13.13,44.55 -40.19,6.76 z"
+     id="path70" />
+</svg>
