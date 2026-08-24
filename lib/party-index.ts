@@ -1,36 +1,58 @@
 import type { Party } from "./parties";
 import type { RichTextRun } from "./rich-text";
 
-type PartyFormatting = Pick<
-  Party["formatting"],
-  "country" | "name" | "nativeName" | "literalName" | "acronym" | "status"
-> & {
-  types: RichTextRun[][];
+type PartyIndexSeats = {
+  legislature: number | null;
+  legislatureName: string;
+  legislatureTotal: number | null;
+  lowerHouse: number | null;
+  lowerHouseName: string;
+  lowerHouseTotal: number | null;
+  upperHouse: number | null;
+  upperHouseName: string;
+  upperHouseTotal: number | null;
+  mep: number | null;
+  mepTotal: number | null;
 };
 
-export type PartyIndexEntry = Pick<
-  Party,
-  | "id"
-  | "country"
-  | "name"
-  | "nativeName"
-  | "literalName"
-  | "acronym"
-  | "formerNames"
-  | "status"
-  | "established"
-  | "dissolved"
-  | "seats"
-  | "color"
-  | "logo"
-> & {
+type PartyFormatting = {
+  country: RichTextRun[];
+  name: RichTextRun[];
+  nativeName: RichTextRun[];
+  literalName: RichTextRun[];
+  acronym: RichTextRun[];
+  types: RichTextRun[][];
+  status: RichTextRun[];
+};
+
+export type PartyIndexEntry = {
+  id: string;
+  country: string;
+  name: string;
+  nativeName: string | null;
+  literalName: string | null;
+  acronym: string | null;
+  formerNames: string | null;
   types: string[];
-  labelDetails: Array<
-    Pick<Party["labelDetails"][number], "name" | "display" | "runs" | "indexVisible">
-  >;
-  alliances: Array<
-    Pick<Party["alliances"][number], "id" | "display" | "runs" | "color" | "indexVisible">
-  >;
+  status: string | null;
+  labelDetails: Array<{
+    name: string;
+    display: string;
+    runs: RichTextRun[];
+    indexVisible: boolean;
+  }>;
+  alliances: Array<{
+    id: string;
+    display: string;
+    runs: RichTextRun[];
+    color: string;
+    indexVisible: boolean;
+  }>;
+  established: string | null;
+  dissolved: string | null;
+  seats: PartyIndexSeats;
+  color: string;
+  logo: string | null;
   formatting: PartyFormatting;
 };
 
