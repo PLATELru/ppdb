@@ -1,9 +1,12 @@
 import type { Party } from "./parties";
+import type { RichTextRun } from "./rich-text";
 
 type PartyFormatting = Pick<
   Party["formatting"],
-  "country" | "name" | "nativeName" | "literalName" | "acronym" | "types" | "status"
->;
+  "country" | "name" | "nativeName" | "literalName" | "acronym" | "status"
+> & {
+  types: RichTextRun[][];
+};
 
 export type PartyIndexEntry = Pick<
   Party,
@@ -14,7 +17,6 @@ export type PartyIndexEntry = Pick<
   | "literalName"
   | "acronym"
   | "formerNames"
-  | "types"
   | "status"
   | "established"
   | "dissolved"
@@ -22,6 +24,7 @@ export type PartyIndexEntry = Pick<
   | "color"
   | "logo"
 > & {
+  types: string[];
   labelDetails: Array<
     Pick<Party["labelDetails"][number], "name" | "display" | "runs" | "indexVisible">
   >;
