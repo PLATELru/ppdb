@@ -327,9 +327,9 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
 
   const statuses = useMemo(
     () =>
-      Array.from(new Set(parties.map((party) => party.status).filter(Boolean))).sort(
-        (a, b) => a.localeCompare(b, "en"),
-      ),
+      Array.from(
+        new Set(parties.map((party) => party.status).filter((status): status is string => status !== null)),
+      ).sort((a, b) => a.localeCompare(b, "en")),
     [parties],
   );
 
@@ -759,7 +759,10 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                       </button>
                     ))}
                     {party.status ? (
-                      <button type="button" onClick={() => chooseStatus(party.status)}>
+                      <button
+                        type="button"
+                        onClick={() => party.status && chooseStatus(party.status)}
+                      >
                         <RichText text={party.status} runs={party.formatting.status} />
                       </button>
                     ) : null}
