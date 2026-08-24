@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="37.629398"
+   height="37.629398"
+   viewBox="0 0 37.629398 37.629398"
+   fill="none"
+   version="1.1"
+   id="svg15"
+   sodipodi:docname="seL.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview17"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="19.102564"
+     inkscape:cx="18.950336"
+     inkscape:cy="18.793289"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg15" />
+  <circle
+     cx="18.814699"
+     cy="18.814699"
+     r="18.814699"
+     fill="#006ab3"
+     id="circle2" />
+  <g
+     clip-path="url(#clip0)"
+     id="g8"
+     transform="translate(-0.5,-0.6855011)">
+    <path
+       d="m 14.391,7.5 c 0.9087,0 1.7803,0.35246 2.4228,0.97983 0.6426,0.62738 1.0036,1.47829 1.0036,2.36557 V 29.5 H 14.391 c -0.9087,0 -1.7803,-0.3525 -2.4228,-0.9798 -0.6426,-0.6274 -1.0036,-1.4783 -1.0036,-2.3656 V 10.8454 c 0,-0.88728 0.361,-1.73819 1.0036,-2.36557 C 12.6107,7.85246 13.4823,7.5 14.391,7.5 Z"
+       fill="#ffffff"
+       id="path4" />
+    <path
+       d="m 21.9407,22.8093 h 4.2975 c 0.9087,0 1.7802,0.3525 2.4228,0.9799 0.6426,0.6273 1.0036,1.4782 1.0036,2.3655 0,0.8872 -0.361,1.7381 -1.0036,2.3655 C 28.0184,29.1476 27.1469,29.5 26.2382,29.5 h -7.7239 v -3.3453 c 0,-0.8873 0.361,-1.7382 1.0036,-2.3655 0.6425,-0.6274 1.514,-0.9799 2.4228,-0.9799 z"
+       fill="#ffffff"
+       id="path6" />
+  </g>
+  <defs
+     id="defs13">
+    <clipPath
+       id="clip0">
+      <rect
+         width="18.700001"
+         height="22"
+         fill="#ffffff"
+         transform="translate(10.9646,7.5)"
+         id="rect10"
+         x="0"
+         y="0" />
+    </clipPath>
+  </defs>
+</svg>

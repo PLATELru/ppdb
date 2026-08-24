@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   version="1.1"
+   viewBox="48.19 48.17 94.129993 48.19"
+   sodipodi:docname="seFV.svg"
+   width="94.129997"
+   height="48.189999"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview51"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="4.0500968"
+     inkscape:cx="141.72501"
+     inkscape:cy="24.196952"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs
+     id="defs4">
+    <style
+       id="style2">
+      .st0 {
+        fill: #ed1c24;
+      }
+    </style>
+  </defs>
+  <g
+     id="g48"
+     transform="translate(0,-0.02)">
+    <polygon
+       class="st0"
+       points="97.46,82.63 93.72,48.19 81.67,48.19 89.02,96.38 100.93,96.38 129.65,48.19 116.52,48.19 97.73,82.63 "
+       id="polygon42" />
+    <polygon
+       class="st0"
+       points="59.35,96.38 62.69,77.46 80.72,77.46 82.36,68.13 64.32,68.13 66.16,57.85 92.13,57.85 91.07,48.19 56.7,48.19 48.19,96.38 "
+       id="polygon44" />
+    <polygon
+       class="st0"
+       points="124.82,87.17 116.99,81.49 126.66,81.49 129.65,72.28 132.64,81.49 142.32,81.49 134.49,87.17 137.48,96.38 129.65,90.69 121.83,96.38 "
+       id="polygon46" />
+  </g>
+</svg>
