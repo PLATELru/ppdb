@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="378.16501"
+   height="296.02725"
+   viewBox="66.752 36 378.165 296.02724"
+   enable-background="new 66.752 36 378.165 296.027"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="seFI.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="2.5166623"
+     inkscape:cx="189.1394"
+     inkscape:cy="147.81483"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <g
+     fill="#cd1b68"
+     id="g8">
+    <polygon
+       points="328.559,36 316.969,92.077 197.02,92.077 182.51,160.615 293.251,160.615 281.353,216.692 170.712,216.692 147.294,327.801 66.752,327.569 128.886,36 "
+       id="polygon2" />
+    <polygon
+       points="444.917,36 368.02,36 326.482,216.692 403.328,216.692 "
+       id="polygon4" />
+    <path
+       d="m 380.036,316.158 c -17.343,17.936 -43.806,21.148 -58.255,7.176 -14.449,-13.972 -12.797,-40.53 4.544,-58.465 17.342,-17.934 44.498,-19.761 58.947,-5.789 14.451,13.971 12.104,39.144 -5.236,57.078 z"
+       id="path6" />
+  </g>
+</svg>
