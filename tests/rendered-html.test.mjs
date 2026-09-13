@@ -51,6 +51,15 @@ test("renders multiple countries and refounded-party life periods", async () => 
   assert.match(npsHtml, /6 August 2023/);
   assert.match(npsHtml, /22 October 2017/);
   assert.match(indexHtml, /2014 – 2017, 2023 –/);
+
+  const npsCard = indexHtml.match(/<article[^>]*id="party-rsNPS"[\s\S]*?<\/article>/)?.[0];
+  assert.ok(npsCard);
+  const normalizedNpsCard = npsCard.replaceAll("<!-- -->", "");
+  assert.match(normalizedNpsCard, /<b>11 \/ 250<\/b> National Assembly/);
+  assert.ok(
+    normalizedNpsCard.indexOf("National Assembly") <
+      normalizedNpsCard.indexOf("2014 – 2017, 2023 –"),
+  );
 });
 
 test("keeps the first dropdown option fixed above a scrolling option list", async () => {

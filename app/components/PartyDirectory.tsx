@@ -774,31 +774,32 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                       </button>
                     ))}
                   </div>
-                  <div className="seat-line">
-                    {(party.dissolved || party.lifePeriods.length > 1) &&
-                    formatLifeSpan(party.lifePeriods) ? (
+                  {!party.dissolved ? (
+                    <div className="seat-line">
+                      <SeatValue
+                        label={party.seats.legislatureName}
+                        value={party.seats.legislature}
+                        total={party.seats.legislatureTotal}
+                      />
+                      <SeatValue
+                        label={party.seats.lowerHouseName}
+                        value={party.seats.lowerHouse}
+                        total={party.seats.lowerHouseTotal}
+                      />
+                      <SeatValue
+                        label={party.seats.upperHouseName}
+                        value={party.seats.upperHouse}
+                        total={party.seats.upperHouseTotal}
+                      />
+                      <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
+                    </div>
+                  ) : null}
+                  {(party.dissolved || party.lifePeriods.length > 1) &&
+                  formatLifeSpan(party.lifePeriods) ? (
+                    <div className="seat-line">
                       <span><b>{formatLifeSpan(party.lifePeriods)}</b></span>
-                    ) : (
-                      <>
-                        <SeatValue
-                          label={party.seats.legislatureName}
-                          value={party.seats.legislature}
-                          total={party.seats.legislatureTotal}
-                        />
-                        <SeatValue
-                          label={party.seats.lowerHouseName}
-                          value={party.seats.lowerHouse}
-                          total={party.seats.lowerHouseTotal}
-                        />
-                        <SeatValue
-                          label={party.seats.upperHouseName}
-                          value={party.seats.upperHouse}
-                          total={party.seats.upperHouseTotal}
-                        />
-                        <SeatValue label="MEPs" value={party.seats.mep} total={party.seats.mepTotal} />
-                      </>
-                    )}
-                  </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </article>

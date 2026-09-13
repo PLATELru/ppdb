@@ -405,6 +405,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .card-alliance-list { display: grid; gap: 4px; width: 100%; }
 .card-alliance-list .alliance-badge { padding: 3px 4px; text-align: center; font-size: 9px; }
 .seat-line { margin-top: 12px; font-family: "Courier New", Courier, monospace; font-size: 10px; }
+.seat-line + .seat-line { margin-top: 4px; }
 .seat-line span { padding-right: 5px; }
 .open-record {
   align-self: stretch;
