@@ -20,6 +20,7 @@ import {
 import { comparePartiesBySeats } from "../../lib/party-sort";
 import { FormattedText as RichText } from "./FormattedText";
 import { LogoImage } from "./LogoImage";
+import { StickySelect } from "./StickySelect";
 
 type Props = {
   countries: string[];
@@ -345,6 +346,47 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
     [parties],
   );
 
+  const countryOptions = useMemo(
+    () => [
+      { value: "all", label: "All countries" },
+      ...countries.map((item) => ({ value: item, label: item })),
+    ],
+    [countries],
+  );
+  const typeOptions = useMemo(
+    () => [
+      { value: "all", label: "All types" },
+      ...types.map((item) => ({ value: item, label: item })),
+    ],
+    [types],
+  );
+  const statusOptions = useMemo(
+    () => [
+      { value: "all", label: "All statuses" },
+      ...statuses.map((item) => ({ value: item, label: item })),
+    ],
+    [statuses],
+  );
+  const labelOptions = useMemo(
+    () => [
+      { value: "", label: "All labels" },
+      ...classificationLabels.map((item) => ({ value: item, label: item })),
+    ],
+    [classificationLabels],
+  );
+  const sortOptions = useMemo(
+    () => [
+      { value: "seats", label: "Parliamentary seats" },
+      { value: "name", label: "Name A–Z" },
+      { value: "country", label: "Country A–Z" },
+      { value: "status", label: "Status A–Z" },
+      { value: "label", label: "First label A–Z" },
+      { value: "newest", label: "Newest first" },
+      { value: "oldest", label: "Oldest first" },
+    ],
+    [],
+  );
+
   function chooseLabel(label: string) {
     setQuery("");
     updateUrlFilters({ label });
@@ -375,7 +417,7 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
       .filter((party) => {
         return (
           (!needle || getPartySearchText(party).includes(needle)) &&
-          (deferredCountry === "all" || party.country === deferredCountry) &&
+          (deferredCountry === "all" || party.countries.includes(deferredCountry)) &&
           (deferredType === "all" || party.types.includes(deferredType)) &&
           (deferredStatus === "all" || party.status === deferredStatus) &&
           (!deferredActiveLabel ||
@@ -584,75 +626,31 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
             onChange={(event) => setQuery(event.target.value)}
           />
         </label>
-        <label>
-          <span>Country</span>
-          <select
-            value={country}
-            onChange={(event) => {
-              updateUrlFilters({ country: event.target.value });
-            }}
-          >
-            <option value="all">All countries</option>
-            {countries.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Type</span>
-          <select
-            value={type}
-            onChange={(event) => {
-              updateUrlFilters({ type: event.target.value });
-            }}
-          >
-            <option value="all">All types</option>
-            {types.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Status</span>
-          <select
-            value={status}
-            onChange={(event) => {
-              updateUrlFilters({ status: event.target.value });
-            }}
-          >
-            <option value="all">All statuses</option>
-            {statuses.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Label</span>
-          <select value={activeLabel} onChange={(event) => chooseLabel(event.target.value)}>
-            <option value="">All labels</option>
-            {classificationLabels.map((item) => (
-              <option key={`label-${item}`} value={item}>{item}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Sort</span>
-          <select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="seats">Parliamentary seats</option>
-            <option value="name">Name A–Z</option>
-            <option value="country">Country A–Z</option>
-            <option value="status">Status A–Z</option>
-            <option value="label">First label A–Z</option>
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-          </select>
-        </label>
+        <StickySelect
+          label="Country"
+          value={country}
+          options={countryOptions}
+          onChange={(value) => updateUrlFilters({ country: value })}
+        />
+        <StickySelect
+          label="Type"
+          value={type}
+          options={typeOptions}
+          onChange={(value) => updateUrlFilters({ type: value })}
+        />
+        <StickySelect
+          label="Status"
+          value={status}
+          options={statusOptions}
+          onChange={(value) => updateUrlFilters({ status: value })}
+        />
+        <StickySelect
+          label="Label"
+          value={activeLabel}
+          options={labelOptions}
+          onChange={chooseLabel}
+        />
+        <StickySelect label="Sort" value={sort} options={sortOptions} onChange={setSort} />
         <div className="view-switch" aria-label="Display style">
           <button
             type="button"
@@ -750,9 +748,11 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                     ) : null}
                   </div>
                   <div className="context-filter-list">
-                    <button type="button" onClick={() => chooseCountry(party.country)}>
-                      <RichText text={party.country} runs={party.formatting.country} />
-                    </button>
+                    {party.countries.map((item, countryIndex) => (
+                      <button type="button" key={item} onClick={() => chooseCountry(item)}>
+                        <RichText text={item} runs={party.formatting.countries[countryIndex]} />
+                      </button>
+                    ))}
                     {party.types.map((item, typeIndex) => (
                       <button type="button" key={item} onClick={() => chooseType(item)}>
                         <RichText text={item} runs={party.formatting.types[typeIndex]} />
@@ -775,8 +775,9 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                     ))}
                   </div>
                   <div className="seat-line">
-                    {party.dissolved && formatLifeSpan(party.established, party.dissolved) ? (
-                      <span><b>{formatLifeSpan(party.established, party.dissolved)}</b></span>
+                    {(party.dissolved || party.lifePeriods.length > 1) &&
+                    formatLifeSpan(party.lifePeriods) ? (
+                      <span><b>{formatLifeSpan(party.lifePeriods)}</b></span>
                     ) : (
                       <>
                         <SeatValue

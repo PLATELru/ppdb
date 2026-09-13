@@ -19,6 +19,7 @@ export function SiteHeader() {
       <nav className="main-nav" aria-label="Primary navigation">
         <a href={`${basePath}/`}>Index</a>
         <a href={`${basePath}/#about`}>About</a>
+        <a href={`${basePath}/contact/`}>Contact</a>
         <a href={`${basePath}/data-guide/`}>Data guide</a>
         <a
           href="https://github.com/PLATELru/ppdb/blob/main/data/PPDB%20database.xlsx"

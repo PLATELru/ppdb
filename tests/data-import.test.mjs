@@ -5,10 +5,32 @@ import database from "../data/parties.json" with { type: "json" };
 const byId = new Map(database.parties.map((party) => [party.id, party]));
 
 test("imports every current party record", () => {
-  assert.equal(database.schemaVersion, 9);
+  assert.equal(database.schemaVersion, 10);
   assert.equal(database.count, database.parties.length);
   assert.equal(byId.size, database.count);
   assert.ok(byId.has("bgUskorenie"));
+});
+
+test("imports every country from a multiline COUNTRY cell", () => {
+  const fatherland = byId.get("rsOtadzbina");
+  assert.equal(fatherland?.country, "Serbia");
+  assert.deepEqual(fatherland?.countries, ["Serbia", "Kosovo"]);
+  assert.deepEqual(
+    fatherland?.formatting.countries.map((runs) => runs.map((run) => run.text).join("")),
+    ["Serbia", "Kosovo"],
+  );
+});
+
+test("pairs multiline establishment and dissolution dates by line", () => {
+  const nps = byId.get("rsNPS");
+  assert.deepEqual(nps?.establishmentDates, ["2014-08-22", "2023-08-06"]);
+  assert.deepEqual(nps?.dissolutionDates, ["2017-10-22"]);
+  assert.deepEqual(nps?.lifePeriods, [
+    { established: "2014-08-22", dissolved: "2017-10-22" },
+    { established: "2023-08-06", dissolved: null },
+  ]);
+  assert.equal(nps?.established, "2014-08-22");
+  assert.equal(nps?.dissolved, null);
 });
 
 test("imports and resolves redirect IDs with their historical colours", () => {
@@ -55,7 +77,7 @@ test("preserves legislature names and partial-date precision", () => {
 });
 
 test("imports optional registration and delegalisation dates", () => {
-  assert.equal(byId.get("kzAdilet")?.registered, "2026-01-06");
+  assert.equal(byId.get("kzAdilet")?.registered, "2026-06-01");
   assert.equal(byId.get("ruKPRSFSR")?.delegalised, "1991-11-06");
   assert.equal(byId.get("atOVP")?.registered, null);
   assert.equal(byId.get("atOVP")?.delegalised, null);
@@ -113,12 +135,20 @@ test("imports international alliances, their colours and Index visibility", () =
         color: "#DD0302",
       },
       {
-        id: "suCPSU",
-        name: "CPSU",
-        display: "CPSU (until 1991)",
-        comment: "(until 1991)",
+        id: "intIMCWP",
+        name: "IMCWP",
+        display: "IMCWP",
+        comment: null,
+        indexVisible: true,
+        color: byId.get("intIMCWP")?.color,
+      },
+      {
+        id: "intICS",
+        name: "ICS",
+        display: "ICS (formerly)",
+        comment: "(formerly)",
         indexVisible: false,
-        color: byId.get("suCPSU")?.color,
+        color: byId.get("intICS")?.color,
       },
     ],
   );

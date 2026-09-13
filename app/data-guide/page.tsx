@@ -1,8 +1,13 @@
 import Link from "next/link";
+import { FooterXLink } from "../components/FooterXLink";
 import { SiteHeader } from "../components/SiteHeader";
 
 const fields = [
-  ["COUNTRY", "Required", "Country name used for filtering and grouping."],
+  [
+    "COUNTRY",
+    "Required multiline text",
+    "Put one country on each line. Every country is searchable and filterable; the first is used for alphabetical sorting and legislature totals.",
+  ],
   ["ID", "Required", "Stable, unique record ID, e.g. atOVP. Changing it changes the party URL."],
   ["NAME", "Required", "English-language party name."],
   [
@@ -23,7 +28,7 @@ const fields = [
   [
     "ESTABLISHMENT / REGISTERED / DELEGALISED / DISSOLUTION",
     "Date",
-    "Optional milestone dates. Full dates, month-year values and year-only values are supported; the displayed precision is preserved.",
+    "Optional milestone dates. ESTABLISHMENT and DISSOLUTION accept paired dates on matching lines for refounded parties. Full dates, month-year values and year-only values are supported; the displayed precision is preserved.",
   ],
   [
     "LABELS",
@@ -180,6 +185,7 @@ export default function DataGuidePage() {
       <footer>
         <Link href="/">← Return to index page</Link>
         <span>PPDB — Data guide</span>
+        <FooterXLink />
       </footer>
     </main>
   );

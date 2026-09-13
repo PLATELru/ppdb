@@ -18,6 +18,7 @@
 // }
 
 import { PartyDirectory } from "./components/PartyDirectory";
+import { FooterXLink } from "./components/FooterXLink";
 import { SiteHeader } from "./components/SiteHeader";
 import { countries, parties } from "../lib/parties";
 import { getPartyIndexVersion, toPartyIndexEntry } from "../lib/party-index";
@@ -61,6 +62,7 @@ export default function Home() {
           not</strong> be used for serious purposes. The website structure was vibecoded using
           ChatGPT. All entries were added by humans.
         </span>
+        <FooterXLink />
       </footer>
     </main>
   );

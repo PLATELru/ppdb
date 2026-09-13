@@ -15,7 +15,9 @@ The ID is the stable key used in URLs and internal links. For example, `atOVP` b
 
 The `Redirects` sheet maps former or alternative IDs to current records. Its columns are `ID`, optional `ID colorcode`, and `Redirect to`. Links using a redirect ID open the target record while retaining the redirect colour; when that colour is blank, PPDB uses the final target's colour. Redirect targets are validated during import, including chained redirects and cycles.
 
-Use real spreadsheet dates in date columns. In `SOURCES`, put one URL on each line.
+Put one country on each line of `COUNTRY` when a party belongs to more than one country. The first country remains the primary country for alphabetical sorting and legislature totals; every listed country is searchable and available in the Country filter.
+
+Use real spreadsheet dates in date columns. `ESTABLISHMENT` and `DISSOLUTION` may contain several dates separated by line breaks. The first establishment is paired with the first dissolution, the second establishment with the second dissolution, and so on. Leave the final dissolution absent for an active refounded party. In `SOURCES`, put one URL on each line.
 
 In `LABELS`, put one label on each line. If a line contains `#`, the label is omitted from Index cards and the Label filter; its record-page tag keeps the text after `#` as a comment but omits the hash itself. In `TYPE`, put one or more values on separate lines. A blank `TYPE` is imported as `Party`.
 

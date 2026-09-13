@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 import { SiteHeader } from "../../components/SiteHeader";
+import { FooterXLink } from "../../components/FooterXLink";
 import { LogoImage } from "../../components/LogoImage";
 import { RichText, WikiText } from "../../components/WikiText";
 import { formatDate, getParty, parties } from "../../../lib/parties";
@@ -16,7 +18,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const party = getParty(id);
   return party
-    ? { title: `${party.name} — PPDB`, description: `${party.name}, ${party.country}: PPDB record.` }
+    ? {
+        title: `${party.name} — PPDB`,
+        description: `${party.name}, ${party.countries.join(", ")}: PPDB record.`,
+      }
     : { title: "Party not found — PPDB" };
 }
 
@@ -78,10 +83,14 @@ export default async function PartyPage({ params }: PageProps) {
   const party = getParty(id);
   if (!party) notFound();
 
-  const established = formatDate(party.established);
+  const establishmentDates = party.establishmentDates
+    .map((value) => formatDate(value))
+    .filter((value): value is string => Boolean(value));
   const registered = formatDate(party.registered);
   const delegalised = formatDate(party.delegalised);
-  const dissolved = formatDate(party.dissolved);
+  const dissolutionDates = party.dissolutionDates
+    .map((value) => formatDate(value))
+    .filter((value): value is string => Boolean(value));
   const lastEdited = formatDate(party.lastEdited);
   const hasSeats = [
     party.seats.legislature,
@@ -100,7 +109,8 @@ export default async function PartyPage({ params }: PageProps) {
     { label: "Telegram", href: party.socials.telegram, text: "Telegram" },
     { label: "VK", href: party.socials.vk, text: "VK" },
   ];
-  const countryIndexHref = `/?country=${encodeURIComponent(party.country)}#party-index-heading`;
+  const countryIndexHref = (country: string) =>
+    `/?country=${encodeURIComponent(country)}#party-index-heading`;
 
   return (
     <main className="site-shell">
@@ -108,7 +118,12 @@ export default async function PartyPage({ params }: PageProps) {
       <div className="page-body record-page">
         <div className="breadcrumbs">
           <Link href="/">Index</Link> <span>›</span>{" "}
-          <Link href={countryIndexHref}>{party.country}</Link> <span>›</span>{" "}
+          {party.countries.map((country, index) => (
+            <Fragment key={country}>
+              {index ? ", " : null}
+              <Link href={countryIndexHref(country)}>{country}</Link>
+            </Fragment>
+          ))} <span>›</span>{" "}
           <strong>{party.acronym ?? party.name}</strong>
         </div>
 
@@ -124,9 +139,11 @@ export default async function PartyPage({ params }: PageProps) {
           <div>
             <span className="eyebrow">Party record / {party.id}</span>
             <div className="record-context">
-              <Link href={countryIndexHref}>
-                <RichText text={party.country} runs={party.formatting.country} />
-              </Link>
+              {party.countries.map((country, countryIndex) => (
+                <Link href={countryIndexHref(country)} key={country}>
+                  <RichText text={country} runs={party.formatting.countries[countryIndex]} />
+                </Link>
+              ))}
               {party.types.map((item, typeIndex) => (
                 <Link key={item} href={`/?type=${encodeURIComponent(item)}`}>
                   <RichText text={item} runs={party.formatting.types[typeIndex]} />
@@ -191,10 +208,14 @@ export default async function PartyPage({ params }: PageProps) {
                   <RichText text={party.acronym} runs={party.formatting.acronym} />
                 </InfoRow>
               ) : null}
-              {established ? <InfoRow label="Established">{established}</InfoRow> : null}
+              {establishmentDates.length ? (
+                <InfoRow label="Established">{establishmentDates.join("\n")}</InfoRow>
+              ) : null}
               {registered ? <InfoRow label="Registered">{registered}</InfoRow> : null}
               {delegalised ? <InfoRow label="Delegalised">{delegalised}</InfoRow> : null}
-              {dissolved ? <InfoRow label="Dissolved">{dissolved}</InfoRow> : null}
+              {dissolutionDates.length ? (
+                <InfoRow label="Dissolved">{dissolutionDates.join("\n")}</InfoRow>
+              ) : null}
               {party.formerNames ? (
                 <InfoRow label="Former names">
                   <RichText text={party.formerNames} runs={party.formatting.formerNames} />
@@ -329,6 +350,7 @@ export default async function PartyPage({ params }: PageProps) {
       <footer>
         <Link href="/">← Return to index page</Link>
         <span>PPDB — Political Parties Database</span>
+        <FooterXLink />
       </footer>
     </main>
   );

@@ -35,7 +35,46 @@ test("renders the type filter and seat sort while retaining lifespan support", a
   assert.match(html, />Type</);
   assert.match(html, /Parliamentary seats/);
   assert.match(html, /Oldest first/);
-  assert.match(component, /formatLifeSpan\(party\.established, party\.dissolved\)/);
+  assert.match(component, /formatLifeSpan\(party\.lifePeriods\)/);
+});
+
+test("renders multiple countries and refounded-party life periods", async () => {
+  const [fatherlandHtml, npsHtml, indexHtml] = await Promise.all([
+    fetchHtml("/party/rsOtadzbina"),
+    fetchHtml("/party/rsNPS"),
+    fetchHtml(),
+  ]);
+
+  assert.match(fatherlandHtml, /href="\/\?country=Serbia#party-index-heading"[^>]*>Serbia<\/a>/);
+  assert.match(fatherlandHtml, /href="\/\?country=Kosovo#party-index-heading"[^>]*>Kosovo<\/a>/);
+  assert.match(npsHtml, /22 August 2014/);
+  assert.match(npsHtml, /6 August 2023/);
+  assert.match(npsHtml, /22 October 2017/);
+  assert.match(indexHtml, /2014 – 2017, 2023 –/);
+});
+
+test("keeps the first dropdown option fixed above a scrolling option list", async () => {
+  const [component, select, styles] = await Promise.all([
+    readFile(new URL("../app/components/PartyDirectory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/StickySelect.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(component, /label: "All countries"/);
+  assert.match(component, /label: "All labels"/);
+  assert.match(select, /sticky-select-option-first/);
+  assert.match(select, /options\.slice\(1\)/);
+  assert.match(styles, /\.sticky-select-scroll \{[^}]*overflow-y: auto;/);
+});
+
+test("renders the contact page, partner links and footer X icon", async () => {
+  const [contactHtml, indexHtml] = await Promise.all([fetchHtml("/contact"), fetchHtml()]);
+  assert.match(contactHtml, /href="https:\/\/x\.com\/partiesdatabase"/);
+  assert.match(contactHtml, /href="https:\/\/bananasareviolet\.github\.io\/epgroupbuilder\/"/);
+  assert.match(contactHtml, /href="https:\/\/bananasareviolet\.github\.io\/eestimate\/"/);
+  assert.match(contactHtml, /href="https:\/\/hok-brag\.github\.io\/"/);
+  assert.match(indexHtml, /class="footer-x-link"/);
+  assert.match(indexHtml, /href="\/contact\/">Contact<\/a>/);
 });
 
 test("uses seat sorting by default and credits humans for the entries", async () => {
@@ -59,7 +98,7 @@ test("renders optional registration and delegalisation dates only on party pages
 
   const registeredHtml = await fetchHtml("/party/kzAdilet");
   assert.match(registeredHtml, />Registered</);
-  assert.match(registeredHtml, /6 January 2026/);
+  assert.match(registeredHtml, /1 June 2026/);
 
   const delegalisedHtml = await fetchHtml("/party/ruKPRSFSR");
   assert.match(delegalisedHtml, />Delegalised</);
@@ -110,11 +149,13 @@ test("renders alliance badges with target colours and record-only comments", asy
   const cardExcerpt = indexHtml.slice(Math.max(0, partyNamePosition - 3000), partyNamePosition + 3000);
   assert.match(cardExcerpt, /href="\/party\/intUCPCPSU"/);
   assert.match(cardExcerpt, />UCP–CPSU<\/a>/);
-  assert.doesNotMatch(cardExcerpt, /CPSU \(until 1991\)/);
+  assert.match(cardExcerpt, /href="\/party\/intIMCWP"/);
+  assert.doesNotMatch(cardExcerpt, /ICS \(formerly\)/);
   assert.match(recordHtml, />International alliances</);
   assert.match(recordHtml, /href="\/party\/intUCPCPSU"/);
-  assert.match(recordHtml, /href="\/party\/suCPSU"/);
-  assert.match(recordHtml, /CPSU \(until 1991\)/);
+  assert.match(recordHtml, /href="\/party\/intIMCWP"/);
+  assert.match(recordHtml, /href="\/party\/intICS"/);
+  assert.match(recordHtml, /ICS \(formerly\)/);
   assert.match(recordHtml, /--alliance-color:#DD0302/);
   assert.match(styles, /var\(--alliance-color/);
 });

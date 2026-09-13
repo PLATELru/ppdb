@@ -1,4 +1,4 @@
-import type { Party } from "./parties";
+import type { Party, PartyLifePeriod } from "./parties";
 import type { RichTextRun } from "./rich-text";
 
 type PartyIndexSeats = {
@@ -17,6 +17,7 @@ type PartyIndexSeats = {
 
 type PartyFormatting = {
   country: RichTextRun[];
+  countries: RichTextRun[][];
   name: RichTextRun[];
   nativeName: RichTextRun[];
   literalName: RichTextRun[];
@@ -28,6 +29,7 @@ type PartyFormatting = {
 export type PartyIndexEntry = {
   id: string;
   country: string;
+  countries: string[];
   name: string;
   nativeName: string | null;
   literalName: string | null;
@@ -49,7 +51,10 @@ export type PartyIndexEntry = {
     indexVisible: boolean;
   }>;
   established: string | null;
+  establishmentDates: string[];
   dissolved: string | null;
+  dissolutionDates: string[];
+  lifePeriods: PartyLifePeriod[];
   seats: PartyIndexSeats;
   color: string;
   logo: string | null;
@@ -81,7 +86,7 @@ export function getPartySearchText(party: PartyIndexEntry) {
     party.nativeName,
     party.literalName,
     party.acronym,
-    party.country,
+    ...party.countries,
     ...party.types,
     party.status,
     party.formerNames,
@@ -97,6 +102,7 @@ export function toPartyIndexEntry(party: Party): PartyIndexEntry {
   return {
     id: party.id,
     country: party.country,
+    countries: party.countries,
     name: party.name,
     nativeName: party.nativeName,
     literalName: party.literalName,
@@ -118,12 +124,16 @@ export function toPartyIndexEntry(party: Party): PartyIndexEntry {
       indexVisible,
     })),
     established: party.established,
+    establishmentDates: party.establishmentDates,
     dissolved: party.dissolved,
+    dissolutionDates: party.dissolutionDates,
+    lifePeriods: party.lifePeriods,
     seats: party.seats,
     color: party.color,
     logo: party.logo,
     formatting: {
       country: party.formatting.country,
+      countries: party.formatting.countries,
       name: party.formatting.name,
       nativeName: party.formatting.nativeName,
       literalName: party.formatting.literalName,

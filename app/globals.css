@@ -193,8 +193,55 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   min-width: 0;
   margin-bottom: 12px;
 }
-.toolbar label { display: grid; min-width: 0; gap: 3px; font-family: "Courier New", Courier, monospace; font-size: 10px; text-transform: uppercase; }
-.toolbar input, .toolbar select { width: 100%; min-width: 0; min-height: 34px; padding: 6px 8px; background: var(--panel-light); }
+.toolbar label, .toolbar-select { display: grid; min-width: 0; gap: 3px; font-family: "Courier New", Courier, monospace; font-size: 10px; text-transform: uppercase; }
+.toolbar input, .toolbar select, .sticky-select-trigger { width: 100%; min-width: 0; min-height: 34px; padding: 6px 8px; background: var(--panel-light); }
+.toolbar-select { position: relative; }
+.sticky-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+  text-transform: none;
+}
+.sticky-select-trigger > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sticky-select-menu {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  z-index: 40;
+  width: max(100%, 220px);
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 2px;
+  background: var(--panel-light);
+  border: 2px solid;
+  border-color: var(--shadow-light) var(--shadow-dark) var(--shadow-dark) var(--shadow-light);
+  box-shadow: 2px 2px 0 #202020;
+  text-transform: none;
+}
+.sticky-select-menu[hidden] { display: none; }
+.sticky-select-scroll { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; }
+.sticky-select-option {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  padding: 6px 8px;
+  cursor: pointer;
+  background: var(--panel-light);
+  border: 0;
+  border-bottom: 1px dotted var(--line);
+  text-align: left;
+}
+.sticky-select-option:last-child { border-bottom: 0; }
+.sticky-select-option-first {
+  position: relative;
+  z-index: 1;
+  border-bottom: 2px solid var(--line);
+  font-weight: 700;
+}
+.sticky-select-option:hover, .sticky-select-option:focus-visible { background: var(--panel-hover); }
+.sticky-select-option[aria-selected="true"] { color: #fff; background: var(--navy); }
 .view-switch { display: flex; max-width: 100%; height: 34px; }
 .view-switch button { padding: 5px 10px; cursor: pointer; }
 .view-switch button.active { color: #fff; background: var(--navy); border-color: #5959b0 #05043f #05043f #5959b0; }
@@ -423,6 +470,20 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .notes-grid > div { padding: 12px; background: var(--panel-light); border: 1px solid var(--line); }
 .notes-grid p { margin: 7px 0 0; color: var(--muted); line-height: 1.5; }
 footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px 5px 6px; color: var(--muted); font-family: "Courier New", Courier, monospace; font-size: 10px; }
+.footer-x-link {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  margin-left: auto;
+  color: var(--ink);
+  background: var(--panel-light);
+  border: 1px solid var(--line);
+  text-decoration: none;
+}
+.footer-x-link:hover { background: var(--panel-hover); }
+.footer-x-link svg { width: 14px; height: 14px; fill: currentColor; }
 
 .record-page { min-height: 700px; }
 .breadcrumbs { padding: 6px 4px 12px; font-family: "Courier New", Courier, monospace; font-size: 11px; }
@@ -534,6 +595,17 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .guide-copy ul { margin: 0; padding-left: 20px; }
 .guide-copy li + li { margin-top: 8px; }
 
+.contact-page { display: grid; align-content: start; gap: 12px; min-height: 520px; }
+.contact-page .breadcrumbs { padding-bottom: 0; }
+.contact-panel { display: grid; justify-items: start; align-content: start; }
+.contact-links { display: grid; gap: 10px; }
+.contact-panel > a, .contact-links a {
+  padding: 9px 10px;
+  background: var(--panel-light);
+  border: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 900px) {
   body { padding: 5px; }
   .site-shell { min-height: calc(100vh - 10px); }
@@ -564,6 +636,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
   .record-logo-wrap { --logo-frame-size: calc(126px - 2px); width: 126px; height: 126px; }
   .former-logo-grid { grid-template-columns: repeat(2, 1fr); }
   .maintenance-line, footer { flex-direction: column; }
+  .footer-x-link { margin-left: 0; }
   .field-row { grid-template-columns: 1fr; }
   .field-row > div { border-right: 0; border-bottom: 1px dotted var(--line); }
   .field-row > div:last-child { border-bottom: 0; }

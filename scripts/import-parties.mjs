@@ -302,6 +302,23 @@ function dateValue(cell) {
   return null;
 }
 
+function dateValues(cell) {
+  if (!cell || cell.v == null || cell.v === "") return [];
+  if (typeof cell.v !== "string") {
+    const value = dateValue(cell);
+    return value ? [value] : [];
+  }
+
+  return String(cell.v)
+    .split(/\r\n|\n|\r/)
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .flatMap((value) => {
+      const parsed = dateValue({ ...cell, v: value, w: value });
+      return parsed ? [parsed] : [];
+    });
+}
+
 const legislatureSheet = workbook.Sheets.Legislatures;
 const legislatureRows = legislatureSheet
   ? XLSX.utils.sheet_to_json(legislatureSheet, { header: 1, raw: true, defval: null })
@@ -371,9 +388,23 @@ const parties = rows
   .map((row, rowOffset) => ({ row, rowNumber: rowOffset + 3 }))
   .filter(({ row }) => text(valueAt(row, "ID")))
   .map(({ row, rowNumber }) => {
-    const country = text(valueAt(row, "COUNTRY"));
+    const countryItems = lineItemsAt(rowNumber, "COUNTRY");
+    const countries = countryItems.map((item) => item.text).filter(Boolean);
+    const country = countries[0] ?? null;
     const legislature = legislatureData.get(country) ?? {};
     const id = text(valueAt(row, "ID"));
+    const establishmentDates = dateValues(cellAt(sheet, rowNumber, index.ESTABLISHMENT));
+    const dissolutionDates = dateValues(cellAt(sheet, rowNumber, index.DISSOLUTION));
+    const lifePeriods = Array.from(
+      { length: Math.max(establishmentDates.length, dissolutionDates.length) },
+      (_, periodIndex) => ({
+        established: establishmentDates[periodIndex] ?? null,
+        dissolved: dissolutionDates[periodIndex] ?? null,
+      }),
+    );
+    const currentlyDissolved =
+      dissolutionDates.length > 0 &&
+      (establishmentDates.length === 0 || dissolutionDates.length >= establishmentDates.length);
     const formerLogos = hasMultilineFormerLogo
       ? parseFormerLogos(
           valueAt(row, "FORMER_LOGO"),
@@ -400,6 +431,7 @@ const parties = rows
 
     return {
       country,
+      countries,
       id,
       name: text(valueAt(row, "NAME")),
       nativeName: text(valueAt(row, "NATIVE_NAME")),
@@ -420,10 +452,13 @@ const parties = rows
       },
       logo: text(valueAt(row, "LOGO")),
       color: text(valueAt(row, "COLORCODE")) ?? "#666666",
-      established: dateValue(cellAt(sheet, rowNumber, index.ESTABLISHMENT)),
+      established: establishmentDates[0] ?? null,
+      establishmentDates,
       registered: dateValue(cellAt(sheet, rowNumber, index.REGISTERED)),
       delegalised: dateValue(cellAt(sheet, rowNumber, index.DELEGALISED)),
-      dissolved: dateValue(cellAt(sheet, rowNumber, index.DISSOLUTION)),
+      dissolved: currentlyDissolved ? dissolutionDates.at(-1) : null,
+      dissolutionDates,
+      lifePeriods,
       labels: labelItems.map((item) => item.name),
       labelDetails: labelItems,
       alliances: allianceItems,
@@ -449,7 +484,8 @@ const parties = rows
       lastEdited: dateValue(cellAt(sheet, rowNumber, index.LAST_EDITED)),
       sources: splitSources(valueAt(row, "SOURCES")),
       formatting: {
-        country: runsAt(rowNumber, "COUNTRY"),
+        country: countryItems[0]?.runs ?? [],
+        countries: countryItems.map((item) => item.runs),
         name: runsAt(rowNumber, "NAME"),
         nativeName: runsAt(rowNumber, "NATIVE_NAME"),
         literalName: runsAt(rowNumber, "LITERAL_NAME"),
@@ -549,6 +585,7 @@ for (const party of parties) {
 const indexParties = parties.map((party) => ({
   id: party.id,
   country: party.country,
+  countries: party.countries,
   name: party.name,
   nativeName: party.nativeName,
   literalName: party.literalName,
@@ -570,12 +607,16 @@ const indexParties = parties.map((party) => ({
     indexVisible,
   })),
   established: party.established,
+  establishmentDates: party.establishmentDates,
   dissolved: party.dissolved,
+  dissolutionDates: party.dissolutionDates,
+  lifePeriods: party.lifePeriods,
   seats: party.seats,
   color: party.color,
   logo: party.logo,
   formatting: {
     country: party.formatting.country,
+    countries: party.formatting.countries,
     name: party.formatting.name,
     nativeName: party.formatting.nativeName,
     literalName: party.formatting.literalName,
@@ -589,7 +630,7 @@ fs.writeFileSync(
   outputPath,
   `${JSON.stringify(
     {
-      schemaVersion: 9,
+      schemaVersion: 10,
       source: "data/PPDB database.xlsx",
       count: parties.length,
       redirects,

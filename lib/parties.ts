@@ -1,6 +1,8 @@
 import databaseJson from "../data/parties.json";
+import type { PartyLifePeriod } from "./party-dates";
 import type { RichTextRun } from "./rich-text";
 export { dateSortKey, formatDate, formatLifeSpan } from "./party-dates";
+export type { PartyLifePeriod } from "./party-dates";
 export type { RichTextRun } from "./rich-text";
 
 export type PartySeats = {
@@ -44,6 +46,7 @@ export type FormerLogo = {
 
 export type PartyFormatting = {
   country: RichTextRun[];
+  countries: RichTextRun[][];
   name: RichTextRun[];
   nativeName: RichTextRun[];
   literalName: RichTextRun[];
@@ -60,6 +63,7 @@ export type PartyFormatting = {
 
 export type Party = {
   country: string;
+  countries: string[];
   id: string;
   name: string;
   nativeName: string | null;
@@ -69,9 +73,12 @@ export type Party = {
   logo: string | null;
   color: string;
   established: string | null;
+  establishmentDates: string[];
   registered: string | null;
   delegalised: string | null;
   dissolved: string | null;
+  dissolutionDates: string[];
+  lifePeriods: PartyLifePeriod[];
   labels: string[];
   labelDetails: PartyLabel[];
   alliances: PartyAlliance[];
@@ -120,7 +127,7 @@ export const redirects: PartyRedirect[] = database.redirects;
 const partyById = new Map(parties.map((party) => [party.id.toLowerCase(), party]));
 const redirectById = new Map(redirects.map((redirect) => [redirect.id.toLowerCase(), redirect]));
 export const countries = Array.from(
-  new Set(parties.map((party) => party.country).filter(Boolean)),
+  new Set(parties.flatMap((party) => party.countries).filter(Boolean)),
 ).sort((a, b) => a.localeCompare(b, "en"));
 
 export function getParty(id: string) {

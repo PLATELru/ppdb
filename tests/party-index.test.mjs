@@ -9,6 +9,7 @@ function indexParty(overrides = {}) {
   return {
     id: "euINITIATIVE",
     country: "European Union",
+    countries: ["European Union"],
     name: "Initiative of Communist and Workers' Parties",
     nativeName: null,
     literalName: null,
@@ -17,7 +18,10 @@ function indexParty(overrides = {}) {
     types: ["Coalition"],
     status: "Dissolved",
     established: null,
+    establishmentDates: [],
     dissolved: null,
+    dissolutionDates: [],
+    lifePeriods: [],
     seats: {},
     color: "#ff0000",
     logo: null,
@@ -30,6 +34,14 @@ function indexParty(overrides = {}) {
 
 test("includes record IDs in the Index search text", () => {
   assert.match(getPartySearchText(indexParty()), /euinitiative/);
+});
+
+test("includes every listed country in the Index search text", () => {
+  const searchText = getPartySearchText(
+    indexParty({ country: "Serbia", countries: ["Serbia", "Kosovo"] }),
+  );
+  assert.match(searchText, /serbia/);
+  assert.match(searchText, /kosovo/);
 });
 
 test("changes the index cache key when searchable data changes", () => {

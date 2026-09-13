@@ -21,9 +21,18 @@ export function dateSortKey(value: string | null) {
   return value;
 }
 
-export function formatLifeSpan(established: string | null, dissolved: string | null) {
-  const startYear = established?.match(/^\d{4}/)?.[0] ?? null;
-  const endYear = dissolved?.match(/^\d{4}/)?.[0] ?? null;
-  if (!startYear || !endYear) return null;
-  return `${startYear} – ${endYear}`;
+export type PartyLifePeriod = {
+  established: string | null;
+  dissolved: string | null;
+};
+
+export function formatLifeSpan(periods: readonly PartyLifePeriod[]) {
+  const spans = periods.flatMap(({ established, dissolved }) => {
+    const startYear = established?.match(/^\d{4}/)?.[0] ?? null;
+    const endYear = dissolved?.match(/^\d{4}/)?.[0] ?? null;
+    if (!startYear) return [];
+    return [`${startYear} –${endYear ? ` ${endYear}` : ""}`];
+  });
+
+  return spans.length ? spans.join(", ") : null;
 }
