@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 55.889998 80.370002"
+   version="1.1"
+   id="svg34"
+   sodipodi:docname="esMM.svg"
+   width="55.889999"
+   height="80.370003"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview36"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="2.3007725"
+     inkscape:cx="8.6927324"
+     inkscape:cy="52.156394"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg34" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#4bcc8c;}</style>
+  </defs>
+  <polygon
+     class="cls-1"
+     points="10.69,43.62 10.85,43.62 23.57,80.37 32.38,80.37 45.1,43.24 45.26,43.24 45.26,80.37 55.89,80.37 55.89,27.98 39.81,27.98 28.34,64.04 28.18,64.04 16.05,27.98 0,27.98 0,80.37 10.69,80.37 "
+     id="polygon10"
+     style="fill:#4ccc8d;fill-opacity:1" />
+  <polygon
+     class="cls-1"
+     points="39.81,27.98 46.73,7.28 37.33,0 28.59,27.98 "
+     id="polygon12"
+     style="fill:#4ccc8d;fill-opacity:1" />
+</svg>
