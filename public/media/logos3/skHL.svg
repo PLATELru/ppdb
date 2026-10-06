@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 163.68781 184.59989"
+   version="1.1"
+   id="svg34"
+   sodipodi:docname="skHL.svg"
+   width="163.68782"
+   height="184.5999"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview36"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="1.5760571"
+     inkscape:cx="113.57457"
+     inkscape:cy="149.10628"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg34" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#e63846;}.cls-2{fill:#336e97;}</style>
+  </defs>
+  <title
+     id="title6">Asset 1logo</title>
+  <path
+     class="cls-1"
+     d="M 58.003889,118.9999 A 247.26,247.26 0 0 0 2.6338892,81.199895 c -3.43000003,-1.69 -2.63000003,-4.37 -2.35000003,-6.79 2.32000003,-21.17 10.99999983,-39.23 26.99999983,-53.5 43.25,-38.68 111.800001,-21.42999995 131.720001,33.09 0.56,1.53 1,3.11 1.63,5.15 -39.63,10.68 -71.440001,34.25 -102.630001,59.850005 z m 0.29,-61.580005 a 19.89,19.89 0 0 0 -0.26,39.77 19.89,19.89 0 1 0 0.26,-39.77 z"
+     id="path8" />
+  <path
+     class="cls-2"
+     d="m 162.41389,68.499895 a 78.61,78.61 0 0 1 -3.34,40.630005 c -3.49,10 -8.53,19.22 -15.88,26.88 -14.27,14.89 -28.79,29.54 -43.280001,44.22 -1.46,1.48 -3.39,2.48 -6,4.37 a 60,60 0 0 1 -0.59,-6 c 0.22,-9.77 -4,-14.29 -13.85,-14.85 -4.24,-0.24 -8.46,-0.87 -12.81,-1.34 8.39,-22.65 68.340001,-81.410005 95.750001,-93.910005 z"
+     id="path10" />
+  <path
+     class="cls-2"
+     d="M 0.75388917,90.069895 A 367.44,367.44 0 0 1 50.823889,157.0699 c -23.21,-7.66 -47.5099998,-34.51 -50.06999983,-67.000005 z"
+     id="path12" />
+  <metadata
+     id="metadata853">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Asset 1logo</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
