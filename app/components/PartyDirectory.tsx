@@ -753,9 +753,9 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                         <RichText text={item} runs={party.formatting.countries[countryIndex]} />
                       </button>
                     ))}
-                    {party.types.map((item, typeIndex) => (
-                      <button type="button" key={item} onClick={() => chooseType(item)}>
-                        <RichText text={item} runs={party.formatting.types[typeIndex]} />
+                    {party.typeDetails.map((item) => (
+                      <button type="button" key={`${item.name}-${item.display}`} onClick={() => chooseType(item.name)}>
+                        <RichText text={item.display} runs={item.runs} />
                       </button>
                     ))}
                     {party.status ? (
@@ -769,7 +769,7 @@ export function PartyDirectory({ countries, initialParties, indexVersion, totalC
                   </div>
                   <div className="label-list">
                     {party.labelDetails.filter((label) => label.indexVisible).map((label) => (
-                      <button type="button" key={label.name} onClick={() => chooseLabel(label.name)}>
+                      <button type="button" key={`${label.name}-${label.display}`} onClick={() => chooseLabel(label.name)}>
                         <RichText text={label.display} runs={label.runs} />
                       </button>
                     ))}

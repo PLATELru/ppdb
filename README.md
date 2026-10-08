@@ -18,3 +18,5 @@ npm run dev
 ```
 
 The import stops on duplicate IDs or rows missing a required field. Run `npm run lint` for source checks and `npm run build:github` to reproduce the GitHub Pages export in `out/`.
+
+Upload the current workbook as `PPDB database.xlsx` in the repository root. The importer uses this file when present and falls back to `data/PPDB database.xlsx`. In `LABELS` and `TYPE`, write `canonical name | display name` to keep filters and grouping under the canonical name. `LABELS` also accepts a comment after `#`, including on a line with a display name.

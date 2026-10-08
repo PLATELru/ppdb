@@ -144,9 +144,9 @@ export default async function PartyPage({ params }: PageProps) {
                   <RichText text={country} runs={party.formatting.countries[countryIndex]} />
                 </Link>
               ))}
-              {party.types.map((item, typeIndex) => (
-                <Link key={item} href={`/?type=${encodeURIComponent(item)}`}>
-                  <RichText text={item} runs={party.formatting.types[typeIndex]} />
+              {party.typeDetails.map((item) => (
+                <Link key={`${item.name}-${item.display}`} href={`/?type=${encodeURIComponent(item.name)}`}>
+                  <RichText text={item.display} runs={item.runs} />
                 </Link>
               ))}
               {party.status ? (

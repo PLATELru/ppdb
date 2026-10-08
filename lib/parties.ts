@@ -27,6 +27,12 @@ export type PartyLabel = {
   runs: RichTextRun[];
 };
 
+export type PartyType = {
+  name: string;
+  display: string;
+  runs: RichTextRun[];
+};
+
 export type PartyAlliance = {
   id: string;
   sourceId: string;
@@ -83,6 +89,7 @@ export type Party = {
   labelDetails: PartyLabel[];
   alliances: PartyAlliance[];
   types: string[];
+  typeDetails: PartyType[];
   status: string | null;
   relations: string | null;
   description: string | null;

@@ -33,12 +33,12 @@ const fields = [
   [
     "LABELS",
     "Multiline text",
-    "Put one label on each line. A line containing # is hidden from the Index; on the record page, text after # is shown as a comment without the # character.",
+    "Put one label on each line. Use Nationalism | North Korean nationalism to display the name on the right while filtering and grouping by the label on the left. A line containing # is hidden from the Index; on the record page, text after # is shown as a comment without the # character. Both forms can be combined: Militarism | Songun # (until 2013).",
   ],
   [
     "TYPE",
     "Multiline text",
-    "Record type used for display and filtering. Blank cells default to Party; put multiple types on separate lines.",
+    "Record type used for display and filtering. Use Political movement | Association to display Association while filtering and grouping by Political movement. Blank cells default to Party; put multiple types on separate lines.",
   ],
   ["STATUS", "Text", "For example Parliamentary, Extra-parliamentary, Regional, Local or Dissolved."],
   ["RELATIONS", "Long text", "Optional relationship notes displayed below Representation in the left column."],

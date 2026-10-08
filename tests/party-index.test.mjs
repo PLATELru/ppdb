@@ -16,6 +16,7 @@ function indexParty(overrides = {}) {
     acronym: "INITIATIVE",
     formerNames: null,
     types: ["Coalition"],
+    typeDetails: [{ name: "Coalition", display: "Coalition", runs: [] }],
     status: "Dissolved",
     established: null,
     establishmentDates: [],
@@ -42,6 +43,17 @@ test("includes every listed country in the Index search text", () => {
   );
   assert.match(searchText, /serbia/);
   assert.match(searchText, /kosovo/);
+});
+
+test("searches both canonical labels and their displayed names", () => {
+  const searchText = getPartySearchText(indexParty({
+    labelDetails: [{ name: "Nationalism", display: "North Korean nationalism" }],
+    types: ["Political movement"],
+    typeDetails: [{ name: "Political movement", display: "Association" }],
+  }));
+  assert.match(searchText, /north korean nationalism/);
+  assert.match(searchText, /political movement/);
+  assert.match(searchText, /association/);
 });
 
 test("changes the index cache key when searchable data changes", () => {

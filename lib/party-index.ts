@@ -1,4 +1,4 @@
-import type { Party, PartyLifePeriod } from "./parties";
+import type { Party, PartyLifePeriod, PartyType } from "./parties";
 import type { RichTextRun } from "./rich-text";
 
 type PartyIndexSeats = {
@@ -36,6 +36,7 @@ export type PartyIndexEntry = {
   acronym: string | null;
   formerNames: string | null;
   types: string[];
+  typeDetails: PartyType[];
   status: string | null;
   labelDetails: Array<{
     name: string;
@@ -88,9 +89,10 @@ export function getPartySearchText(party: PartyIndexEntry) {
     party.acronym,
     ...party.countries,
     ...party.types,
+    ...party.typeDetails.map((item) => item.display),
     party.status,
     party.formerNames,
-    ...party.labelDetails.map((label) => label.display),
+    ...party.labelDetails.flatMap((label) => [label.name, label.display]),
     ...party.alliances.map((alliance) => alliance.display),
   ]
     .filter(Boolean)
@@ -109,6 +111,7 @@ export function toPartyIndexEntry(party: Party): PartyIndexEntry {
     acronym: party.acronym,
     formerNames: party.formerNames,
     types: party.types,
+    typeDetails: party.typeDetails,
     status: party.status,
     labelDetails: party.labelDetails.map(({ name, display, runs, indexVisible }) => ({
       name,

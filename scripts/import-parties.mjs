@@ -4,7 +4,10 @@ import XLSX from "xlsx";
 import { parseFormerLogos } from "../lib/former-logos.mjs";
 
 const root = process.cwd();
-const inputPath = path.join(root, "data", "PPDB database.xlsx");
+const uploadedInputPath = path.join(root, "PPDB database.xlsx");
+const inputPath = fs.existsSync(uploadedInputPath)
+  ? uploadedInputPath
+  : path.join(root, "data", "PPDB database.xlsx");
 const outputPath = path.join(root, "data", "parties.json");
 const indexOutputPath = path.join(root, "public", "data", "party-index.json");
 
@@ -195,23 +198,36 @@ function lineItemsAt(rowNumber, key, fallback = []) {
   }));
 }
 
+function namedItem(item, end = item.text.length) {
+  const value = item.text.slice(0, end);
+  const pipeIndex = value.indexOf("|");
+  const name = value.slice(0, pipeIndex < 0 ? value.length : pipeIndex).trim();
+  if (!name) return null;
+  const displayStart = pipeIndex < 0 ? 0 : pipeIndex + 1;
+  const displayValue = value.slice(displayStart);
+  const display = displayValue.trim() || name;
+  const start = displayValue.trim()
+    ? displayStart + displayValue.search(/\S/)
+    : value.search(/\S/);
+  return {
+    name,
+    display,
+    runs: sliceRuns(item.runs, start, start + display.length),
+  };
+}
+
 function labelItemsAt(rowNumber) {
   return lineItemsAt(rowNumber, "LABELS").flatMap((item) => {
     const hashIndex = item.text.indexOf("#");
     const labelEnd = hashIndex < 0 ? item.text.length : hashIndex;
-    const labelStart = item.text.slice(0, labelEnd).search(/\S/);
-    if (labelStart < 0) return [];
-    const label = item.text.slice(labelStart, labelEnd).trimEnd();
+    const label = namedItem(item, labelEnd);
     if (!label) return [];
-    const labelRuns = sliceRuns(item.runs, labelStart, labelStart + label.length);
 
     if (hashIndex < 0) {
       return [{
-        name: label,
-        display: label,
+        ...label,
         comment: null,
         indexVisible: true,
-        runs: labelRuns,
       }];
     }
 
@@ -230,11 +246,11 @@ function labelItemsAt(rowNumber) {
       : [];
 
     return [{
-      name: label,
-      display: comment ? `${label} ${comment}` : label,
+      name: label.name,
+      display: comment ? `${label.display} ${comment}` : label.display,
       comment: comment || null,
       indexVisible: false,
-      runs: mergeRuns([...labelRuns, ...spacer, ...commentRuns]),
+      runs: mergeRuns([...label.runs, ...spacer, ...commentRuns]),
     }];
   });
 }
@@ -427,7 +443,9 @@ const parties = rows
 
     const labelItems = labelItemsAt(rowNumber);
     const allianceItems = allianceItemsAt(rowNumber);
-    const typeItems = lineItemsAt(rowNumber, "TYPE", ["Party"]);
+    const typeItems = lineItemsAt(rowNumber, "TYPE", ["Party"])
+      .map((item) => namedItem(item))
+      .filter(Boolean);
 
     return {
       country,
@@ -462,7 +480,8 @@ const parties = rows
       labels: labelItems.map((item) => item.name),
       labelDetails: labelItems,
       alliances: allianceItems,
-      types: typeItems.map((item) => item.text),
+      types: typeItems.map((item) => item.name),
+      typeDetails: typeItems,
       status: text(valueAt(row, "STATUS")),
       relations: text(valueAt(row, "RELATIONS")),
       description: text(valueAt(row, "DESCRIPTION")),
@@ -592,6 +611,7 @@ const indexParties = parties.map((party) => ({
   acronym: party.acronym,
   formerNames: party.formerNames,
   types: party.types,
+  typeDetails: party.typeDetails,
   status: party.status,
   labelDetails: party.labelDetails.map(({ name, display, runs, indexVisible }) => ({
     name,
@@ -631,7 +651,7 @@ fs.writeFileSync(
   `${JSON.stringify(
     {
       schemaVersion: 10,
-      source: "data/PPDB database.xlsx",
+      source: path.relative(root, inputPath),
       count: parties.length,
       redirects,
       parties,
