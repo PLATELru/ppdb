@@ -1,15 +1,60 @@
 # Political Parties Database (PPDB)
 
-In short,
 PPDB is a database of political parties from around the world.
 
-The site was built almost entirely with the help of ChatGPT, yet the hundreds upon hundreds of entries were added manually by a single person.
+The site was built almost entirely with the help of ChatGPT, yet the entries
+were added manually by a single person. This site may contain unverified and
+controversial information, as the topic it describes cannot be completely
+unambiguous. Send suggestions or corrections to https://x.com/partiesdatabase .
 
-This site may contain unverified and controversial information, as the topic it describes cannot be completely unambiguous.
+## Updating the database and images
 
-If you have any suggestions, complaints, or corrections, please send me a dm at https://x.com/partiesdatabase .
+Replace `data/PPDB database.xlsx` with the current workbook. An upload named
+`PPDB database.xlsx` at the repository root still takes priority when present.
+In `LABELS` and `TYPE`, use `canonical name | display name` to retain grouping
+under the canonical name. `LABELS` also accepts a comment after `#`.
 
-## Local use
+Original logos are uploaded directly to the private `ppdb-media` Cloudflare R2
+bucket under `media/logos/`. Spreadsheet image fields accept a filename such as
+`uaSolidarnist.png`, or a direct image URL. Former logos use
+`filename|comment|date`, one image per line. Earlier `/media/logos2/` and
+`/media/logos3/` references remain supported by the importer.
+
+See [the complete update instructions](docs/image-upload.md).
+
+## R2 media processing
+
+R2 owns the originals and WebP thumbnails. The current Git source and deployment
+artifacts do not contain the logo archive. The public read-only gateway at
+`https://ppdb-media.tifmch.workers.dev` uses the `MEDIA` binding to the private
+`ppdb-media` bucket. It accepts image reads; storage credentials are never sent
+to the browser. Its source and configuration are in [workers/media](workers/media/README.md).
+
+`npm run media:process` lists all original and thumbnail objects with pagination.
+The private `_ppdb/logo-thumbnails.json` manifest records source versions and
+checksums. Only new or changed originals, missing previews, and changed preview
+settings require image downloads and conversion. Originals are read without
+modification. New previews are downloaded again and verified byte for byte.
+
+The `Update PPDB logo thumbnails` action can be run manually after image-only
+uploads. It also offers `verify_all` to download and verify every current image.
+The Pages workflow runs normal processing before publishing. Both workflows
+share a concurrency group so manifest updates cannot overlap. Reports are saved
+in the `r2-media-processing` workflow artifact for 30 days.
+
+Configure Actions secrets `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, and
+`R2_SECRET_ACCESS_KEY`, using an R2 Object Read & Write token restricted to this
+bucket. A jurisdiction-specific bucket can also set `R2_ENDPOINT`. Credentials
+remain in Actions secrets. Local builds need no storage credentials.
+
+The transition verifies SHA-256 and byte counts against an inventory of every
+GitHub original and preview before the archive is removed from the current Git
+tree. That report is also stored privately in R2 at
+`_ppdb/github-removal-verification.json`. Old commits and the pre-migration
+backup branches are retained; their historical image contents remain available.
+The processor never deletes R2 objects.
+
+## Build and hosting
 
 ```bash
 npm install
@@ -17,87 +62,23 @@ npm run import:data
 npm run dev
 ```
 
-The import stops on duplicate IDs or rows missing a required field. Run `npm run lint` for source checks and `npm run build:github` to reproduce the GitHub Pages export in `out/`.
+`import:data` generates the database and directory index from the workbook. It
+does not fetch or generate images. Duplicate IDs and missing required values
+stop the import.
 
-Replace the current workbook at `data/PPDB database.xlsx`. A workbook uploaded as
-`PPDB database.xlsx` in the repository root remains supported and takes priority
-when present. Image cells accept a filename such as `rsNPS.png` from the single
-`public/media/logos` directory, or a direct image URL. See the
-[upload instructions](docs/image-upload.md). In `LABELS` and `TYPE`, write
-`canonical name | display name` to keep filters and grouping under the canonical
-name. `LABELS` also accepts a comment after `#`.
+`npm run build` produces the Sites Worker in `dist/server/index.js` and static
+assets in `dist/client`. Party pages use one shared server template with real
+404 responses. `npm run build:github` separately prerenders the GitHub Pages
+fallback under `/ppdb` in `out/`. Both hosts load logos from R2.
 
-## Runtime hosting and fallback
+GitHub pushes publish GitHub Pages automatically. The main Sites publication is
+updated separately from the pushed source; a GitHub push does not automatically
+publish that Site. An image replaced under an existing filename is served to
+both hosts through R2 without a Site rebuild, subject to the one-hour image
+cache. Use a new filename for immediate image changes.
 
-`npm run build` produces the Cloudflare Worker in `dist/server/index.js` and its
-static assets in `dist/client`. The shared `/party/:id` template renders the
-requested record on the server, including its title and metadata. No HTML file
-is built for each party. Direct links, reloads, and real 404 responses for missing
-records work without a client-side 404 workaround.
-
-`npm run build:github` remains available as a separate GitHub Pages fallback. It
-uses `/ppdb`, prerenders party pages, and writes `out/`. The existing Pages workflow
-is retained. Publishing the Worker does not redirect or remove the Pages site.
-Runtime publication through Sites is separate from the GitHub Pages workflow;
-GitHub pushes do not currently trigger a Sites deployment automatically.
-
-The runtime and GitHub Pages deployment outputs omit `media` files. Cards and
-party pages load thumbnails and originals from the verified R2 gateway at
-`https://ppdb-media.tifmch.workers.dev`. Runtime `/media/*` links redirect to that
-gateway. Original files remain in the repository and are available as a direct
-GitHub fallback if the image gateway is unavailable.
-
-Before the migration, the complete GitHub source was retained on
-`backup/before-runtime-pages-2026-10-26` at commit
-`1dee3c2cff6dafa258e7b0043b9655de2c23adad`. The previous hosted Site version is
-also retained in its version history. For an immediate fallback, use the existing
-GitHub Pages site. Revert the migration commit to roll back its code changes;
-avoid resetting the whole branch, which would discard subsequent workbook edits.
-
-## Logo thumbnails
-
-The thumbnail generator scans all subdirectories of `public/media`, excluding
-its own `logo-thumbnails` output. PNG, JPEG, SVG, WebP, GIF, AVIF, and TIFF files
-receive WebP previews up to 192 × 192; animated files use their first frame.
-Original image bytes are preserved. Directory names remain in the preview paths,
-so equal filenames in different folders stay separate.
-
-A content manifest reuses unchanged previews and removes obsolete ones. The
-GitHub Pages workflow caches the previews between runs. An image that cannot be
-converted still falls back to its original when viewed in the directory.
-
-## External R2 media archive
-
-The `Sync PPDB media to R2` GitHub Actions workflow copies original images and
-generated thumbnails from every `public/media` subdirectory to the account's
-private R2 bucket. Configure repository Actions secrets `R2_ACCOUNT_ID`,
-`R2_BUCKET`, `R2_ACCESS_KEY_ID`, and `R2_SECRET_ACCESS_KEY`. Use an R2 S3 token
-with Object Read & Write restricted to this bucket. For a jurisdiction-specific
-bucket, also set `R2_ENDPOINT` to the endpoint shown by Cloudflare.
-
-Keys retain the existing `media/...` paths. Source files are never changed or
-deleted, and the synchronizer never deletes remote objects. Each uploaded
-image is downloaded again and compared by SHA-256. Existing objects with the
-same content hash, size, and content type are reused. The workflow records a
-file inventory and verification summary in its `r2-media-verification` artifact;
-credentials and signed requests are not logged or included in that artifact.
-
-Synchronization runs inside the Pages workflow on relevant media or generator
-changes on `main`, before the new pages are published. A private source-manifest
-marker skips repeated uploads for workbook-only updates; the manual action
-forces object verification. The public read-only gateway is connected at
-`https://ppdb-media.tifmch.workers.dev`; its `MEDIA` binding uses the private
-`ppdb-media` R2 bucket. The source before R2 setup is retained on
-`backup/before-r2-media-2026-10-26`, and the state immediately before switching
-image delivery is retained on `backup/before-r2-switch-2026-10-26`.
-
-A standalone read-only gateway is documented in [workers/media](workers/media/README.md).
-It uses an R2 binding in the bucket owner's account and exposes only image reads;
-no storage API keys are copied to the website or browser.
-
-The gateway's HTTPS origin is set in `lib/media-origin.mjs`. Spreadsheet
-`/media/...` values remain unchanged. Directory
-cards use the external thumbnails; party pages use the external originals.
-Both deployment outputs then omit media files, while the repository retains
-the originals for rollback and future synchronization. Clearing `MEDIA_ORIGIN`
-and rebuilding restores the previous local/Pages image delivery.
+The source before runtime migration is retained on
+`backup/before-runtime-pages-2026-10-26` at
+`1dee3c2cff6dafa258e7b0043b9655de2c23adad`. R2 setup and image-delivery backup
+branches are also retained. Restore image files from R2 or the historical Git
+source before attempting a rollback to local image delivery.

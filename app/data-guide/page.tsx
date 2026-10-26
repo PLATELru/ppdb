@@ -117,9 +117,9 @@ export default function DataGuidePage() {
             <div className="section-label">Logo files</div>
             <div className="guide-copy">
               <p>
-                Upload logo files to <code>public/media/logos/</code>, then put a filename such as
-                <code> atFPO.png</code> in the LOGO cell. These files and their generated thumbnails
-                are synchronized to R2 and loaded from there by the published site.
+                Upload original logo files to the R2 media archive under <code>media/logos/</code>,
+                then put a filename such as <code>atFPO.png</code> in the LOGO cell.
+                The published site loads originals and generated thumbnails from that archive.
               </p>
             </div>
           </section>

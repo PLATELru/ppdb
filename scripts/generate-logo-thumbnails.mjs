@@ -3,10 +3,10 @@ import os from "node:os";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
-import sharp from "sharp";
 import { thumbnailExtensions } from "../lib/logo-thumbnail-path.mjs";
+import { createLogoThumbnail, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
 
-const settingsVersion = `192-webp-80-alpha90-v1-sharp-${sharp.versions.sharp}`;
+const settingsVersion = thumbnailSettingsVersion;
 
 export async function generateLogoThumbnails(root = process.cwd()) {
   const inputRoot = path.join(root, "public", "media");
@@ -53,11 +53,7 @@ export async function generateLogoThumbnails(root = process.cwd()) {
           continue;
         }
         await fs.mkdir(path.dirname(output), { recursive: true });
-        await sharp(bytes, { animated: false, density: 144, failOn: "none" })
-          .rotate()
-          .resize({ width: 192, height: 192, fit: "inside", withoutEnlargement: true })
-          .webp({ alphaQuality: 90, effort: 4, quality: 80, smartSubsample: true })
-          .toFile(temporary);
+        await fs.writeFile(temporary, await createLogoThumbnail(bytes));
         await fs.rename(temporary, output);
         manifest[relativePath] = fingerprint;
         generated++;

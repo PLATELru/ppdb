@@ -1,19 +1,22 @@
-name: Sync PPDB media to R2
+name: Update PPDB logo thumbnails
 
-# Normal pushes synchronize in pages.yml before publishing. This remains the
-# manual repair/resynchronization action without starting a second upload job.
 on:
   workflow_dispatch:
+    inputs:
+      verify_all:
+        description: Download and verify the complete R2 archive
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: r2-media
+  group: ppdb-media-and-pages
   cancel-in-progress: false
 
 jobs:
-  sync:
+  thumbnails:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -22,40 +25,25 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Check R2 settings
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          node --input-type=module -e '
-            const names = ["R2_ACCOUNT_ID", "R2_BUCKET", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY"];
-            const missing = names.filter(name => !process.env[name]?.trim());
-            if (missing.length) throw new Error(`Missing repository secrets: ${missing.join(", ")}`);
-            console.log("All four R2 repository secrets are configured; values are not displayed.");
-          '
       - run: npm ci
-      - name: Test R2 synchronization
+      - name: Test R2 processing
         run: node --test tests/r2-media.test.mjs
-      - uses: actions/cache@v4
-        with:
-          path: public/media/logo-thumbnails
-          key: thumbnails-${{ runner.os }}-${{ hashFiles('package-lock.json', 'scripts/generate-logo-thumbnails.mjs', 'lib/logo-thumbnail-path.mjs') }}-${{ hashFiles('public/media/**') }}
-          restore-keys: |
-            thumbnails-${{ runner.os }}-${{ hashFiles('package-lock.json', 'scripts/generate-logo-thumbnails.mjs', 'lib/logo-thumbnail-path.mjs') }}-
-      - name: Generate all media thumbnails
-        run: node scripts/generate-logo-thumbnails.mjs
-      - name: Upload and verify media
+      - name: Update previews in R2
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-        run: node scripts/sync-media-r2.mjs --verify-all
+          VERIFY_ALL: ${{ inputs.verify_all }}
+        run: |
+          if [ "$VERIFY_ALL" = "true" ]; then
+            npm run media:process -- --verify-all
+          else
+            npm run media:process
+          fi
       - uses: actions/upload-artifact@v4
         with:
-          name: r2-media-verification
-          path: outputs/r2-media-sync.json
+          name: r2-media-processing
+          path: outputs/r2-media-processing.json
           retention-days: 30

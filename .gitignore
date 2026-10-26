@@ -44,3 +44,7 @@ next-env.d.ts
 /work/
 
 *.tsbuildinfo
+
+# Originals and previews are maintained in R2, outside Git.
+/public/media/*
+!/public/media/.gitkeep
