@@ -29,6 +29,13 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    // Keep the original image archive on the existing public Pages host. The
+    // runtime deployment contains the small generated previews; original
+    // pixels stay available without duplicating hundreds of MB in its archive.
+    if (url.pathname.startsWith("/media/") && !url.pathname.startsWith("/media/logo-thumbnails/")) {
+      return Response.redirect(`https://platelru.github.io/ppdb${url.pathname}${url.search}`, 302);
+    }
+
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       return handleImageOptimization(request, {

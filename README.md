@@ -35,6 +35,12 @@ is retained. Publishing the Worker does not redirect or remove the Pages site.
 Runtime publication through Sites is separate from the GitHub Pages workflow;
 GitHub pushes do not currently trigger a Sites deployment automatically.
 
+The runtime archive keeps generated thumbnails locally. Original `/media/*`
+image requests are redirected to the retained GitHub Pages image archive at
+`https://platelru.github.io/ppdb/media/`. This keeps the runtime upload below the
+hosting archive limit without modifying or deleting original files. Keep the
+Pages publication available for full-resolution images and the fallback site.
+
 Before the migration, the complete GitHub source was retained on
 `backup/before-runtime-pages-2026-10-26` at commit
 `1dee3c2cff6dafa258e7b0043b9655de2c23adad`. The previous hosted Site version is
