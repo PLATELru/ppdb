@@ -86,8 +86,8 @@ test("imports optional registration and delegalisation dates", () => {
 test("imports literal names, leadership and spreadsheet emphasis", () => {
   assert.equal(byId.get("ltSajudis")?.literalName, "Reform Movement of Lithuania");
   assert.match(byId.get("ltSajudis")?.leadership ?? "", /Vytautas Landsbergis/);
-  assert.equal(byId.get("atOVP")?.formatting.formerNames[0]?.bold, true);
-  assert.equal(byId.get("atOVP")?.formatting.formerNames[0]?.italic, false);
+  assert.ok(byId.get("peBDP")?.formatting.formerNames.some((run) => run.bold && !run.italic));
+  assert.ok(byId.get("peBDP")?.formatting.formerNames.some((run) => run.italic && !run.bold));
   assert.deepEqual(
     byId.get("suCPSU")?.formatting.leadership.filter((run) => run.bold || run.italic),
     [
@@ -105,10 +105,10 @@ test("imports literal names, leadership and spreadsheet emphasis", () => {
 });
 
 test("imports multiline labels, comments and record types", () => {
-  const fpo = byId.get("atFPO");
-  const formerLabel = fpo?.labelDetails.find((label) => label.name === "National liberalism");
-  assert.equal(formerLabel?.display, "National liberalism (former)");
-  assert.equal(formerLabel?.comment, "(former)");
+  const cpsu = byId.get("suCPSU");
+  const formerLabel = cpsu?.labelDetails.find((label) => label.name === "Stalinism");
+  assert.equal(formerLabel?.display, "Stalinism (until 1956)");
+  assert.equal(formerLabel?.comment, "(until 1956)");
   assert.equal(formerLabel?.indexVisible, false);
   assert.deepEqual(byId.get("atOVP")?.types, ["Party"]);
   assert.deepEqual(byId.get("peJP")?.types, ["Party", "Coalition"]);
@@ -168,7 +168,7 @@ test("imports optional ideology and relations sections", () => {
   assert.equal(byId.get("peJP")?.ideology, null);
   assert.match(byId.get("peJP")?.relations ?? "", /\[\[peANTAURO\|ANTAURO\]\]/);
   assert.equal(byId.get("atOVP")?.ideology, null);
-  assert.equal(byId.get("atOVP")?.relations, null);
+  assert.match(byId.get("atOVP")?.relations ?? "", /\[\[atCS\|Christian Social Party\]\]/);
 });
 
 test("accepts the three-letter international ID prefix and its cross-reference", () => {

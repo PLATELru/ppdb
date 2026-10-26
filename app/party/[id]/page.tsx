@@ -11,6 +11,9 @@ import { formatDate, getParty, parties } from "../../../lib/parties";
 type PageProps = { params: Promise<{ id: string }> };
 
 export function generateStaticParams() {
+  // The Worker renders the shared template when a record is requested.
+  // Prerender only for the separate GitHub Pages fallback.
+  if (process.env.GITHUB_PAGES !== "true") return [];
   return parties.map((party) => ({ id: party.id }));
 }
 

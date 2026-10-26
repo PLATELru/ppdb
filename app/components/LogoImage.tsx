@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, type CSSProperties } from "react";
+import { indexThumbnailPath } from "../../lib/logo-thumbnail-path.mjs";
 
 type Props = {
   alt: string;
@@ -17,12 +18,6 @@ type LogoFrame = {
   orientation: "landscape" | "portrait";
   source: string;
 };
-
-function indexThumbnailPath(src: string) {
-  const path = src.split(/[?#]/, 1)[0];
-  if (!/^\/media\/logos\/.+\.png$/i.test(path)) return null;
-  return `/media/logo-thumbnails/${path.slice("/media/logos/".length)}.webp`;
-}
 
 function withBasePath(src: string, basePath: string) {
   const isRemoteOrEmbedded = /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src);
@@ -48,7 +43,7 @@ export function LogoImage({
     if (!src) return [];
     const thumbnailSrc = thumbnail ? indexThumbnailPath(src) : null;
     const originalSrc = withBasePath(src, basePath);
-    const repositoryFallback = src.startsWith("/media/logos/")
+    const repositoryFallback = src.startsWith("/media/")
       ? `https://raw.githubusercontent.com/PLATELru/ppdb/main/public${src}`
       : null;
 

@@ -24,6 +24,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: public/media/logo-thumbnails
+          key: thumbnails-${{ runner.os }}-${{ hashFiles('package-lock.json', 'scripts/generate-logo-thumbnails.mjs', 'lib/logo-thumbnail-path.mjs') }}-${{ hashFiles('public/media/**') }}
+          restore-keys: |
+            thumbnails-${{ runner.os }}-${{ hashFiles('package-lock.json', 'scripts/generate-logo-thumbnails.mjs', 'lib/logo-thumbnail-path.mjs') }}-
       - run: npm run build:github
       - uses: actions/upload-pages-artifact@v3
         with:
