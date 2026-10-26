@@ -35,11 +35,11 @@ is retained. Publishing the Worker does not redirect or remove the Pages site.
 Runtime publication through Sites is separate from the GitHub Pages workflow;
 GitHub pushes do not currently trigger a Sites deployment automatically.
 
-The runtime archive keeps generated thumbnails locally. Original `/media/*`
-image requests are redirected to the retained GitHub Pages image archive at
-`https://platelru.github.io/ppdb/media/`. This keeps the runtime upload below the
-hosting archive limit without modifying or deleting original files. Keep the
-Pages publication available for full-resolution images and the fallback site.
+The runtime and GitHub Pages deployment outputs omit `media` files. Cards and
+party pages load thumbnails and originals from the verified R2 gateway at
+`https://ppdb-media.tifmch.workers.dev`. Runtime `/media/*` links redirect to that
+gateway. Original files remain in the repository and are available as a direct
+GitHub fallback if the image gateway is unavailable.
 
 Before the migration, the complete GitHub source was retained on
 `backup/before-runtime-pages-2026-10-26` at commit
@@ -77,18 +77,18 @@ file inventory and verification summary in its `r2-media-verification` artifact;
 credentials and signed requests are not logged or included in that artifact.
 
 Synchronization runs on relevant media or generator changes on `main` and can
-also be started manually. Copying the archive does not change public image
-delivery: the existing Pages archive remains the fallback until a separate
-read-only media endpoint has been connected and verified. The source before
-R2 setup is retained on `backup/before-r2-media-2026-10-26`.
+also be started manually. The public read-only gateway is connected at
+`https://ppdb-media.tifmch.workers.dev`; its `MEDIA` binding uses the private
+`ppdb-media` R2 bucket. The source before R2 setup is retained on
+`backup/before-r2-media-2026-10-26`, and the state immediately before switching
+image delivery is retained on `backup/before-r2-switch-2026-10-26`.
 
-A standalone read-only gateway is ready in [workers/media](workers/media/README.md).
+A standalone read-only gateway is documented in [workers/media](workers/media/README.md).
 It uses an R2 binding in the bucket owner's account and exposes only image reads;
-no storage API keys need to be copied to the website or browser. Keep the current
-image delivery until that gateway's origin is configured and tested.
+no storage API keys are copied to the website or browser.
 
-After verifying the gateway, set its HTTPS origin in `lib/media-origin.mjs` and
-publish both builds. Spreadsheet `/media/...` values remain unchanged. Directory
+The gateway's HTTPS origin is set in `lib/media-origin.mjs`. Spreadsheet
+`/media/...` values remain unchanged. Directory
 cards use the external thumbnails; party pages use the external originals.
 Both deployment outputs then omit media files, while the repository retains
 the originals for rollback and future synchronization. Clearing `MEDIA_ORIGIN`
