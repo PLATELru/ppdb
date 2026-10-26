@@ -18,6 +18,7 @@
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
   },
   "dependencies": {
+    "aws4fetch": "1.0.20",
     "drizzle-orm": "0.45.2",
     "next": "16.2.6",
     "react": "19.2.6",

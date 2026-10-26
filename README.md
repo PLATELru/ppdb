@@ -59,3 +59,25 @@ so equal filenames in different folders stay separate.
 A content manifest reuses unchanged previews and removes obsolete ones. The
 GitHub Pages workflow caches the previews between runs. An image that cannot be
 converted still falls back to its original when viewed in the directory.
+
+## External R2 media archive
+
+The `Sync PPDB media to R2` GitHub Actions workflow copies original images and
+generated thumbnails from every `public/media` subdirectory to the account's
+private R2 bucket. Configure repository Actions secrets `R2_ACCOUNT_ID`,
+`R2_BUCKET`, `R2_ACCESS_KEY_ID`, and `R2_SECRET_ACCESS_KEY`. Use an R2 S3 token
+with Object Read & Write restricted to this bucket. For a jurisdiction-specific
+bucket, also set `R2_ENDPOINT` to the endpoint shown by Cloudflare.
+
+Keys retain the existing `media/...` paths. Source files are never changed or
+deleted, and the synchronizer never deletes remote objects. Each uploaded
+image is downloaded again and compared by SHA-256. Existing objects with the
+same content hash, size, and content type are reused. The workflow records a
+file inventory and verification summary in its `r2-media-verification` artifact;
+credentials and signed requests are not logged or included in that artifact.
+
+Synchronization runs on relevant media or generator changes on `main` and can
+also be started manually. Copying the archive does not change public image
+delivery: the existing Pages archive remains the fallback until a separate
+read-only media endpoint has been connected and verified. The source before
+R2 setup is retained on `backup/before-r2-media-2026-10-26`.
