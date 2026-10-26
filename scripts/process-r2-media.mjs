@@ -10,7 +10,7 @@ const originalsPrefix = "media/logos/";
 const thumbnailsPrefix = "media/logo-thumbnails/logos/";
 const stateKey = "_ppdb/logo-thumbnails.json";
 const digest = (algorithm, bytes, encoding = "hex") => createHash(algorithm).update(bytes).digest(encoding);
-const etag = value => value?.replace(/^"|"$/g, "") || null;
+const etag = value => value?.replace(/^W\//i, "").replace(/^"|"$/g, "") || null;
 const xmlText = value => value.replace(/&(?:amp|lt|gt|quot|apos|#\d+|#x[\da-f]+);/gi, token => {
   const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&apos;": "'" };
   return entities[token] ?? String.fromCodePoint(parseInt(token.slice(2, -1).replace(/^x/i, ""), /^&#x/i.test(token) ? 16 : 10));
@@ -56,7 +56,7 @@ async function download(request, key, expected) {
   await requireR2Status(response, "GET", key);
   const version = etag(response.headers.get("etag"));
   const bytes = Buffer.from(await response.arrayBuffer());
-  if (!version || (expected && (version !== expected.etag || bytes.length !== expected.bytes))) throw new Error(`R2 object changed during processing: ${key}. Run the action again.`);
+  if (!version || (expected && (version !== expected.etag || bytes.length !== expected.bytes))) throw new Error(`R2 object changed during processing: ${key} (listed ${expected?.etag}/${expected?.bytes}, received ${version}/${bytes.length}). Run the action again.`);
   return { bytes, etag: version, sha256: digest("sha256", bytes) };
 }
 

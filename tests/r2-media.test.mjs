@@ -33,7 +33,8 @@ function archive() {
     }
     assert.equal(method, "GET", "Processing must not delete R2 objects.");
     const item = objects.get(key);
-    return item ? new Response(item.bytes, { headers: { ...item.headers, etag: `"${item.etag}"`, "content-length": String(item.bytes.length) } }) : new Response(null, { status: 404 });
+    // A compressed SVG response may have a weak HTTP ETag while LIST uses the strong storage ETag.
+    return item ? new Response(item.bytes, { headers: { ...item.headers, etag: `${key.endsWith(".svg") ? "W/" : ""}"${item.etag}"`, "content-length": String(item.bytes.length) } }) : new Response(null, { status: 404 });
   };
   return { objects, operations, set, request };
 }
