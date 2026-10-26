@@ -81,3 +81,8 @@ also be started manually. Copying the archive does not change public image
 delivery: the existing Pages archive remains the fallback until a separate
 read-only media endpoint has been connected and verified. The source before
 R2 setup is retained on `backup/before-r2-media-2026-10-26`.
+
+A standalone read-only gateway is ready in [workers/media](workers/media/README.md).
+It uses an R2 binding in the bucket owner's account and exposes only image reads;
+no storage API keys need to be copied to the website or browser. Keep the current
+image delivery until that gateway's origin is configured and tested.

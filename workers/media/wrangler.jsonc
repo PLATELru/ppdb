@@ -1,0 +1,9 @@
+{
+  "name": "ppdb-media",
+  "main": "index.mjs",
+  "compatibility_date": "2026-10-26",
+  "workers_dev": true,
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "ppdb-media" }
+  ]
+}
