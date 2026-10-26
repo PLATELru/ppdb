@@ -81,7 +81,7 @@ async function requireStatus(response, method, key) {
   throw new Error(`R2 ${method} returned HTTP ${response.status} for ${key}. Check the bucket, endpoint and token permissions.`);
 }
 
-export async function syncMedia({ root = process.cwd(), request, log = console.log, concurrency = 6 } = {}) {
+export async function syncMedia({ root = process.cwd(), request, log = console.log, concurrency = 12, useManifest = false, verifyAll = false } = {}) {
   const files = await inventoryMedia(root);
   if (!files.length) throw new Error("No source media found; synchronization stopped.");
   const originals = files.filter((file) => !file.key.startsWith("media/logo-thumbnails/"));
@@ -92,6 +92,30 @@ export async function syncMedia({ root = process.cwd(), request, log = console.l
     bytes: 0, uploaded: 0, reused: 0, verifiedDownloads: 0,
   };
   const manifest = new Array(files.length);
+  let inventoryCursor = 0;
+  const workers = Math.max(1, Math.min(16, concurrency));
+  await Promise.all(Array.from({ length: workers }, async () => {
+    while (inventoryCursor < files.length) {
+      const index = inventoryCursor++;
+      const bytes = await readFile(files[index].filename);
+      manifest[index] = { key: files[index].key, bytes: bytes.length, sha256: digest("sha256", bytes) };
+    }
+  }));
+  const manifestSha256 = digest("sha256", JSON.stringify(manifest));
+  const markerKey = "_ppdb/media-sync.json";
+  if (useManifest && !verifyAll) {
+    const previous = await request("GET", markerKey);
+    if (previous.ok) {
+      let marker;
+      try { marker = await previous.json(); } catch { marker = null; }
+      if (marker?.version === 1 && marker.manifestSha256 === manifestSha256 && marker.files === files.length) {
+        log(`R2 media manifest unchanged; ${files.length} files were already synchronized.`);
+        return { ...summary, bytes: manifest.reduce((sum, item) => sum + item.bytes, 0), reused: files.length, cached: true, manifestSha256, manifest };
+      }
+    } else if (previous.status !== 404) {
+      await requireStatus(previous, "GET", markerKey);
+    } else await previous.body?.cancel();
+  }
   let cursor = 0;
   let completed = 0;
   let stopped = false;
@@ -103,6 +127,7 @@ export async function syncMedia({ root = process.cwd(), request, log = console.l
       try {
         const bytes = await readFile(file.filename);
         const sha256 = digest("sha256", bytes);
+        if (sha256 !== manifest[index].sha256 || bytes.length !== manifest[index].bytes) throw new Error(`Source media changed during synchronization: ${file.key}. Run it again.`);
         const md5 = digest("md5", bytes);
         const head = await request("HEAD", file.key);
         const matches = head.ok
@@ -144,15 +169,21 @@ export async function syncMedia({ root = process.cwd(), request, log = console.l
       }
     }
   }
-  await Promise.all(Array.from({ length: Math.max(1, Math.min(8, concurrency)) }, () => next()));
+  await Promise.all(Array.from({ length: workers }, () => next()));
   if (failures.length) throw failures[0];
-  return { ...summary, manifestSha256: digest("sha256", JSON.stringify(manifest)), manifest };
+  if (useManifest) {
+    const bytes = Buffer.from(JSON.stringify({ version: 1, manifestSha256, files: files.length }));
+    const marker = await request("PUT", markerKey, { "content-type": "application/json", "cache-control": "no-store", "content-md5": digest("md5", bytes, "base64") }, bytes);
+    await requireStatus(marker, "PUT", markerKey);
+    await marker.body?.cancel();
+  }
+  return { ...summary, manifestSha256, manifest };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const config = r2Configuration();
-    const report = await syncMedia({ request: createR2Client(config) });
+    const report = await syncMedia({ request: createR2Client(config), useManifest: true, verifyAll: process.argv.includes("--verify-all") });
     const output = path.resolve("outputs/r2-media-sync.json");
     await mkdir(path.dirname(output), { recursive: true });
     await writeFile(output, `${JSON.stringify({ sourceCommit: process.env.GITHUB_SHA ?? null, ...report }, null, 2)}\n`);

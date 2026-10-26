@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import XLSX from "xlsx";
 import { parseFormerLogos } from "../lib/former-logos.mjs";
+import { resolveLogoReference } from "../lib/logo-reference.mjs";
 
 const root = process.cwd();
 const uploadedInputPath = path.join(root, "PPDB database.xlsx");
@@ -428,7 +429,7 @@ const parties = rows
         )
       : Array.from({ length: 5 }, (_, offset) => offset + 1)
           .map((number) => {
-            const url = text(valueAt(row, `FORMER_LOGO${number}`));
+            const url = resolveLogoReference(valueAt(row, `FORMER_LOGO${number}`), `FORMER_LOGO${number} at row ${rowNumber}`);
             return url
               ? {
                   url,
@@ -468,7 +469,7 @@ const parties = rows
         mep: number(valueAt(row, "MEP")),
         mepTotal: legislature.mepTotal ?? null,
       },
-      logo: text(valueAt(row, "LOGO")),
+      logo: resolveLogoReference(valueAt(row, "LOGO"), `LOGO at row ${rowNumber} (${id})`),
       color: text(valueAt(row, "COLORCODE")) ?? "#666666",
       established: establishmentDates[0] ?? null,
       establishmentDates,
@@ -656,8 +657,6 @@ fs.writeFileSync(
       redirects,
       parties,
     },
-    null,
-    2,
   )}\n`,
 );
 fs.mkdirSync(path.dirname(indexOutputPath), { recursive: true });

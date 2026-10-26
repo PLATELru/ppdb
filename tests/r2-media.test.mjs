@@ -48,6 +48,16 @@ test("media synchronization verifies remote bytes, resumes unchanged files and p
     assert.equal(changed.uploaded, 1);
     assert.equal(changed.reused, 1);
     assert.equal(await readFile(path.join(originals, "party.svg"), "utf8"), "updated original");
+    await syncMedia({ root, request, log() {}, useManifest: true });
+    operations.length = 0;
+    const cached = await syncMedia({ root, request, log() {}, useManifest: true });
+    assert.equal(cached.cached, true);
+    assert.equal(cached.reused, 2);
+    assert.deepEqual(operations, ["GET"]);
+    operations.length = 0;
+    const verified = await syncMedia({ root, request, log() {}, useManifest: true, verifyAll: true });
+    assert.equal(verified.cached, undefined);
+    assert.ok(operations.includes("HEAD"));
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

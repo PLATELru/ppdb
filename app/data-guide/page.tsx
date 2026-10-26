@@ -22,8 +22,8 @@ const fields = [
   ],
   [
     "LOGO / COLORCODE",
-    "Path or URL / hex",
-    "Use an external URL or a local path such as /media/logos/atFPO.png, plus a party colour such as #005EA8.",
+    "Filename or URL / hex",
+    "Use an image filename such as atFPO.png or a direct image URL, plus a party colour such as #005EA8.",
   ],
   [
     "ESTABLISHMENT / REGISTERED / DELEGALISED / DISSOLUTION",
@@ -114,12 +114,12 @@ export default function DataGuidePage() {
             </div>
           </section>
           <section className="panel">
-            <div className="section-label">Local logo storage</div>
+            <div className="section-label">Logo files</div>
             <div className="guide-copy">
               <p>
-                Upload logo files to <code>public/media/logos/</code>, then put a path such as
-                <code> /media/logos/atFPO.png</code> in the LOGO cell. These files are deployed with
-                the site and do not depend on an external image host.
+                Upload logo files to <code>public/media/logos/</code>, then put a filename such as
+                <code> atFPO.png</code> in the LOGO cell. These files and their generated thumbnails
+                are synchronized to R2 and loaded from there by the published site.
               </p>
             </div>
           </section>
@@ -147,8 +147,8 @@ export default function DataGuidePage() {
             <div className="section-label">Former logos</div>
             <div className="guide-copy">
               <p>Put one logo on each line of <code>FORMER_LOGO</code>:</p>
-              <pre>{`/media/logos/Logo1.svg|Used under the former party name|2020-05
-/media/logos/Logo2.svg||2004`}</pre>
+              <pre>{`Logo1.svg|Used under the former party name|2020-05
+Logo2.svg||2004`}</pre>
               <p>
                 The comment is optional, but both separators are required. The final field accepts
                 a full date, month and year, a year alone, or may be left empty.

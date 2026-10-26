@@ -20,8 +20,8 @@ test("parses multiline former logos with optional comments", () => {
 
 test("normalizes European dates and permits an empty until field", () => {
   assert.deepEqual(parseFormerLogos("Logo.svg|Old identity|26-11-2005\nLogo2.svg||"), [
-    { url: "Logo.svg", comment: "Old identity", until: "2005-11-26" },
-    { url: "Logo2.svg", comment: null, until: null },
+    { url: "/media/logos/Logo.svg", comment: "Old identity", until: "2005-11-26" },
+    { url: "/media/logos/Logo2.svg", comment: null, until: null },
   ]);
 });
 

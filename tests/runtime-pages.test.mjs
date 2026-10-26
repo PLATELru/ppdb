@@ -25,9 +25,9 @@ test("runtime requests serve the last 50 workbook records with no party HTML fil
   }
   const missing = await worker.fetch(new Request("http://localhost/party/ppdb-nonexistent-test-record"), env, ctx);
   assert.equal(missing.status, 404);
-  const original = await worker.fetch(new Request("http://localhost/media/logos2/seFF.png"), env, ctx);
+  const original = await worker.fetch(new Request("http://localhost/media/logos/seFF.png"), env, ctx);
   assert.equal(original.status, 302);
-  assert.equal(original.headers.get("location"), `${MEDIA_ORIGIN || "https://platelru.github.io/ppdb"}/media/logos2/seFF.png`);
-  assert.equal(files.some((file) => /^media[/\\]logos2[/\\]seFF\.png$/.test(file)), false);
-  assert.equal(files.includes("media/logo-thumbnails/logos2/seFF.png.webp"), !MEDIA_ORIGIN);
+  assert.equal(original.headers.get("location"), `${MEDIA_ORIGIN || "https://platelru.github.io/ppdb"}/media/logos/seFF.png`);
+  assert.equal(files.some((file) => /^media[/\\]logos[/\\]seFF\.png$/.test(file)), false);
+  assert.equal(files.includes("media/logo-thumbnails/logos/seFF.png.webp"), !MEDIA_ORIGIN);
 });

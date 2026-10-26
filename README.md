@@ -19,7 +19,13 @@ npm run dev
 
 The import stops on duplicate IDs or rows missing a required field. Run `npm run lint` for source checks and `npm run build:github` to reproduce the GitHub Pages export in `out/`.
 
-Upload the current workbook as `PPDB database.xlsx` in the repository root. The importer uses this file when present and falls back to `data/PPDB database.xlsx`. In `LABELS` and `TYPE`, write `canonical name | display name` to keep filters and grouping under the canonical name. `LABELS` also accepts a comment after `#`, including on a line with a display name.
+Replace the current workbook at `data/PPDB database.xlsx`. A workbook uploaded as
+`PPDB database.xlsx` in the repository root remains supported and takes priority
+when present. Image cells accept a filename such as `rsNPS.png` from the single
+`public/media/logos` directory, or a direct image URL. See the
+[upload instructions](docs/image-upload.md). In `LABELS` and `TYPE`, write
+`canonical name | display name` to keep filters and grouping under the canonical
+name. `LABELS` also accepts a comment after `#`.
 
 ## Runtime hosting and fallback
 
@@ -76,8 +82,10 @@ same content hash, size, and content type are reused. The workflow records a
 file inventory and verification summary in its `r2-media-verification` artifact;
 credentials and signed requests are not logged or included in that artifact.
 
-Synchronization runs on relevant media or generator changes on `main` and can
-also be started manually. The public read-only gateway is connected at
+Synchronization runs inside the Pages workflow on relevant media or generator
+changes on `main`, before the new pages are published. A private source-manifest
+marker skips repeated uploads for workbook-only updates; the manual action
+forces object verification. The public read-only gateway is connected at
 `https://ppdb-media.tifmch.workers.dev`; its `MEDIA` binding uses the private
 `ppdb-media` R2 bucket. The source before R2 setup is retained on
 `backup/before-r2-media-2026-10-26`, and the state immediately before switching
