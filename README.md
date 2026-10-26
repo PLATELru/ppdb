@@ -86,3 +86,10 @@ A standalone read-only gateway is ready in [workers/media](workers/media/README.
 It uses an R2 binding in the bucket owner's account and exposes only image reads;
 no storage API keys need to be copied to the website or browser. Keep the current
 image delivery until that gateway's origin is configured and tested.
+
+After verifying the gateway, set its HTTPS origin in `lib/media-origin.mjs` and
+publish both builds. Spreadsheet `/media/...` values remain unchanged. Directory
+cards use the external thumbnails; party pages use the external originals.
+Both deployment outputs then omit media files, while the repository retains
+the originals for rollback and future synchronization. Clearing `MEDIA_ORIGIN`
+and rebuilding restores the previous local/Pages image delivery.

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 import XLSX from "xlsx";
+import { MEDIA_ORIGIN } from "../lib/media-origin.mjs";
 
 test("runtime requests serve the last 50 workbook records with no party HTML files", async () => {
   const files = await readdir(new URL("../dist/client", import.meta.url), { recursive: true });
@@ -26,7 +27,7 @@ test("runtime requests serve the last 50 workbook records with no party HTML fil
   assert.equal(missing.status, 404);
   const original = await worker.fetch(new Request("http://localhost/media/logos2/seFF.png"), env, ctx);
   assert.equal(original.status, 302);
-  assert.equal(original.headers.get("location"), "https://platelru.github.io/ppdb/media/logos2/seFF.png");
+  assert.equal(original.headers.get("location"), `${MEDIA_ORIGIN || "https://platelru.github.io/ppdb"}/media/logos2/seFF.png`);
   assert.equal(files.some((file) => /^media[/\\]logos2[/\\]seFF\.png$/.test(file)), false);
-  assert.ok(files.includes("media/logo-thumbnails/logos2/seFF.png.webp"));
+  assert.equal(files.includes("media/logo-thumbnails/logos2/seFF.png.webp"), !MEDIA_ORIGIN);
 });

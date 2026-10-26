@@ -294,7 +294,7 @@ test("uses the shared media thumbnail resolver and asynchronous image decoding",
     readFile(new URL("../app/components/LogoImage.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(component, /indexThumbnailPath/);
+  assert.match(component, /logoSources/);
   assert.match(component, /decoding="async"/);
   assert.match(component, /fetchPriority=\{thumbnail \? "low" : undefined\}/);
 });

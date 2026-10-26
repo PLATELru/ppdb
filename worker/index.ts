@@ -1,6 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import { externalMediaUrl } from "../lib/media-origin.mjs";
 
 interface Env {
   ASSETS: Fetcher;
@@ -29,9 +30,10 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
-    // Keep the original image archive on the existing public Pages host. The
-    // runtime deployment contains the small generated previews; original
-    // pixels stay available without duplicating hundreds of MB in its archive.
+    const mediaUrl = externalMediaUrl(url.pathname);
+    if (mediaUrl) return Response.redirect(`${mediaUrl}${url.search}`, 302);
+
+    // Retain the existing Pages archive while external delivery is disabled.
     if (url.pathname.startsWith("/media/") && !url.pathname.startsWith("/media/logo-thumbnails/")) {
       return Response.redirect(`https://platelru.github.io/ppdb${url.pathname}${url.search}`, 302);
     }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, type CSSProperties } from "react";
-import { indexThumbnailPath } from "../../lib/logo-thumbnail-path.mjs";
+import { logoSources } from "../../lib/media-origin.mjs";
 
 type Props = {
   alt: string;
@@ -19,12 +19,6 @@ type LogoFrame = {
   source: string;
 };
 
-function withBasePath(src: string, basePath: string) {
-  const isRemoteOrEmbedded = /^(?:[a-z]+:)?\/\//i.test(src) || /^(?:data|blob):/i.test(src);
-  if (isRemoteOrEmbedded) return src;
-  return `${basePath}${src.startsWith("/") ? src : `/${src}`}`;
-}
-
 export function LogoImage({
   alt,
   className,
@@ -39,24 +33,7 @@ export function LogoImage({
   const [frame, setFrame] = useState<LogoFrame | null>(null);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-  const sources = useMemo(() => {
-    if (!src) return [];
-    const thumbnailSrc = thumbnail ? indexThumbnailPath(src) : null;
-    const originalSrc = withBasePath(src, basePath);
-    const repositoryFallback = src.startsWith("/media/")
-      ? `https://raw.githubusercontent.com/PLATELru/ppdb/main/public${src}`
-      : null;
-
-    return Array.from(
-      new Set(
-        [
-          thumbnailSrc ? withBasePath(thumbnailSrc, basePath) : null,
-          originalSrc,
-          repositoryFallback,
-        ].filter((item): item is string => Boolean(item)),
-      ),
-    );
-  }, [basePath, src, thumbnail]);
+  const sources = useMemo(() => logoSources(src, { basePath, thumbnail }), [basePath, src, thumbnail]);
 
   const activeSrc = sources[sourceIndex] ?? null;
   const captureLoadedImage = useCallback((image: HTMLImageElement | null) => {
