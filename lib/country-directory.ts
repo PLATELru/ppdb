@@ -17,6 +17,10 @@ export type BiggestParty = {
   seats: number;
   chamber: string;
   total: number | null;
+  houses: {
+    lower: { seats: number | null; name: string; total: number | null };
+    upper: { seats: number | null; name: string; total: number | null };
+  } | null;
 };
 
 export type CountryDirectoryEntry = Country & {
@@ -63,12 +67,28 @@ export function getCountryDirectory(
       && party.country === country.name
     ));
     const upperHouse = !candidates.some((party) => nationalSeats(party, false).seats > 0);
+    const bicameral = candidates.some(({ seats }) => (
+      seats.lowerHouse != null || seats.upperHouse != null
+      || seats.lowerHouseTotal != null || seats.upperHouseTotal != null
+    ));
     const ranked = candidates.map((party) => ({
       id: party.id,
       name: party.name,
       acronym: party.acronym,
       color: party.color,
       ...nationalSeats(party, upperHouse),
+      houses: bicameral ? {
+        lower: {
+          seats: party.seats.lowerHouse,
+          name: party.seats.lowerHouseName,
+          total: party.seats.lowerHouseTotal,
+        },
+        upper: {
+          seats: party.seats.upperHouse,
+          name: party.seats.upperHouseName,
+          total: party.seats.upperHouseTotal,
+        },
+      } : null,
     }));
     const largest = Math.max(0, ...ranked.map((party) => party.seats));
 
