@@ -66,6 +66,15 @@ npm run dev
 does not fetch or generate images. Duplicate IDs and missing required values
 stop the import.
 
+The `Countries` worksheet drives `/countries/`. As on `PPDB` and `Legislatures`,
+its second row contains the field names: `COUNTRY`, `STATUS`, `LAST_REVISION`
+and optional `TYPE`. `STATUS` is the coverage note, including `Almost all` and
+`Only a few`; a blank status keeps the country visible in grey without links.
+Revision dates come from `LAST_REVISION`. Counts include all Index records for
+each country. Biggest-party badges use the national seats recorded for existing
+party records, preferring the lower or sole chamber to the upper chamber. They
+exclude coalitions, dissolved parties and MEP seats, and display ties together.
+
 `npm run build` produces the Sites Worker in `dist/server/index.js` and static
 assets in `dist/client`. Party pages use one shared server template with real
 404 responses. `npm run build:github` separately prerenders the GitHub Pages

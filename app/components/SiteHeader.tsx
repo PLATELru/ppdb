@@ -18,6 +18,7 @@ export function SiteHeader() {
       </header>
       <nav className="main-nav" aria-label="Primary navigation">
         <a href={`${basePath}/`}>Index</a>
+        <a href={`${basePath}/countries/`}>Countries</a>
         <a href={`${basePath}/#about`}>About</a>
         <a href={`${basePath}/contact/`}>Contact</a>
         <a href={`${basePath}/data-guide/`}>Data guide</a>

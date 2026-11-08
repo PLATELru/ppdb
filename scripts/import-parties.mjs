@@ -10,6 +10,7 @@ const inputPath = fs.existsSync(uploadedInputPath)
   ? uploadedInputPath
   : path.join(root, "data", "PPDB database.xlsx");
 const outputPath = path.join(root, "data", "parties.json");
+const countriesOutputPath = path.join(root, "data", "countries.json");
 const indexOutputPath = path.join(root, "public", "data", "party-index.json");
 
 const workbook = XLSX.readFile(inputPath, {
@@ -367,6 +368,35 @@ const legislatureData = new Map(
   }),
 );
 
+const countriesSheet = workbook.Sheets.Countries;
+const countryRows = countriesSheet
+  ? XLSX.utils.sheet_to_json(countriesSheet, { header: 1, raw: true, defval: null })
+  : [];
+const countryHeaders = (countryRows[1] ?? []).map((value) => String(value ?? "").trim());
+const countryIndex = Object.fromEntries(countryHeaders.map((header, column) => [header, column]));
+if (countriesSheet && ["COUNTRY", "STATUS", "LAST_REVISION"].some((key) => countryIndex[key] == null)) {
+  throw new Error("Countries must contain COUNTRY, STATUS and LAST_REVISION in its second row.");
+}
+const countryNames = new Set();
+const countries = countryRows.slice(2).flatMap((row, rowOffset) => {
+  const name = text(row[countryIndex.COUNTRY]);
+  if (!name) return [];
+  const key = name.toLowerCase();
+  if (countryNames.has(key)) throw new Error(`Duplicate country in Countries: ${name}`);
+  countryNames.add(key);
+  const revisionCell = cellAt(countriesSheet, rowOffset + 3, countryIndex.LAST_REVISION);
+  const lastRevision = dateValue(revisionCell);
+  if (text(revisionCell?.v) && !lastRevision) {
+    throw new Error(`Invalid LAST_REVISION for ${name} in Countries row ${rowOffset + 3}.`);
+  }
+  return [{
+    name,
+    coverage: text(row[countryIndex.STATUS]),
+    lastRevision,
+    type: text(row[countryIndex.TYPE]),
+  }];
+}).sort((a, b) => a.name.localeCompare(b.name, "en"));
+
 const redirectsSheet = workbook.Sheets.Redirects;
 const redirectRows = redirectsSheet
   ? XLSX.utils.sheet_to_json(redirectsSheet, { header: 1, raw: true, defval: null })
@@ -661,8 +691,13 @@ fs.writeFileSync(
 );
 fs.mkdirSync(path.dirname(indexOutputPath), { recursive: true });
 fs.writeFileSync(
+  countriesOutputPath,
+  `${JSON.stringify({ schemaVersion: 1, count: countries.length, countries })}\n`,
+);
+fs.writeFileSync(
   indexOutputPath,
   `${JSON.stringify({ schemaVersion: 1, count: indexParties.length, parties: indexParties })}\n`,
 );
 
 console.log(`Imported ${parties.length} parties from ${sheetName}.`);
+console.log(`Imported ${countries.length} countries from Countries.`);

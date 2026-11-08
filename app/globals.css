@@ -596,6 +596,42 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 14px
 .guide-copy ul { margin: 0; padding-left: 20px; }
 .guide-copy li + li { margin-top: 8px; }
 
+.countries-disclaimer { margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-left: 5px solid #9b7415; background: #fff4cf; color: #47360c; }
+.countries-disclaimer p { margin: 0; line-height: 1.6; }
+:root[data-theme="dark"] .countries-disclaimer { background: #38321f; color: #f1dfaa; border-left-color: #d4b156; }
+.countries-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; padding: 8px 4px 0; }
+.countries-heading h1 { margin: 5px 0 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; letter-spacing: -0.04em; }
+.countries-total { color: var(--muted); font-family: "Courier New", Courier, monospace; font-size: 12px; white-space: nowrap; }
+.countries-description { margin: 12px 4px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.countries-table-scroll { overflow-x: auto; border: 1px solid var(--line); }
+.countries-table-scroll:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.countries-table { width: 100%; min-width: 720px; border-collapse: collapse; background: var(--panel-light); text-align: left; }
+.countries-table th, .countries-table td { padding: 10px 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); vertical-align: middle; }
+.countries-table th:last-child, .countries-table td:last-child { border-right: 0; }
+.countries-table tbody tr:last-child > * { border-bottom: 0; }
+.countries-table thead { background: var(--navy); color: #fff; font-family: "Courier New", Courier, monospace; font-size: 11px; text-transform: uppercase; }
+.countries-table tbody th { width: 23%; font-size: 13px; }
+.countries-table tbody td { font-size: 12px; }
+.countries-table tbody tr:not(.country-uncovered):hover { background: var(--panel-hover); }
+.countries-table .country-count { text-align: right; font-variant-numeric: tabular-nums; }
+.country-revision { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.country-name { display: inline-block; line-height: 1.4; }
+.coverage-badge { display: inline-block; padding: 4px 7px; border: 1px solid; font-size: 11px; line-height: 1.35; }
+.coverage-high { background: #d8efd9; color: #195622; border-color: #78a77e; }
+.coverage-low { background: #f6dbd9; color: #852420; border-color: #c48a86; }
+.coverage-other { background: var(--button-face); color: var(--ink); border-color: var(--line); }
+.coverage-empty { color: var(--muted); background: var(--panel); border-color: color-mix(in srgb, var(--line) 45%, transparent); }
+.country-uncovered { background: color-mix(in srgb, var(--panel) 80%, var(--panel-light)); color: var(--muted); }
+.country-uncovered .country-name { font-weight: 400; }
+.country-uncovered .country-party-badge { border-left-color: var(--line); color: var(--muted); }
+:root[data-theme="dark"] .coverage-high { background: #203e29; color: #b0e8b6; border-color: #4c8459; }
+:root[data-theme="dark"] .coverage-low { background: #4a292a; color: #ffbcb5; border-color: #a45f60; }
+.country-party-list { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.country-party-badge { display: inline-flex; align-items: center; justify-content: space-between; gap: 9px; max-width: 100%; padding: 4px 6px; border: 1px solid var(--line); border-left: 5px solid var(--party-color, #666); background: var(--panel-light); color: var(--ink); font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; text-decoration: none; }
+a.country-party-badge:hover { background: var(--button-hover); text-decoration: underline; }
+.country-party-seats { flex-shrink: 0; color: var(--muted); font-family: "Courier New", Courier, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
+.countries-footnote { margin-bottom: 2px; }
+
 .contact-page { display: grid; align-content: start; gap: 12px; min-height: 520px; }
 .contact-page .breadcrumbs { padding-bottom: 0; }
 .contact-panel { display: grid; justify-items: start; align-content: start; }
