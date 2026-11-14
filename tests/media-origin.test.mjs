@@ -9,10 +9,11 @@ import { prepareRuntimeAssets } from "../scripts/prepare-runtime-assets.mjs";
 test("external image delivery uses R2 thumbnails and originals while preserving direct URLs", () => {
   const src = "/media/logos3/test.svg";
   assert.deepEqual(logoSources(src, { basePath: "/ppdb", thumbnail: true, origin: "https://media.example" }), [
-    "https://media.example/media/logo-thumbnails/logos3/test.svg.webp",
+    "https://media.example/media/logo-thumbnails/logos3/test.svg.webp?v=288-lossless",
     "https://media.example/media/logos3/test.svg",
   ]);
-  assert.equal(logoSources(src, { basePath: "/ppdb", thumbnail: true, origin: "" })[0], "/ppdb/media/logo-thumbnails/logos3/test.svg.webp");
+  assert.equal(logoSources(src, { basePath: "/ppdb", thumbnail: true, origin: "" })[0], "/ppdb/media/logo-thumbnails/logos3/test.svg.webp?v=288-lossless");
+  assert.equal(logoSources("/media/logos/test.png", { thumbnail: true, origin: "https://media.example" })[0], "https://media.example/media/logo-thumbnails/logos/test.png.webp");
   assert.deepEqual(logoSources("https://other.example/logo.svg", { thumbnail: true, origin: "https://media.example" }), ["https://other.example/logo.svg"]);
   assert.deepEqual(logoSources(null), []);
   assert.equal(externalMediaUrl("/branding/PPDB.png", "https://media.example"), null);

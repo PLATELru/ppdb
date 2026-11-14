@@ -3,10 +3,8 @@ import os from "node:os";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
-import { thumbnailExtensions } from "../lib/logo-thumbnail-path.mjs";
-import { createLogoThumbnail, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
-
-const settingsVersion = thumbnailSettingsVersion;
+import { isSvgLogo, thumbnailExtensions } from "../lib/logo-thumbnail-path.mjs";
+import { createLogoThumbnail, svgThumbnailSettingsVersion, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
 
 export async function generateLogoThumbnails(root = process.cwd()) {
   const inputRoot = path.join(root, "public", "media");
@@ -46,6 +44,7 @@ export async function generateLogoThumbnails(root = process.cwd()) {
       const temporary = `${output}.tmp`;
       try {
         const bytes = await fs.readFile(input);
+        const settingsVersion = isSvgLogo(input) ? svgThumbnailSettingsVersion : thumbnailSettingsVersion;
         const fingerprint = createHash("sha256").update(settingsVersion).update(bytes).digest("hex");
         if (previous[relativePath] === fingerprint && await fs.stat(output).then(() => true, () => false)) {
           manifest[relativePath] = fingerprint;
@@ -53,7 +52,7 @@ export async function generateLogoThumbnails(root = process.cwd()) {
           continue;
         }
         await fs.mkdir(path.dirname(output), { recursive: true });
-        await fs.writeFile(temporary, await createLogoThumbnail(bytes));
+        await fs.writeFile(temporary, await createLogoThumbnail(bytes, input));
         await fs.rename(temporary, output);
         manifest[relativePath] = fingerprint;
         generated++;

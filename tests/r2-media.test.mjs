@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import test from "node:test";
 import sharp from "sharp";
 import { listR2Objects, parseObjectListing, processR2Media, verifyMigrationInventory } from "../scripts/process-r2-media.mjs";
-import { thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
+import { svgThumbnailSettingsVersion, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
 import { r2Configuration } from "../lib/r2-client.mjs";
 
 const hash = bytes => createHash("sha256").update(bytes).digest("hex");
@@ -49,7 +49,7 @@ test("R2 processing handles paginated filenames, changes only affected previews 
   assert.equal((await listR2Objects(r2.request, "media/logos/")).size, 2);
   const preview = "media/logo-thumbnails/logos/a.svg.webp";
   const metadata = await sharp(r2.objects.get(preview).bytes).metadata();
-  assert.equal(metadata.width, 192); assert.equal(metadata.height, 96); assert.equal(metadata.hasAlpha, true);
+  assert.equal(metadata.width, 288); assert.equal(metadata.height, 144); assert.equal(metadata.hasAlpha, true);
   assert.deepEqual(r2.objects.get(a).bytes, before);
   r2.operations.length = 0;
   const unchanged = await processR2Media({ request: r2.request, log() {} });
@@ -67,12 +67,34 @@ test("R2 processing handles paginated filenames, changes only affected previews 
   assert.equal(verified.verifiedOriginals, 2); assert.equal(verified.verifiedThumbnails, 2);
 });
 
+test("updating SVG settings regenerates small vector previews and reuses raster previews", async () => {
+  const r2 = archive();
+  const vector = "media/logos/vector.svg";
+  const preview = "media/logo-thumbnails/logos/vector.svg.webp";
+  const stateKey = "_ppdb/logo-thumbnails.json";
+  r2.set(vector, '<svg xmlns="http://www.w3.org/2000/svg" width="35pt" height="35pt"><circle cx="17" cy="17" r="16" fill="blue"/></svg>');
+  r2.set("media/logos/raster.png", await sharp({ create: { width: 70, height: 70, channels: 3, background: "green" } }).png().toBuffer());
+  await processR2Media({ request: r2.request, log() {} });
+  const legacy = JSON.parse(r2.objects.get(stateKey).bytes);
+  delete legacy.svgSettingsVersion;
+  r2.set(stateKey, JSON.stringify(legacy));
+  r2.operations.length = 0;
+
+  const result = await processR2Media({ request: r2.request, log() {} });
+  assert.equal(result.generated, 1);
+  assert.equal(result.reused, 1);
+  assert.deepEqual(r2.operations.filter(x => x.method === "PUT" && x.key.startsWith("media/")).map(x => x.key), [preview]);
+  const { width, height } = await sharp(r2.objects.get(preview).bytes).metadata();
+  assert.deepEqual([width, height], [288, 288]);
+  assert.equal(r2.objects.get(preview).bytes.toString("ascii", 12, 16), "VP8L");
+});
+
 test("migration verifies actual archive bytes before seeding the manifest and rejects corruption", async () => {
   const r2 = archive();
   r2.set("media/logos/a.svg", svg("red"));
   await processR2Media({ request: r2.request, log() {} });
   const files = [...r2.objects].filter(([key]) => key.startsWith("media/")).map(([key, item]) => ({ key, bytes: item.bytes.length, sha256: hash(item.bytes) }));
-  const baseline = { version: 1, settingsVersion: thumbnailSettingsVersion, files };
+  const baseline = { version: 1, settingsVersion: thumbnailSettingsVersion, svgSettingsVersion: svgThumbnailSettingsVersion, files };
   const migration = await verifyMigrationInventory({ request: r2.request, baseline, log() {} });
   assert.equal(migration.report.files, 2);
   const result = await processR2Media({ request: r2.request, seed: migration.state, log() {} });

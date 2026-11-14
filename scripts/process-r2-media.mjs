@@ -2,8 +2,8 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { createLogoThumbnail, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
-import { thumbnailExtensions, indexThumbnailPath } from "../lib/logo-thumbnail-path.mjs";
+import { createLogoThumbnail, svgThumbnailSettingsVersion, thumbnailSettingsVersion } from "../lib/logo-thumbnail.mjs";
+import { thumbnailExtensions, indexThumbnailPath, isSvgLogo } from "../lib/logo-thumbnail-path.mjs";
 import { createR2Client, r2Configuration, requireR2Status } from "../lib/r2-client.mjs";
 
 const originalsPrefix = "media/logos/";
@@ -104,7 +104,7 @@ export async function verifyMigrationInventory({ request, baseline, log = consol
   const report = { files: completed, originals: Object.keys(entries).length, thumbnails: completed - Object.keys(entries).length, bytes, inventorySha256: digest("sha256", JSON.stringify(baseline)), verifiedAt: new Date().toISOString() };
   await putVerified(request, "_ppdb/github-removal-verification.json", Buffer.from(JSON.stringify(report)), { "content-type": "application/json", "cache-control": "no-store" });
   log(`R2_MIGRATION_RESULT=${JSON.stringify(report)}`);
-  return { state: { version: 1, settingsVersion: baseline.settingsVersion, entries }, report };
+  return { state: { version: 1, settingsVersion: baseline.settingsVersion, svgSettingsVersion: baseline.svgSettingsVersion, entries }, report };
 }
 
 export async function processR2Media({ request, verifyAll = false, seed, log = console.log } = {}) {
@@ -129,7 +129,10 @@ export async function processR2Media({ request, verifyAll = false, seed, log = c
     const key = thumbnailKey(file.key);
     const old = previous.entries[file.key];
     const thumb = thumbnails.get(key);
-    const same = previous.settingsVersion === thumbnailSettingsVersion && old?.etag === file.etag && old.bytes === file.bytes
+    const settingsMatch = isSvgLogo(file.key)
+      ? previous.svgSettingsVersion === svgThumbnailSettingsVersion
+      : previous.settingsVersion === thumbnailSettingsVersion;
+    const same = settingsMatch && old?.etag === file.etag && old.bytes === file.bytes
       && thumb && old.thumbnailEtag === thumb.etag && old.thumbnailBytes === thumb.bytes;
     if (same && !verifyAll) { entries[file.key] = old; summary.reused++; return; }
     const source = await download(request, file.key, file);
@@ -143,14 +146,14 @@ export async function processR2Media({ request, verifyAll = false, seed, log = c
       summary.reused++;
       return;
     }
-    const output = await createLogoThumbnail(source.bytes);
+    const output = await createLogoThumbnail(source.bytes, file.key);
     const preview = await putVerified(request, key, output, { "content-type": "image/webp", "cache-control": "public, max-age=3600", "x-amz-meta-source-sha256": source.sha256 });
     entries[file.key] = { etag: source.etag, bytes: source.bytes.length, sha256: source.sha256, thumbnailEtag: preview.etag, thumbnailBytes: output.length, thumbnailSha256: preview.sha256 };
     summary.generated++;
     summary.verifiedThumbnails++;
   });
   const ordered = Object.fromEntries(Object.entries(entries).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
-  const state = { version: 1, settingsVersion: thumbnailSettingsVersion, entries: ordered };
+  const state = { version: 1, settingsVersion: thumbnailSettingsVersion, svgSettingsVersion: svgThumbnailSettingsVersion, entries: ordered };
   if (seed || JSON.stringify(state) !== JSON.stringify(previous)) {
     await putVerified(request, stateKey, Buffer.from(JSON.stringify(state)), { "content-type": "application/json", "cache-control": "no-store" });
   }
