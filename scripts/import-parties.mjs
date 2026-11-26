@@ -5,10 +5,10 @@ import { parseFormerLogos } from "../lib/former-logos.mjs";
 import { resolveLogoReference } from "../lib/logo-reference.mjs";
 
 const root = process.cwd();
-const uploadedInputPath = path.join(root, "PPDB database.xlsx");
-const inputPath = fs.existsSync(uploadedInputPath)
-  ? uploadedInputPath
-  : path.join(root, "data", "PPDB database.xlsx");
+const dataInputPath = path.join(root, "data", "PPDB database.xlsx");
+const inputPath = fs.existsSync(dataInputPath)
+  ? dataInputPath
+  : path.join(root, "PPDB database.xlsx");
 const outputPath = path.join(root, "data", "parties.json");
 const countriesOutputPath = path.join(root, "data", "countries.json");
 const indexOutputPath = path.join(root, "public", "data", "party-index.json");
@@ -699,5 +699,5 @@ fs.writeFileSync(
   `${JSON.stringify({ schemaVersion: 1, count: indexParties.length, parties: indexParties })}\n`,
 );
 
-console.log(`Imported ${parties.length} parties from ${sheetName}.`);
+console.log(`Imported ${parties.length} parties from ${path.relative(root, inputPath)} (${sheetName}).`);
 console.log(`Imported ${countries.length} countries from Countries.`);

@@ -16,9 +16,8 @@
 
 Сохраните книгу под точным именем `PPDB database.xlsx` и замените файл в
 [каталоге data](https://github.com/PLATELru/ppdb/tree/main/data). Названия вроде
-`PPDB database(7).xlsx` автоматически не подхватываются. Загрузка файла
-`PPDB database.xlsx` в корень по-прежнему поддерживается, но эта копия получает
-приоритет над `data/PPDB database.xlsx`; обновлять нужно используемую копию.
+`PPDB database(7).xlsx` автоматически не подхватываются. Сборка использует `data/PPDB database.xlsx`.
+Копия в корне используется, только если таблицы в `data/` нет.
 
 После коммита действие
 [Deploy PPDB to GitHub Pages](https://github.com/PLATELru/ppdb/actions/workflows/pages.yml)
